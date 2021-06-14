@@ -7,7 +7,8 @@ The ["jiggle" animation](https://github.com/arcanistzed/scs/blob/277783cbc04ab2c
 
 All other code is my own and is licensed as described in the [LICENSE](LICENSE) file.
 
-The full license text of [SmallTime](https://github.com/unsoluble/smalltime/blob/main/LICENSE) is reproduced below for the sake of completness:
+
+The full [license text of SmallTime](https://github.com/unsoluble/smalltime/blob/main/LICENSE) is reproduced below for the sake of completness:
 ```
 MIT License
 
