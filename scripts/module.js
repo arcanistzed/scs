@@ -2,7 +2,6 @@ let scs_PinOffset = 125;
 
 // remove combat tab from sidebar
 Hooks.on("renderSidebar", app => {
-    delete app.tabs.combat
     document.querySelectorAll("[data-tab='combat']").forEach(element => element.remove());
     document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
 });
