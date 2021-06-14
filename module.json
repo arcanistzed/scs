@@ -1,30 +1,33 @@
 {
-  "name": "module",
-  "title": "New Module",
-  "description": "",
+  "name": "scs",
+  "title": "Simultaneous Combat System",
+  "description": "An implementation of the Simultaneous Combat System for Foundry VTT.",
   "version": "This is auto replaced",
   "library": "false",
-  "manifestPlusVersion": "1.0.0",
-  "minimumCoreVersion": "0.7.9",
-  "compatibleCoreVersion": "0.7.9",
+  "socket": true,
+  "manifestPlusVersion": "1.2.0",
+  "minimumCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "0.8.6",
   "authors": [
     {
-      "name": "The League of Extraordinary FVTT Developers",
-      "url": "https://github.com/League-of-Foundry-Developers",
+      "name": "arcanist",
+      "url": "https://arcanistzed.github.io/",
+      "email": "arcanistzed@gmail.com",
       "discord": "discordID#0001"
     }
   ],
   "dependencies": [
-
-  ],
-  "conflicts": [
-    
+    {
+      "name": "socketlib",
+      "manifest": "https://github.com/manuelVo/foundryvtt-socketlib/blob/v1.0.6/module.json",
+      "type": "module"
+    }
   ],
   "esmodules": [
     "/scripts/module.js"
   ],
   "scripts": [
-    "/scripts/lib/lib.js"
+    "/scripts/lib/draggabilly.js"
   ],
   "styles": [
     "/styles/module.css"
@@ -38,11 +41,5 @@
   ],
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
-  "download": "This is auto replaced",
-  "media": [
-    {
-      "type": "icon",
-      "url": "https://avatars2.githubusercontent.com/u/71292812?s=400&u=ccdb4eeb7abf551ca8f314e5a9bfd0479a4d3d41&v=4"
-    }
-  ]
+  "download": "This is auto replaced"
 }
