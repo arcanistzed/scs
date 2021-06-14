@@ -29,6 +29,7 @@ Hooks.once('ready', async function () {
 });
 
 class scsApp extends FormApplication {
+    
     // Override close() to prevent Escape presses from closing the scs app.
     async close(options = {}) {
         // If called by scs, use original method to handle app closure.
