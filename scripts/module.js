@@ -1,4 +1,4 @@
-let scs_PinOffset = 125;
+let pinOffset = 100;
 
 // remove combat tab from sidebar
 Hooks.on("renderSidebar", app => {
@@ -25,11 +25,12 @@ Hooks.on("init", () => {
 })
 
 Hooks.once('ready', async function () {
+    if (game.modules.get("smalltime").active) { pinOffset += 67 };
+
     new scsApp().render(true);
 });
 
 class scsApp extends FormApplication {
-    
     // Override close() to prevent Escape presses from closing the scs app.
     async close(options = {}) {
         // If called by scs, use original method to handle app closure.
@@ -56,6 +57,21 @@ class scsApp extends FormApplication {
     }
 
     static get defaultOptions() {
+
+        const pinned = game.settings.get('scs', 'pinned');
+
+        const playerApp = document.getElementById('players');
+        const playerAppPos = playerApp.getBoundingClientRect();
+    
+        this.initialPosition = game.settings.get('scs', 'position');
+    
+        // The actual pin location is set elsewhere, but we need to insert something
+        // manually here to feed it values for the initial render.
+        if (pinned) {
+          this.initialPosition.top = playerAppPos.top - pinOffset + 12;
+          this.initialPosition.left = playerAppPos.left;
+        }
+
         return mergeObject(super.defaultOptions, {
             classes: ['form'],
             popOut: true,
@@ -63,7 +79,9 @@ class scsApp extends FormApplication {
             closeOnSubmit: false,
             template: 'modules/scs/templates/template.html',
             id: 'scs-app',
-            title: 'Simultaneous Combat System'
+            title: 'Simultaneous Combat System',
+            top: this.initialPosition.top,
+            left: this.initialPosition.left
         });
     }
 
@@ -76,47 +94,53 @@ class scsApp extends FormApplication {
 
         const drag = new Draggable(this, html, draggable, false);
 
-        html.find('#lastRound').on('click', () => {
-            changeRound(-1);
-        });
-
-        html.find('#lastPhase').on('click', () => {
-            changePhase(-1);
-        });
-
-        html.find('#nextPhase').on('click', () => {
-            changePhase(1);
-        });
-
-        html.find('#nextRound').on('click', () => {
-            changeRound(1);
-        });
-
         var buttons = document.querySelectorAll(".phase-button");
         var phase = 0;
         var round = 1;
 
-        function changePhase(delta) {
-            phase += delta;
-            if (phase === 3) {
-                changeRound(1);
-            } else if (phase === -1) {
-                phase = 3;
-                changeRound(-1);
-            };
+        html.find('#lastRound').on('click', () => { lastRound() });
+
+        html.find('#lastPhase').on('click', () => { lastPhase() });
+
+        html.find('#nextPhase').on('click', () => { nextPhase() });
+
+        html.find('#nextRound').on('click', () => { nextRound() });
+
+        function lastRound() {
+            round -= 1;
+            phase = 2;
+            updateDisplay();
+            console.log("hi")
+        };
+
+        function lastPhase() {
+            phase -= 1;
+            updateDisplay();
+            console.log("ho")
+        };
+
+        function nextPhase() {
+            phase += 1;
             updateDisplay();
         };
 
-        function changeRound(delta) {
+        function nextRound() {
+            round += 1;
             phase = 0;
-            round += delta;
-            document.querySelector("#currentRound").innerHTML = "Round " + round;
             updateDisplay();
         };
 
         function updateDisplay() {
+
+            if (phase === 3) { nextRound() }
+            else if (phase === -1) { lastRound() };
+
             buttons.forEach(current => { current.classList.remove("checked") });
-            buttons[phase].classList.toggle("checked");
+            buttons[phase].classList.add("checked");
+
+            document.querySelector("#currentRound").innerHTML = "Round " + round;
+
+            console.log("Phase: " + (phase + 1) + " of Round: " + round)
         }
 
         // Pin zone is the "jiggle area" in which the app will be locked
@@ -153,8 +177,8 @@ class scsApp extends FormApplication {
             });
 
             // Defining a region above the PlayerList that will trigger the jiggle.
-            let playerAppUpperBound = playerAppPos.top - 50;
-            let playerAppLowerBound = playerAppPos.top + 50;
+            let playerAppUpperBound = playerAppPos.top - pinOffset;
+            let playerAppLowerBound = playerAppPos.top + pinOffset;
 
             if (
                 event.clientX < 215 &&
@@ -177,7 +201,7 @@ class scsApp extends FormApplication {
 
             const playerApp = document.getElementById('players');
             const playerAppPos = playerApp.getBoundingClientRect();
-            let myOffset = playerAppPos.height + scs_PinOffset;
+            let myOffset = playerAppPos.height + pinOffset;
 
             // If the mouseup happens inside the Pin zone, pin the app.
             if (pinZone) {
@@ -205,7 +229,7 @@ class scsApp extends FormApplication {
         if (!$('#pin-lock').length) {
             const playerApp = document.getElementById('players');
             const playerAppPos = playerApp.getBoundingClientRect();
-            let myOffset = playerAppPos.height + scs_PinOffset;
+            let myOffset = playerAppPos.height + pinOffset;
 
             // Dropping this into the DOM with an !important was the only way
             // I could get it to enable the locking behaviour.

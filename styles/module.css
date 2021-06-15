@@ -45,15 +45,20 @@
   margin-right: 3px;
 }
 
-nav.arrows {
+nav.flexrow.arrows {
   text-align: center;
   color: white;
   cursor: pointer;
+  padding: 5px;
+}
+
+nav.flexrow.buttons {
+  flex: 2;
 }
 
 #scs-app {
   flex-wrap: nowrap;
-  height: 100px;
+  height: 75px;
   background: none;
 }
 
@@ -76,6 +81,7 @@ nav.arrows {
 #currentRound {
   color: grey;
   text-align: center;
+  flex: 2;
 }
 
 @keyframes jiggle {
