@@ -62,14 +62,14 @@ class scsApp extends FormApplication {
 
         const playerApp = document.getElementById('players');
         const playerAppPos = playerApp.getBoundingClientRect();
-    
+
         this.initialPosition = game.settings.get('scs', 'position');
-    
+
         // The actual pin location is set elsewhere, but we need to insert something
         // manually here to feed it values for the initial render.
         if (pinned) {
-          this.initialPosition.top = playerAppPos.top - pinOffset + 12;
-          this.initialPosition.left = playerAppPos.left;
+            this.initialPosition.top = playerAppPos.top - pinOffset + 12;
+            this.initialPosition.left = playerAppPos.left;
         }
 
         return mergeObject(super.defaultOptions, {
@@ -94,18 +94,17 @@ class scsApp extends FormApplication {
 
         const drag = new Draggable(this, html, draggable, false);
 
-        var buttons = document.querySelectorAll(".phase-button");
-        var phase = 0;
-        var round = 1;
+        var buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
+        var phase = 0; // counts the current phase
+        var round = 1; // counts the current round
 
+        // Execute one of the functions below this, depending on the button clicked
         html.find('#lastRound').on('click', () => { lastRound() });
-
         html.find('#lastPhase').on('click', () => { lastPhase() });
-
         html.find('#nextPhase').on('click', () => { nextPhase() });
-
         html.find('#nextRound').on('click', () => { nextRound() });
 
+        // Return to the last round
         function lastRound() {
             round -= 1;
             phase = 2;
@@ -113,34 +112,40 @@ class scsApp extends FormApplication {
             console.log("hi")
         };
 
+        // Return to the last phase
         function lastPhase() {
             phase -= 1;
             updateDisplay();
             console.log("ho")
         };
 
+        // Advance to the next phase
         function nextPhase() {
             phase += 1;
             updateDisplay();
         };
 
+        // Advance to the next round
         function nextRound() {
             round += 1;
             phase = 0;
             updateDisplay();
         };
 
+        /**
+         * Updates the app to display the correct state
+         */
         function updateDisplay() {
-
+            // Change rounds
             if (phase === 3) { nextRound() }
             else if (phase === -1) { lastRound() };
 
+            // Update the appearance of the buttons
             buttons.forEach(current => { current.classList.remove("checked") });
             buttons[phase].classList.add("checked");
 
+            // Update the Round number
             document.querySelector("#currentRound").innerHTML = "Round " + round;
-
-            console.log("Phase: " + (phase + 1) + " of Round: " + round)
         }
 
         // Pin zone is the "jiggle area" in which the app will be locked
