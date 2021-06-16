@@ -84,7 +84,8 @@ class scsApp extends FormApplication {
         // The actual pin location is set elsewhere, but we need to insert something
         // manually here to feed it values for the initial render.
         if (pinned) {
-            this.initialPosition.top = playerAppPos.top - pinOffset + 12;
+            var playerOffset = !game.user.isGM ? 36 : 12;
+            this.initialPosition.top = playerAppPos.top - pinOffset + playerOffset;
             this.initialPosition.left = playerAppPos.left;
         }
 
@@ -111,11 +112,16 @@ class scsApp extends FormApplication {
         const drag = new Draggable(this, html, draggable, false);
 
         // Hide buttons for players and re-adjust app size
-        if (!game.users.current.isGM) {
+        if (!game.user.isGM) {
             html.find("nav.flexrow.arrows").hide();
             document.querySelector("#scs-app").style.setProperty('--scsHeight', '50px');
             pinOffset -= 25;
-        }
+        };
+
+        Hooks.on("updateSetting", () => {
+            pullValues();
+            updateApp();
+        });
 
         var buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
         var phase, round;
