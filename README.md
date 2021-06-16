@@ -7,8 +7,6 @@ An implementation of the Simultaneous Combat System for Foundry VTT. See the ori
 # Installation
 In the setup screen, use the URL https://github.com/arcanistzed/scs/releases/latest/download/module.json to install the module.
 
-# Usage
-
 # License
 This package is under an [MIT license](LICENSE)
 
