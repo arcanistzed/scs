@@ -12,7 +12,7 @@ Hooks.on("init", () => {
         scope: 'client',
         config: false,
         type: Object,
-        default: { top: 446, left: 15 },
+        default: { top: 446, left: 15 }
     });
 
     game.settings.register('scs', 'pinned', {
@@ -20,9 +20,25 @@ Hooks.on("init", () => {
         scope: 'client',
         config: false,
         type: Boolean,
-        default: true,
+        default: true
     });
-})
+
+    game.settings.register('scs', 'phase', {
+        name: 'Phase',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0
+    });
+
+    game.settings.register('scs', 'round', {
+        name: 'Round',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 1
+    });
+});
 
 Hooks.once('ready', async function () {
     if (game.modules.get("smalltime").active) { pinOffset += 67 };
@@ -94,9 +110,20 @@ class scsApp extends FormApplication {
 
         const drag = new Draggable(this, html, draggable, false);
 
+        // Hide buttons for players and re-adjust app size
+        if (!game.users.current.isGM) {
+            html.find("nav.flexrow.arrows").hide();
+            document.querySelector("#scs-app").style.setProperty('--scsHeight', '50px');
+            pinOffset -= 25;
+        }
+
         var buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
-        var phase = 0; // counts the current phase
-        var round = 1; // counts the current round
+        var phase, round;
+
+        function pullValues() {
+            phase = game.settings.get("scs", "phase"); // counts the current phase
+            round = game.settings.get("scs", "round"); // counts the current round
+        };
 
         // Execute one of the functions below this, depending on the button clicked
         html.find('#lastRound').on('click', () => { lastRound() });
@@ -106,36 +133,38 @@ class scsApp extends FormApplication {
 
         // Return to the last round
         function lastRound() {
+            pullValues();
             round -= 1;
             phase = 2;
-            updateDisplay();
-            console.log("hi")
+            updateApp();
         };
 
         // Return to the last phase
         function lastPhase() {
+            pullValues();
             phase -= 1;
-            updateDisplay();
-            console.log("ho")
+            updateApp();
         };
 
         // Advance to the next phase
         function nextPhase() {
+            pullValues();
             phase += 1;
-            updateDisplay();
+            updateApp();
         };
 
         // Advance to the next round
         function nextRound() {
+            pullValues();
             round += 1;
             phase = 0;
-            updateDisplay();
+            updateApp();
         };
 
         /**
          * Updates the app to display the correct state
          */
-        function updateDisplay() {
+        function updateApp() {
             // Change rounds
             if (phase === 3) { nextRound() }
             else if (phase === -1) { lastRound() };
@@ -146,6 +175,10 @@ class scsApp extends FormApplication {
 
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = "Round " + round;
+
+            // Save new values
+            game.settings.set("scs", "phase", phase);
+            game.settings.set("scs", "round", round);
         }
 
         // Pin zone is the "jiggle area" in which the app will be locked

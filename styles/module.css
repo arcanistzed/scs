@@ -57,8 +57,9 @@ nav.flexrow.buttons {
 }
 
 #scs-app {
+  --scsHeight: 75px;
   flex-wrap: nowrap;
-  height: 75px;
+  height: var(--scsHeight);
   background: none;
 }
 
