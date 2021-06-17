@@ -1,8 +1,10 @@
 {
-  "settings": {
-    "showTracker": {
-      "Name": "Show Tracker",
-      "Hint": "Enable this to display the default combat tracker"
+  "scs": {
+    "settings": {
+      "showTracker": {
+        "Name": "Show Tracker",
+        "Hint": "Enable this to display the default combat tracker"
+      }
     }
   }
 }

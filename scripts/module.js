@@ -42,8 +42,8 @@ Hooks.on("init", () => {
     });
 
     game.settings.register('scs', 'showTracker', {
-        name: game.i18n.localize("settings.showTracker.Name"),
-        hint: game.i18n.localize("settings.showTracker.Hint"),
+        name: game.i18n.localize("scs.settings.showTracker.Name"),
+        hint: game.i18n.localize("scs.settings.showTracker.Hint"),
         scope: 'world',
         config: true,
         type: Boolean,
@@ -111,10 +111,6 @@ class scsApp extends FormApplication {
             top: this.initialPosition.top,
             left: this.initialPosition.left
         });
-    }
-
-    async _updateObject(event, formData) {
-        console.log("update")
     }
 
     activateListeners(html) {
