@@ -1,8 +1,8 @@
 let pinOffset = 100;
 
-// remove combat tab from sidebar
+// Hide combat tab from sidebar
 Hooks.on("renderSidebar", app => {
-    document.querySelectorAll("[data-tab='combat']").forEach(element => element.remove());
+    document.querySelectorAll("[data-tab='combat']").forEach(element => element.style.display = "none");
     document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
 });
 
