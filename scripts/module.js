@@ -1,9 +1,11 @@
 let pinOffset = 100;
 
 // Hide combat tab from sidebar
-Hooks.on("renderSidebar", app => {
-    document.querySelectorAll("[data-tab='combat']").forEach(element => element.style.display = "none");
-    document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
+Hooks.on("renderSidebar", () => {
+    if (!game.settings.get("scs", "showTracker")) {
+        document.querySelectorAll("[data-tab='combat']").forEach(element => element.style.display = "none");
+        document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
+    };
 });
 
 Hooks.on("init", () => {
@@ -37,6 +39,15 @@ Hooks.on("init", () => {
         config: false,
         type: Number,
         default: 1
+    });
+
+    game.settings.register('scs', 'showTracker', {
+        name: game.i18n.localize("settings.showTracker.Name"),
+        hint: game.i18n.localize("settings.showTracker.Hint"),
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: false
     });
 });
 

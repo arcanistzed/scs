@@ -1,3 +1,8 @@
 {
-    "MODULE.hello": "hello"
+  "settings": {
+    "showTracker": {
+      "Name": "Show Tracker",
+      "Hint": "Enable this to display the default combat tracker"
+    }
+  }
 }

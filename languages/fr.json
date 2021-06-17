@@ -1,0 +1,8 @@
+{
+  "settings": {
+    "showTracker": {
+      "Name": "Afficher l'onglet combat",
+      "Hint": "Activez ceci pour que l'outil de gestion du combat s'affiche normalement"
+    }
+  }
+}
