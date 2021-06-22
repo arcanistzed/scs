@@ -5,6 +5,7 @@ Hooks.on("renderSidebar", () => {
     if (!game.settings.get("scs", "showTracker")) {
         document.querySelectorAll("[data-tab='combat']").forEach(element => element.style.display = "none");
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
+        Hooks.on("collapseSidebar", (_sidebar, collapsed) => { collapsed ? document.querySelector("#sidebar[class*='collapsed']").style.height = "min-content" : null; });
     };
 });
 
@@ -137,6 +138,7 @@ class scsApp extends FormApplication {
             phase = game.settings.get("scs", "phase"); // counts the current phase
             round = game.settings.get("scs", "round"); // counts the current round
         };
+        pullValues();
 
         // Execute one of the functions below this, depending on the button clicked
         html.find('#lastRound').on('click', () => { lastRound() });
