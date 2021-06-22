@@ -6,19 +6,13 @@
   "manifestPlusVersion": "1.2.0",
   "minimumCoreVersion": "0.8.6",
   "compatibleCoreVersion": "0.8.7",
+  "author": "arcanist",
   "authors": [
     {
       "name": "arcanist",
       "url": "https://arcanistzed.github.io/",
       "email": "arcanistzed@gmail.com",
       "discord": "arcanist#4317"
-    }
-  ],
-  "dependencies": [
-    {
-      "name": "socketlib",
-      "manifest": "https://github.com/manuelVo/foundryvtt-socketlib/blob/v1.0.6/module.json",
-      "type": "module"
     }
   ],
   "esmodules": [
