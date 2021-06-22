@@ -9,6 +9,8 @@ Hooks.on("renderSidebar", () => {
     };
 });
 
+const debouncedReload = debounce(() => window.location.reload(), 100)
+
 Hooks.on("init", () => {
     game.settings.register('scs', 'position', {
         name: 'Position',
@@ -48,7 +50,8 @@ Hooks.on("init", () => {
         scope: 'world',
         config: true,
         type: Boolean,
-        default: false
+        default: false,
+        onChange: debouncedReload
     });
 });
 
@@ -137,8 +140,9 @@ class scsApp extends FormApplication {
         function pullValues() {
             phase = game.settings.get("scs", "phase"); // counts the current phase
             round = game.settings.get("scs", "round"); // counts the current round
+            updateApp();
         };
-        pullValues();
+        Hooks.on("renderscsApp", () => { pullValues() });
 
         // Execute one of the functions below this, depending on the button clicked
         html.find('#lastRound').on('click', () => { lastRound() });

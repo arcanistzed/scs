@@ -3,7 +3,7 @@
     "settings": {
       "showTracker": {
         "Name": "Show Tracker",
-        "Hint": "Enable this to display the default combat tracker"
+        "Hint": "Enable this to display the default combat tracker (requires reload)"
       }
     }
   }
