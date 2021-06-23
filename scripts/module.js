@@ -53,6 +53,15 @@ Hooks.on("init", () => {
         default: false,
         onChange: debouncedReload
     });
+
+    game.settings.register('scs', 'limitPhases', {
+        name: game.i18n.localize("scs.settings.limitPhases.Name"),
+        hint: game.i18n.localize("scs.settings.limitPhases.Hint"),
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: true,
+    });
 });
 
 Hooks.once('ready', async function () {
@@ -184,9 +193,14 @@ class scsApp extends FormApplication {
          * Updates the app to display the correct state
          */
         function updateApp() {
-            // Change rounds
-            if (phase === 3) { nextRound() }
-            else if (phase === -1) { lastRound() };
+            // Change rounds if limit phases is enabled
+            if (game.settings.get("scs", "limitPhases")) {
+                if (phase === 3) { nextRound() }
+                else if (phase === -1) { lastRound() };
+            } else {
+                if (phase === 3) {phase = 0};
+                if (phase === -1) {phase = 2};
+            };
 
             // Update the appearance of the buttons
             buttons.forEach(current => { current.classList.remove("checked") });

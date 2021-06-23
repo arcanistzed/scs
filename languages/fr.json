@@ -4,6 +4,10 @@
       "showTracker": {
         "Name": "Afficher l'onglet combat",
         "Hint": "Activez ceci pour que l'outil de gestion du combat s'affiche normalement (nécessite un rechargement)"
+      },
+      "limitPhases": {
+        "Name": "Limité les phases",
+        "Hint": "Une fois les trois phases terminées, passez à l'étape suivante du combat."
       }
     }
   }

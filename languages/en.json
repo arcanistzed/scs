@@ -4,6 +4,10 @@
       "showTracker": {
         "Name": "Show Tracker",
         "Hint": "Enable this to display the default combat tracker (requires reload)"
+      },
+      "limitPhases": {
+        "Name": "Limit Phases",
+        "Hint": "After the three phases are finished, move on to the next round of combat."
       }
     }
   }
