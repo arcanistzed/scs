@@ -138,10 +138,8 @@ class scsApp extends FormApplication {
             pinOffset -= 25;
         };
 
-        Hooks.on("updateSetting", () => {
-            pullValues();
-            updateApp();
-        });
+        // Compatibility with About Time
+        const aboutTime = game.modules.get("about-time").active;
 
         var buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
         var phase, round;
@@ -165,6 +163,7 @@ class scsApp extends FormApplication {
             pullValues();
             round -= 1;
             phase = 2;
+            if (aboutTime) game.Gametime.advanceClock(-6);
             updateApp();
         };
 
@@ -187,6 +186,7 @@ class scsApp extends FormApplication {
             pullValues();
             round += 1;
             phase = 0;
+            if (aboutTime) game.Gametime.advanceClock(6);
             updateApp();
         };
 
