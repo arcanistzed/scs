@@ -152,6 +152,7 @@ class scsApp extends FormApplication {
             updateApp();
         };
         Hooks.on("renderscsApp", () => { pullValues() });
+        Hooks.on("updateSetting", setting => { setting.data.key === "scs.phase" ? pullValues() : null });
 
         // Execute one of the functions below this, depending on the button clicked
         html.find('#lastRound').on('click', () => { lastRound() });
@@ -198,8 +199,8 @@ class scsApp extends FormApplication {
                 if (phase === 3) { nextRound() }
                 else if (phase === -1) { lastRound() };
             } else {
-                if (phase === 3) {phase = 0};
-                if (phase === -1) {phase = 2};
+                if (phase === 3) { phase = 0 };
+                if (phase === -1) { phase = 2 };
             };
 
             // Update the appearance of the buttons
