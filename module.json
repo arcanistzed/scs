@@ -4,7 +4,7 @@
   "description": "An implementation of the Simultaneous Combat System for Foundry VTT.",
   "version": "This is auto replaced",
   "manifestPlusVersion": "1.2.0",
-  "minimumCoreVersion": "0.8.6",
+  "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.8.7",
   "author": "arcanist",
   "authors": [
