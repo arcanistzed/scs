@@ -44,6 +44,14 @@ Hooks.on("init", () => {
         default: 1
     });
 
+    game.settings.register('scs', 'stopRealtime', {
+        name: "stopRealtime",
+        scope: 'world',
+        config: false,
+        type: Boolean,
+        default: true,
+    });
+
     game.settings.register('scs', 'showTracker', {
         name: game.i18n.localize("scs.settings.showTracker.Name"),
         hint: game.i18n.localize("scs.settings.showTracker.Hint"),
@@ -74,12 +82,12 @@ class scsApp extends FormApplication {
     // Override close() to prevent Escape presses from closing the scs app.
     async close(options = {}) {
         // If called by scs, use original method to handle app closure.
-        if (options.scs) return super.close();
+        if (options.scs || options.smallTime) return super.close();
 
         // Case 1: Close other open UI windows.
         if (Object.keys(ui.windows).length > 1) {
             Object.values(ui.windows).forEach((app) => {
-                if (app.title === 'Simultaneous Combat System') return;
+                if (app.title === 'Simultaneous Combat System' || app.title === 'SmallTime') return;
                 app.close();
             });
         }
@@ -138,8 +146,39 @@ class scsApp extends FormApplication {
             pinOffset -= 25;
         };
 
-        // Compatibility with About Time
+        // Integration with About Time
         const aboutTime = game.modules.get("about-time").active;
+        /*if (aboutTime && game.settings.get("scs", "stopRealtime")) {
+            Hooks.on("createCombatant", () => {
+                let d = new Dialog({
+                    title: "Slow down time?",
+                    content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
+                    buttons: {
+                        yes: {
+                            icon: '<i class="fas fa-check"></i>',
+                            label: "Yes",
+                            callback: () => game.Gametime.stopRunning()
+                        },
+                        no: {
+                            icon: '<i class="fas fa-times"></i>',
+                            label: "No"
+                        },
+                        never: {
+                            icon: '<i class="fas fa-skull"></i>',
+                            label: "Never",
+                            callback: () => game.settings.set("scs", "stopRealtime", false)
+                        }
+                    },
+                    default: "yes",
+                });
+                d.render(true);
+            });
+        };
+
+        Hooks.on("deleteCombatant", () => {
+            if (game.combat?.turns.length && aboutTime) game.Gametime.startRunning();
+        });
+        */
 
         var buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
         var phase, round;
@@ -163,7 +202,7 @@ class scsApp extends FormApplication {
             pullValues();
             round -= 1;
             phase = 2;
-            if (aboutTime) game.Gametime.advanceClock(-6);
+            if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
             updateApp();
         };
 
@@ -186,7 +225,7 @@ class scsApp extends FormApplication {
             pullValues();
             round += 1;
             phase = 0;
-            if (aboutTime) game.Gametime.advanceClock(6);
+            if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
             updateApp();
         };
 

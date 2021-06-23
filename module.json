@@ -16,7 +16,7 @@
     }
   ],
   "esmodules": [
-    "/scripts/module.js"
+    "/scripts/scs.js"
   ],
   "scripts": [
     "/scripts/lib/draggabilly.js"
