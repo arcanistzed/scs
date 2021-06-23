@@ -30,17 +30,17 @@
 }
 
 .phase-button.mv {
-  background-color: #e45f17;
+  background-image: linear-gradient(#e45f17, #e49b17);
   border-radius: 5px 0px 0px 5px;
   margin-left: 3px;
 }
 
 .phase-button.atk {
-  background-color: #e5352d;
+  background-image: linear-gradient(#e5352d, #e52d9b);
 }
 
 .phase-button.spl {
-  background-color: #326bb6;
+  background-image: linear-gradient(#326bb6, #32aab6);
   border-radius: 0px 5px 5px 0px;
   margin-right: 3px;
 }
