@@ -7,6 +7,7 @@ An implementation of the Simultaneous Combat System for Foundry VTT. See the ori
 The DM can control the current phase and round with easy-to-use controls floating in the bottom corner:
 
 ![scs](https://user-images.githubusercontent.com/82790112/123032659-4e875c80-d3b4-11eb-853e-1609a45cda56.gif)
+![gradient](https://user-images.githubusercontent.com/82790112/123046244-ddeb3a80-d3c9-11eb-98db-da2f4a6abd68.gif)
 
 On the player's side:
 
