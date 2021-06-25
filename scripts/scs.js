@@ -252,7 +252,7 @@ class scsApp extends FormApplication {
             // Save new values
             game.settings.set("scs", "phase", phase);
             game.settings.set("scs", "round", round);
-        }
+        };
 
         // Pin zone is the "jiggle area" in which the app will be locked
         // to a pinned position if dropped. pinZone stores whether or not
