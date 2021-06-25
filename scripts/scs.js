@@ -186,9 +186,11 @@ class scsApp extends FormApplication {
         function pullValues() {
             phase = game.settings.get("scs", "phase"); // counts the current phase
             round = game.settings.get("scs", "round"); // counts the current round
-            updateApp();
         };
-        Hooks.on("renderscsApp", () => { pullValues() });
+        Hooks.on("renderscsApp", () => {
+            pullValues()
+            updateApp();
+        });
         Hooks.on("updateSetting", setting => { setting.data.key === "scs.phase" ? pullValues() : null });
 
         // Execute one of the functions below this, depending on the button clicked
