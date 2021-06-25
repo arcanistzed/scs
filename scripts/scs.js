@@ -73,7 +73,7 @@ Hooks.on("init", () => {
 });
 
 Hooks.once('ready', async function () {
-    if (game.modules.get("smalltime").active) { pinOffset += 67 };
+    if (game.modules.get("smalltime")?.active) { pinOffset += 67 };
 
     new scsApp().render(true);
 });
@@ -147,7 +147,7 @@ class scsApp extends FormApplication {
         };
 
         // Integration with About Time
-        const aboutTime = game.modules.get("about-time").active;
+        const aboutTime = game.modules.get("about-time")?.active;
         /*if (aboutTime && game.settings.get("scs", "stopRealtime")) {
             Hooks.on("createCombatant", () => {
                 let d = new Dialog({
@@ -335,7 +335,7 @@ class scsApp extends FormApplication {
     };
 
     // Pin the app above the Players list.
-    static async pinApp(expanded) {
+    static async pinApp(_expanded) {
         // Only do this if a pin lock isn't already in place.
         if (!$('#pin-lock').length) {
             const playerApp = document.getElementById('players');
