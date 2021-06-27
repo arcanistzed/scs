@@ -1,5 +1,10 @@
 {
   "scs": {
+    "phases": {
+      "mv": "Déplacement",
+      "atk": "Attaques",
+      "spl": "Sorts"
+    },
     "settings": {
       "showTracker": {
         "Name": "Afficher l'onglet combat",

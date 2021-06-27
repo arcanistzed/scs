@@ -1,13 +1,13 @@
-<form class="flexcol" id="draggable">
+<form class="flexcol">
     <nav class="flexrow buttons">
-        <div class="phase-button mv checked">Move</div>
-        <div class="phase-button atk">Attacks</div>
-        <div class="phase-button spl">Spells</div>
+        <div class="phase-button mv">{{ localize "scs.phases.mv" }}</div>
+        <div class="phase-button atk">{{ localize "scs.phases.atk" }}</div>
+        <div class="phase-button spl">{{ localize "scs.phases.spl" }}</div>
     </nav>
     <nav class="flexrow arrows">
         <div id="lastRound" class="fas fa-angle-double-left"></div>
         <div id="lastPhase" class="fas fa-angle-left"></div>
-        <div id="currentRound">Round 1</div>
+        <div id="currentRound"></div>
         <div id="nextPhase" class="fas fa-angle-right"></div>
         <div id="nextRound" class="fas fa-angle-double-right"></div>
     </nav>

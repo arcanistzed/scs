@@ -1,5 +1,10 @@
 {
   "scs": {
+    "phases": {
+      "mv": "Déplacer",
+      "atk": "Attaquer",
+      "spl": "Sorts"
+    },
     "settings": {
       "showTracker": {
         "Name": "Show Tracker",
