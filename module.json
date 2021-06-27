@@ -15,11 +15,9 @@
       "discord": "arcanist#4317"
     }
   ],
-  "esmodules": [
-    "/scripts/scs.js"
-  ],
   "scripts": [
-    "/scripts/lib/draggabilly.js"
+    "/scripts/scs.js",
+    "/scripts/intro.js"
   ],
   "styles": [
     "/styles/module.css"
@@ -34,6 +32,13 @@
       "lang": "fr",
       "name": "French",
       "path": "languages/fr.json"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "_introjs",
+      "manifest": "https://github.com/League-of-Foundry-Developers/intro.js-lib/releases/download/3.2.1-fvtt1/module.json",
+      "type": "module"
     }
   ],
   "url": "This is auto replaced",
