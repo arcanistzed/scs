@@ -1,9 +1,9 @@
 {
   "scs": {
     "phases": {
-      "mv": "Déplacement",
-      "atk": "Attaques",
-      "spl": "Sorts"
+      "one": "Déplacer",
+      "two": "Attaquer",
+      "three": "Sorts"
     },
     "settings": {
       "showTracker": {
@@ -13,6 +13,22 @@
       "limitPhases": {
         "Name": "Limité les phases",
         "Hint": "Une fois les trois phases terminées, passez à l'étape suivante du combat."
+      },
+      "startupTutorial": {
+        "Name": "Affiché les instructions",
+        "Hint": "Désactivé cela pour ne pas faire joué les instuctions à chaque fois"
+      },
+      "phaseOne": {
+        "Name": "Première phase",
+        "Hint": "Configuré le nom de la première phase"
+      },
+      "phaseTwo": {
+        "Name": "Deuxième phase",
+        "Hint": "Configuré le nom de la deuxième phase"
+      },
+      "phaseThree": {
+        "Name": "Première phase",
+        "Hint": "Configuré le nom de la troisième phase"
       }
     }
   }

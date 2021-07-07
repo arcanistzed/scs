@@ -1,9 +1,9 @@
 {
   "scs": {
     "phases": {
-      "mv": "Déplacer",
-      "atk": "Attaquer",
-      "spl": "Sorts"
+      "one": "Move",
+      "two": "Attacks",
+      "three": "Spells"
     },
     "settings": {
       "showTracker": {
@@ -13,6 +13,22 @@
       "limitPhases": {
         "Name": "Limit Phases",
         "Hint": "After the three phases are finished, move on to the next round of combat."
+      },
+      "startupTutorial": {
+        "Name": "Play Startup Tutorial",
+        "Hint": "Disable this if you don't want the tutorial to play each time the page loads"
+      },
+      "phaseOne": {
+        "Name": "First Phase",
+        "Hint": "Set a custom name for the first phase"
+      },
+      "phaseTwo": {
+        "Name": "Second Phase",
+        "Hint": "Set a custom name for the second phase"
+      },
+      "phaseThree": {
+        "Name": "Third Phase",
+        "Hint": "Set a custom name for the third phase"
       }
     }
   }

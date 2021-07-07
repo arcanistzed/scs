@@ -1,7 +1,7 @@
 .draggable {
-    width: 140px;
-    border-radius: 10px;
-    cursor: move;
+  width: 140px;
+  border-radius: 10px;
+  cursor: move;
 }
 
 .draggable.is-dragging {
@@ -10,14 +10,13 @@
 
 .phase-button {
   display: block;
-  font-size: 14px;
-  margin: 3px 0px 3px 0px;
-  height: 20px;
+  margin: 3px 0;
   text-align: center;
   height: 40px;
   color: white;
-  padding: 12px;
-  cursor: pointer;
+  padding: 12px 0;
+  overflow-wrap: anywhere;
+  overflow: clip;
 }
 
 .phase-button:hover {
@@ -29,17 +28,17 @@
   mix-blend-mode: soft-light;
 }
 
-.phase-button.mv {
+.phase-button.one {
   background-image: linear-gradient(#e45f17, #e49b17);
   border-radius: 5px 0px 0px 5px;
   margin-left: 3px;
 }
 
-.phase-button.atk {
+.phase-button.two {
   background-image: linear-gradient(#e5352d, #e52d9b);
 }
 
-.phase-button.spl {
+.phase-button.three {
   background-image: linear-gradient(#326bb6, #32aab6);
   border-radius: 0px 5px 5px 0px;
   margin-right: 3px;
@@ -48,18 +47,20 @@
 nav.flexrow.arrows {
   text-align: center;
   color: white;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 5px;
 }
 
 nav.flexrow.buttons {
-  flex: 2;
+  flex-wrap: nowrap;
 }
 
 #scs-app {
   --scsHeight: 75px;
-  flex-wrap: nowrap;
   height: var(--scsHeight);
+  max-width: 200px;
+  flex-wrap: nowrap;
   background: none;
 }
 
