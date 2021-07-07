@@ -9,9 +9,8 @@ Hooks.on("renderSidebar", () => {
     };
 });
 
-const debouncedReload = debounce(() => window.location.reload(), 100)
-
 Hooks.on("init", () => {
+
     game.settings.register('scs', 'position', {
         name: 'Position',
         scope: 'client',
@@ -20,7 +19,7 @@ Hooks.on("init", () => {
         default: { top: 446, left: 15 }
     });
 
-    game.settings.register('scs', 'pinned', {
+     game.settings.register('scs', 'pinned', {
         name: 'Pinned',
         scope: 'client',
         config: false,
@@ -59,7 +58,37 @@ Hooks.on("init", () => {
         config: true,
         type: Boolean,
         default: false,
-        onChange: debouncedReload
+        onChange: debounce(() => window.location.reload(), 100)
+    });
+
+    game.settings.register('scs', 'phaseOne', {
+        name: game.i18n.localize("scs.settings.phaseOne.Name"),
+        hint: game.i18n.localize("scs.settings.phaseOne.Hint"),
+        scope: 'world',
+        config: true,
+        type: String,
+        default: game.i18n.localize("scs.phases.one"),
+        onchange: () => { new scsApp().render(true); }
+    });
+
+    game.settings.register('scs', 'phaseTwo', {
+        name: game.i18n.localize("scs.settings.phaseTwo.Name"),
+        hint: game.i18n.localize("scs.settings.phaseTwo.Hint"),
+        scope: 'world',
+        config: true,
+        type: String,
+        default: game.i18n.localize("scs.phases.two"),
+        onchange: () => { new scsApp().render(true); }
+    });
+
+    game.settings.register('scs', 'phaseThree', {
+        name: game.i18n.localize("scs.settings.phaseThree.Name"),
+        hint: game.i18n.localize("scs.settings.phaseThree.Hint"),
+        scope: 'world',
+        config: true,
+        type: String,
+        default: game.i18n.localize("scs.phases.three"),
+        onchange: () => { new scsApp().render(true); }
     });
 
     game.settings.register('scs', 'limitPhases', {
@@ -69,6 +98,15 @@ Hooks.on("init", () => {
         config: true,
         type: Boolean,
         default: false,
+    });
+
+    game.settings.register('scs', 'startupTutorial', {
+        name: game.i18n.localize("scs.settings.startupTutorial.Name"),
+        hint: game.i18n.localize("scs.settings.startupTutorial.Hint"),
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: true,
     });
 });
 
@@ -102,7 +140,7 @@ class scsApp extends FormApplication {
         }
         // Case 3: Toggle the main menu.
         else ui.menu.toggle();
-    }
+    };
 
     static get defaultOptions() {
 
@@ -126,18 +164,18 @@ class scsApp extends FormApplication {
             popOut: true,
             submitOnChange: true,
             closeOnSubmit: false,
-            template: 'modules/scs/templates/template.html',
+            template: 'modules/scs/templates/template.hbs',
             id: 'scs-app',
             title: 'Simultaneous Combat System',
             top: this.initialPosition.top,
             left: this.initialPosition.left
         });
-    }
+    };
 
     activateListeners(html) {
         super.activateListeners(html);
 
-        const drag = new Draggable(this, html, draggable, false);
+        const drag = new Draggable(this, html, document.getElementById("currentRound"), false);
 
         // Hide buttons for players and re-adjust app size
         if (!game.user.isGM) {
@@ -146,115 +184,17 @@ class scsApp extends FormApplication {
             pinOffset -= 25;
         };
 
-        // Integration with About Time
-        const aboutTime = game.modules.get("about-time")?.active;
-        /*if (aboutTime && game.settings.get("scs", "stopRealtime")) {
-            Hooks.on("createCombatant", () => {
-                let d = new Dialog({
-                    title: "Slow down time?",
-                    content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
-                    buttons: {
-                        yes: {
-                            icon: '<i class="fas fa-check"></i>',
-                            label: "Yes",
-                            callback: () => game.Gametime.stopRunning()
-                        },
-                        no: {
-                            icon: '<i class="fas fa-times"></i>',
-                            label: "No"
-                        },
-                        never: {
-                            icon: '<i class="fas fa-skull"></i>',
-                            label: "Never",
-                            callback: () => game.settings.set("scs", "stopRealtime", false)
-                        }
-                    },
-                    default: "yes",
-                });
-                d.render(true);
-            });
-        };
+        scsApp.tutorial();
 
-        Hooks.on("deleteCombatant", () => {
-            if (game.combat?.turns.length && aboutTime) game.Gametime.startRunning();
-        });
-        */
+        scsApp.display(html);
 
-        var buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
-        var phase, round;
+        scsApp.combat()
 
-        function pullValues() {
-            phase = game.settings.get("scs", "phase"); // counts the current phase
-            round = game.settings.get("scs", "round"); // counts the current round
-        };
-        Hooks.on("renderscsApp", () => {
-            pullValues()
-            updateApp();
-        });
-        Hooks.on("updateSetting", setting => { setting.data.key === "scs.phase" ? pullValues() : null });
-
-        // Execute one of the functions below this, depending on the button clicked
-        html.find('#lastRound').on('click', () => { lastRound() });
-        html.find('#lastPhase').on('click', () => { lastPhase() });
-        html.find('#nextPhase').on('click', () => { nextPhase() });
-        html.find('#nextRound').on('click', () => { nextRound() });
-
-        // Return to the last round
-        function lastRound() {
-            pullValues();
-            round -= 1;
-            phase = 2;
-            if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
-            updateApp();
-        };
-
-        // Return to the last phase
-        function lastPhase() {
-            pullValues();
-            phase -= 1;
-            updateApp();
-        };
-
-        // Advance to the next phase
-        function nextPhase() {
-            pullValues();
-            phase += 1;
-            updateApp();
-        };
-
-        // Advance to the next round
-        function nextRound() {
-            pullValues();
-            round += 1;
-            phase = 0;
-            if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
-            updateApp();
-        };
-
-        /**
-         * Updates the app to display the correct state
-         */
-        function updateApp() {
-            // Change rounds if limit phases is enabled
-            if (game.settings.get("scs", "limitPhases")) {
-                if (phase === 3) { nextRound() }
-                else if (phase === -1) { lastRound() };
-            } else {
-                if (phase === 3) { phase = 0 };
-                if (phase === -1) { phase = 2 };
-            };
-
-            // Update the appearance of the buttons
-            buttons.forEach(current => { current.classList.remove("checked") });
-            buttons[phase].classList.add("checked");
-
-            // Update the Round number
-            document.querySelector("#currentRound").innerHTML = "Round " + round;
-
-            // Save new values
-            game.settings.set("scs", "phase", phase);
-            game.settings.set("scs", "round", round);
-        };
+        // Inject phase names
+        html.find(".phase-button.one")[0].innerText = game.settings.get("scs", "phaseOne");
+        html.find(".phase-button.two")[0].innerText = game.settings.get("scs", "phaseTwo");
+        html.find(".phase-button.three")[0].innerText = game.settings.get("scs", "phaseThree");
+        console.log(html)
 
         // Pin zone is the "jiggle area" in which the app will be locked
         // to a pinned position if dropped. pinZone stores whether or not
@@ -363,4 +303,144 @@ class scsApp extends FormApplication {
         // Remove the style tag that's pinning the window.
         $('#pin-lock').remove();
     }
-}
+
+    // Manage phase and round diplay
+    static display(html) {
+        const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
+        const aboutTime = game.modules.get("about-time")?.active;
+        var phase, round;
+
+        function pullValues() {
+            phase = game.settings.get("scs", "phase"); // counts the current phase
+            round = game.settings.get("scs", "round"); // counts the current round
+        };
+        Hooks.on("renderscsApp", () => {
+            pullValues();
+            updateApp();
+        });
+        Hooks.on("updateSetting", setting => { setting.data.key === "scs.phase" ? pullValues() : null });
+
+        // Execute one of the functions below this, depending on the button clicked
+        html.find('#lastRound').on('click', () => { lastRound() });
+        html.find('#lastPhase').on('click', () => { lastPhase() });
+        html.find('#nextPhase').on('click', () => { nextPhase() });
+        html.find('#nextRound').on('click', () => { nextRound() });
+
+        // Return to the last round
+        function lastRound() {
+            pullValues();
+            round -= 1;
+            phase = 2;
+            if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
+            updateApp();
+        };
+
+        // Return to the last phase
+        function lastPhase() {
+            pullValues();
+            phase -= 1;
+            updateApp();
+        };
+
+        // Advance to the next phase
+        function nextPhase() {
+            pullValues();
+            phase += 1;
+            updateApp();
+        };
+
+        // Advance to the next round
+        function nextRound() {
+            pullValues();
+            round += 1;
+            phase = 0;
+            if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
+            updateApp();
+        };
+
+        /**
+         * Updates the app to display the correct state
+         */
+        function updateApp() {
+            // Change rounds if limit phases is enabled
+            if (game.settings.get("scs", "limitPhases")) {
+                if (phase === 3) { nextRound() }
+                else if (phase === -1) { lastRound() };
+            } else {
+                if (phase === 3) { phase = 0 };
+                if (phase === -1) { phase = 2 };
+            };
+
+            // Update the appearance of the buttons
+            buttons.forEach(current => { current.classList.remove("checked") });
+            buttons[phase].classList.add("checked");
+
+            // Update the Round number
+            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), round].join(" ");
+
+            // Save new values
+            game.settings.set("scs", "phase", phase);
+            game.settings.set("scs", "round", round);
+        };
+    };
+
+    // Manage combat
+    static combat() {
+        // Integration with About Time
+        const aboutTime = game.modules.get("about-time")?.active;
+        if (aboutTime && game.settings.get("scs", "stopRealtime")) {
+            Hooks.on("createCombatant", () => {
+                let d = new Dialog({
+                    title: "Slow down time?",
+                    content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
+                    buttons: {
+                        yes: {
+                            icon: '<i class="fas fa-check"></i>',
+                            label: "Yes",
+                            callback: () => game.Gametime.stopRunning()
+                        },
+                        no: {
+                            icon: '<i class="fas fa-times"></i>',
+                            label: "No"
+                        },
+                        never: {
+                            icon: '<i class="fas fa-skull"></i>',
+                            label: "Never",
+                            callback: () => game.settings.set("scs", "stopRealtime", false)
+                        }
+                    },
+                    default: "yes",
+                });
+                d.render(true);
+            });
+        };
+ 
+        Hooks.on("deleteCombatant", () => {
+            if (game.combat?.turns.length && aboutTime) game.Gametime.startRunning();
+        });
+    };
+
+    // IntroJS tutorial
+    static tutorial() {
+        introJs().setOptions({
+            steps: [{
+                title: 'Welcome to SCS',
+                intro: 'This module is an implementation of the Simultaneous Combat System described in <a href="https://redd.it/nlyif8">this reddit post</a><br/>Don\'t show this tutorial again.'
+            },
+            {
+                title: "How it works",
+                intro: `Instead of each character taking their own turn sequentially, everything happens all at once. In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into three phases: ${"TODO movement, attacks, and spells"}.`
+            },
+            {
+                title: "Where is the Combat Tracker?",
+                element: document.getElementById("sidebar-tabs"),
+                intro: "Since combat happens simultaneously with this system, I've disabled the combat tracker. You can always renable it in the module's settings."
+            },
+            {
+                title: "How do I move this thing around?",
+                element: document.getElementById("currentRound"),
+                intro: "You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it."
+            }]
+        }).start();
+    }
+};
