@@ -16,8 +16,7 @@
     }
   ],
   "scripts": [
-    "/scripts/scs.js",
-    "/scripts/intro.js"
+    "/scripts/scs.js"
   ],
   "styles": [
     "/styles/module.css"
