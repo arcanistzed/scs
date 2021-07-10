@@ -1,0 +1,5 @@
+ - Better localization support
+ - WIP: Ability to set custom names and colors for phases and have up to six of them
+ - Enabling/Disabling the combat tracker no longer requires a page reload
+ - Integration with About Time, so that Realtime clocks are paused during combat
+ - WIP: IntroJS tutorial to show you how to use the module
