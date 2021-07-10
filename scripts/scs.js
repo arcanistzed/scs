@@ -1,16 +1,18 @@
 let pinOffset = 100;
 
-// Hide combat tab from sidebar
-Hooks.on("renderSidebar", () => {
+// Hide combat tab
+Hooks.on("renderCombatTracker", () => {
+    console.log("Hi")
     if (!game.settings.get("scs", "showTracker")) {
-        document.querySelectorAll("[data-tab='combat']").forEach(element => element.style.display = "none");
+        document.querySelector("[data-tab='combat']").style.display = "none";
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
-        Hooks.on("collapseSidebar", (_sidebar, collapsed) => { collapsed ? document.querySelector("#sidebar[class*='collapsed']").style.height = "min-content" : null; });
+        Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
+            if (collapsed) document.querySelector("#sidebar").style.height = "min-content";
+        });
     };
 });
 
 Hooks.on("init", () => {
-
     game.settings.register('scs', 'position', {
         name: 'Position',
         scope: 'client',
@@ -19,7 +21,7 @@ Hooks.on("init", () => {
         default: { top: 446, left: 15 }
     });
 
-     game.settings.register('scs', 'pinned', {
+    game.settings.register('scs', 'pinned', {
         name: 'Pinned',
         scope: 'client',
         config: false,
@@ -58,7 +60,7 @@ Hooks.on("init", () => {
         config: true,
         type: Boolean,
         default: false,
-        onChange: debounce(() => window.location.reload(), 100)
+        onChange: () => { game.setupGame(); }
     });
 
     game.settings.register('scs', 'phaseOne', {
@@ -157,13 +159,9 @@ class scsApp extends FormApplication {
             var playerOffset = !game.user.isGM ? 36 : 12;
             this.initialPosition.top = playerAppPos.top - pinOffset + playerOffset;
             this.initialPosition.left = playerAppPos.left;
-        }
+        };
 
         return mergeObject(super.defaultOptions, {
-            classes: ['form'],
-            popOut: true,
-            submitOnChange: true,
-            closeOnSubmit: false,
             template: 'modules/scs/templates/template.hbs',
             id: 'scs-app',
             title: 'Simultaneous Combat System',
@@ -179,22 +177,18 @@ class scsApp extends FormApplication {
 
         // Hide buttons for players and re-adjust app size
         if (!game.user.isGM) {
-            html.find("nav.flexrow.arrows").hide();
+            html.find("scsArrows").hide();
             document.querySelector("#scs-app").style.setProperty('--scsHeight', '50px');
             pinOffset -= 25;
         };
 
-        scsApp.tutorial();
+        scsApp.addPhases();
 
         scsApp.display(html);
 
         scsApp.combat()
 
-        // Inject phase names
-        html.find(".phase-button.one")[0].innerText = game.settings.get("scs", "phaseOne");
-        html.find(".phase-button.two")[0].innerText = game.settings.get("scs", "phaseTwo");
-        html.find(".phase-button.three")[0].innerText = game.settings.get("scs", "phaseThree");
-        console.log(html)
+        //scsApp.tutorial();
 
         // Pin zone is the "jiggle area" in which the app will be locked
         // to a pinned position if dropped. pinZone stores whether or not
@@ -303,6 +297,16 @@ class scsApp extends FormApplication {
         // Remove the style tag that's pinning the window.
         $('#pin-lock').remove();
     }
+
+    // Adds the phases to the Application
+    static addPhases() {
+        game.i18n.localize("scs.phases").forEach((Name, _Index, _Array) => {
+            let phaseButton = document.createElement("div");
+            document.querySelector(".scsButtons").append(phaseButton);
+            phaseButton.classList.add("phase-button");
+            phaseButton.innerText = Name;
+        });
+    };
 
     // Manage phase and round diplay
     static display(html) {
@@ -414,7 +418,7 @@ class scsApp extends FormApplication {
                 d.render(true);
             });
         };
- 
+
         Hooks.on("deleteCombatant", () => {
             if (game.combat?.turns.length && aboutTime) game.Gametime.startRunning();
         });
@@ -424,22 +428,22 @@ class scsApp extends FormApplication {
     static tutorial() {
         introJs().setOptions({
             steps: [{
-                title: 'Welcome to SCS',
-                intro: 'This module is an implementation of the Simultaneous Combat System described in <a href="https://redd.it/nlyif8">this reddit post</a><br/>Don\'t show this tutorial again.'
+                title: game.i18n.localize("tutorial.welcome.Title"),
+                intro: game.i18n.localize("tutorial.welcome.Intro")
             },
             {
-                title: "How it works",
-                intro: `Instead of each character taking their own turn sequentially, everything happens all at once. In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into three phases: ${"TODO movement, attacks, and spells"}.`
+                title: game.i18n.localize("tutorial.howItWorks.Title"),
+                intro: game.i18n.format("tutorial.howItWorks.Intro")
             },
             {
-                title: "Where is the Combat Tracker?",
+                title: game.i18n.localize("tutorial.combatTracker.Title"),
                 element: document.getElementById("sidebar-tabs"),
-                intro: "Since combat happens simultaneously with this system, I've disabled the combat tracker. You can always renable it in the module's settings."
+                intro: game.i18n.localize("tutorial.combatTracker.Intro")
             },
             {
-                title: "How do I move this thing around?",
+                title: game.i18n.localize("tutorial.movingAround.Title"),
                 element: document.getElementById("currentRound"),
-                intro: "You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it."
+                intro: game.i18n.localize("tutorial.movingAround.Intro")
             }]
         }).start();
     }
