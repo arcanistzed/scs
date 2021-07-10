@@ -1,10 +1,5 @@
 {
   "scs": {
-    "phases": [
-      "Move",
-      "Attacks",
-      "Spells"
-    ],
     "settings": {
       "showTracker": {
         "Name": "Show Tracker",
@@ -18,17 +13,14 @@
         "Name": "Play Startup Tutorial",
         "Hint": "Disable this if you don't want the tutorial to play each time the page loads"
       },
-      "phaseOne": {
-        "Name": "First Phase",
-        "Hint": "Set a custom name for the first phase"
-      },
-      "phaseTwo": {
-        "Name": "Second Phase",
-        "Hint": "Set a custom name for the second phase"
-      },
-      "phaseThree": {
-        "Name": "Third Phase",
-        "Hint": "Set a custom name for the third phase"
+      "phaseNames": {
+        "Name": "Phase Names",
+        "Hint": "A comma-seperated list of phase names",
+        "defaults": [
+          "Move",
+          "Attacks",
+          "Spells"
+        ]
       }
     }
   },

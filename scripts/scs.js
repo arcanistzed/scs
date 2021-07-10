@@ -1,4 +1,5 @@
 let pinOffset = 100;
+let phases = [];
 
 // Hide combat tab
 Hooks.on("renderCombatTracker", () => {
@@ -13,110 +14,99 @@ Hooks.on("renderCombatTracker", () => {
 });
 
 Hooks.on("init", () => {
-    game.settings.register('scs', 'position', {
-        name: 'Position',
-        scope: 'client',
+    game.settings.register("scs", "position", {
+        name: "Position",
+        scope: "client",
         config: false,
         type: Object,
         default: { top: 446, left: 15 }
     });
 
-    game.settings.register('scs', 'pinned', {
-        name: 'Pinned',
-        scope: 'client',
+    game.settings.register("scs", "pinned", {
+        name: "Pinned",
+        scope: "client",
         config: false,
         type: Boolean,
         default: true
     });
 
-    game.settings.register('scs', 'phase', {
-        name: 'Phase',
-        scope: 'world',
+    game.settings.register("scs", "currentPhase", {
+        scope: "world",
         config: false,
         type: Number,
         default: 0
     });
 
-    game.settings.register('scs', 'round', {
-        name: 'Round',
-        scope: 'world',
+    game.settings.register("scs", "currentRound", {
+        name: "Current Round",
+        scope: "world",
         config: false,
         type: Number,
         default: 1
     });
 
-    game.settings.register('scs', 'stopRealtime', {
+    game.settings.register("scs", "stopRealtime", {
         name: "stopRealtime",
-        scope: 'world',
+        scope: "world",
         config: false,
         type: Boolean,
         default: true,
     });
 
-    game.settings.register('scs', 'showTracker', {
+    game.settings.register("scs", "showTracker", {
         name: game.i18n.localize("scs.settings.showTracker.Name"),
         hint: game.i18n.localize("scs.settings.showTracker.Hint"),
-        scope: 'world',
+        scope: "world",
         config: true,
         type: Boolean,
         default: false,
         onChange: () => { game.setupGame(); }
     });
 
-    game.settings.register('scs', 'phaseOne', {
-        name: game.i18n.localize("scs.settings.phaseOne.Name"),
-        hint: game.i18n.localize("scs.settings.phaseOne.Hint"),
-        scope: 'world',
+    game.settings.register("scs", "phases", {
+        name: game.i18n.localize("scs.settings.phaseNames.Name"),
+        hint: game.i18n.localize("scs.settings.phaseNames.Hint"),
+        scope: "world",
         config: true,
         type: String,
-        default: game.i18n.localize("scs.phases.one"),
-        onchange: () => { new scsApp().render(true); }
+        default: game.i18n.localize("scs.settings.phaseNames.defaults").join(", "),
+        onchange: () => {
+            setPhases();
+            new scsApp().render(true);
+        }
     });
 
-    game.settings.register('scs', 'phaseTwo', {
-        name: game.i18n.localize("scs.settings.phaseTwo.Name"),
-        hint: game.i18n.localize("scs.settings.phaseTwo.Hint"),
-        scope: 'world',
-        config: true,
-        type: String,
-        default: game.i18n.localize("scs.phases.two"),
-        onchange: () => { new scsApp().render(true); }
-    });
-
-    game.settings.register('scs', 'phaseThree', {
-        name: game.i18n.localize("scs.settings.phaseThree.Name"),
-        hint: game.i18n.localize("scs.settings.phaseThree.Hint"),
-        scope: 'world',
-        config: true,
-        type: String,
-        default: game.i18n.localize("scs.phases.three"),
-        onchange: () => { new scsApp().render(true); }
-    });
-
-    game.settings.register('scs', 'limitPhases', {
+    game.settings.register("scs", "limitPhases", {
         name: game.i18n.localize("scs.settings.limitPhases.Name"),
         hint: game.i18n.localize("scs.settings.limitPhases.Hint"),
-        scope: 'world',
+        scope: "world",
         config: true,
         type: Boolean,
         default: false,
     });
 
-    game.settings.register('scs', 'startupTutorial', {
+    game.settings.register("scs", "startupTutorial", {
         name: game.i18n.localize("scs.settings.startupTutorial.Name"),
         hint: game.i18n.localize("scs.settings.startupTutorial.Hint"),
-        scope: 'client',
+        scope: "client",
         config: true,
         type: Boolean,
         default: true,
     });
 });
 
-Hooks.once('ready', async function () {
-    if (game.modules.get("smalltime")?.active) { pinOffset += 67 };
+Hooks.once("ready", async function () {
+    if (game.modules.get("smalltime")?.active) { pinOffset += 67 }; // Move up if SmallTime is active
 
-    new scsApp().render(true);
+    setPhases(); // Create phases array
+
+    new scsApp().render(true); // Render the app
 });
+
+// Sets the phases with the value in settings
+function setPhases() {
+    phases.push([game.settings.get("scs", "phases").split(", ")]);
+};
 
 class scsApp extends FormApplication {
     // Override close() to prevent Escape presses from closing the scs app.
@@ -127,7 +117,7 @@ class scsApp extends FormApplication {
         // Case 1: Close other open UI windows.
         if (Object.keys(ui.windows).length > 1) {
             Object.values(ui.windows).forEach((app) => {
-                if (app.title === 'Simultaneous Combat System' || app.title === 'SmallTime') return;
+                if (app.title === "Simultaneous Combat System" || app.title === "SmallTime") return;
                 app.close();
             });
         }
@@ -146,12 +136,12 @@ class scsApp extends FormApplication {
 
     static get defaultOptions() {
 
-        const pinned = game.settings.get('scs', 'pinned');
+        const pinned = game.settings.get("scs", "pinned");
 
-        const playerApp = document.getElementById('players');
+        const playerApp = document.getElementById("players");
         const playerAppPos = playerApp.getBoundingClientRect();
 
-        this.initialPosition = game.settings.get('scs', 'position');
+        this.initialPosition = game.settings.get("scs", "position");
 
         // The actual pin location is set elsewhere, but we need to insert something
         // manually here to feed it values for the initial render.
@@ -162,9 +152,9 @@ class scsApp extends FormApplication {
         };
 
         return mergeObject(super.defaultOptions, {
-            template: 'modules/scs/templates/template.hbs',
-            id: 'scs-app',
-            title: 'Simultaneous Combat System',
+            template: "modules/scs/templates/template.hbs",
+            id: "scs-app",
+            title: "Simultaneous Combat System",
             top: this.initialPosition.top,
             left: this.initialPosition.left
         });
@@ -178,7 +168,7 @@ class scsApp extends FormApplication {
         // Hide buttons for players and re-adjust app size
         if (!game.user.isGM) {
             html.find("scsArrows").hide();
-            document.querySelector("#scs-app").style.setProperty('--scsHeight', '50px');
+            document.querySelector("#scs-app").style.setProperty("--scsHeight", "50px");
             pinOffset -= 25;
         };
 
@@ -200,7 +190,7 @@ class scsApp extends FormApplication {
         drag._onDragMouseMove = function _newOnDragMouseMove(event) {
             event.preventDefault();
 
-            const playerApp = document.getElementById('players');
+            const playerApp = document.getElementById("players");
             const playerAppPos = playerApp.getBoundingClientRect();
 
             // Limit dragging to 60 updates per second.
@@ -214,7 +204,7 @@ class scsApp extends FormApplication {
             // TODO: Figure out how to account for changes to the viewport size
             // between drags.
             let conditionalOffset = 0;
-            if (game.settings.get('scs', 'pinned')) {
+            if (game.settings.get("scs", "pinned")) {
                 conditionalOffset = 20;
             }
 
@@ -232,10 +222,10 @@ class scsApp extends FormApplication {
                 event.clientY > playerAppUpperBound &&
                 event.clientY < playerAppLowerBound
             ) {
-                $('#scs-app').css('animation', 'jiggle 0.2s infinite');
+                $("#scs-app").css("animation", "jiggle 0.2s infinite");
                 pinZone = true;
             } else {
-                $('#scs-app').css('animation', '');
+                $("#scs-app").css("animation", "");
                 pinZone = false;
             }
         };
@@ -246,41 +236,41 @@ class scsApp extends FormApplication {
             window.removeEventListener(...this.handlers.dragMove);
             window.removeEventListener(...this.handlers.dragUp);
 
-            const playerApp = document.getElementById('players');
+            const playerApp = document.getElementById("players");
             const playerAppPos = playerApp.getBoundingClientRect();
             let myOffset = playerAppPos.height + pinOffset;
 
             // If the mouseup happens inside the Pin zone, pin the app.
             if (pinZone) {
                 scsApp.pinApp(true);
-                await game.settings.set('scs', 'pinned', true);
+                await game.settings.set("scs", "pinned", true);
                 this.app.setPosition({
                     left: 15,
                     top: window.innerHeight - myOffset,
                 });
             } else {
-                let windowPos = $('#scs-app').position();
+                let windowPos = $("#scs-app").position();
                 let newPos = { top: windowPos.top, left: windowPos.left };
-                await game.settings.set('scs', 'position', newPos);
-                await game.settings.set('scs', 'pinned', false);
+                await game.settings.set("scs", "position", newPos);
+                await game.settings.set("scs", "pinned", false);
             }
 
             // Kill the jiggle animation on mouseUp.
-            $('#scs-app').css('animation', '');
+            $("#scs-app").css("animation", "");
         };
     };
 
     // Pin the app above the Players list.
     static async pinApp(_expanded) {
-        // Only do this if a pin lock isn't already in place.
-        if (!$('#pin-lock').length) {
-            const playerApp = document.getElementById('players');
+        // Only do this if a pin lock isn"t already in place.
+        if (!$("#pin-lock").length) {
+            const playerApp = document.getElementById("players");
             const playerAppPos = playerApp.getBoundingClientRect();
             let myOffset = playerAppPos.height + pinOffset;
 
             // Dropping this into the DOM with an !important was the only way
             // I could get it to enable the locking behaviour.
-            $('body').append(`
+            $("body").append(`
         <style id="pin-lock">
           #scs-app {
             top: calc(100vh - ${myOffset}px) !important;
@@ -288,23 +278,23 @@ class scsApp extends FormApplication {
           }
         </style>
       `);
-            await game.settings.set('scs', 'pinned', true);
+            await game.settings.set("scs", "pinned", true);
         }
     }
 
     // Un-pin the app.
     static unPinApp() {
-        // Remove the style tag that's pinning the window.
-        $('#pin-lock').remove();
+        // Remove the style tag that"s pinning the window.
+        $("#pin-lock").remove();
     }
 
     // Adds the phases to the Application
     static addPhases() {
-        game.i18n.localize("scs.phases").forEach((Name, _Index, _Array) => {
+        phases.forEach(data => {
             let phaseButton = document.createElement("div");
             document.querySelector(".scsButtons").append(phaseButton);
             phaseButton.classList.add("phase-button");
-            phaseButton.innerText = Name;
+            phaseButton.innerText = data[0];
         });
     };
 
@@ -312,11 +302,11 @@ class scsApp extends FormApplication {
     static display(html) {
         const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
         const aboutTime = game.modules.get("about-time")?.active;
-        var phase, round;
+        var currentPhase, currentRound;
 
         function pullValues() {
-            phase = game.settings.get("scs", "phase"); // counts the current phase
-            round = game.settings.get("scs", "round"); // counts the current round
+            currentPhase = game.settings.get("scs", "currentPhase"); // counts the current phase
+            currentRound = game.settings.get("scs", "currentRound"); // counts the current round
         };
         Hooks.on("renderscsApp", () => {
             pullValues();
@@ -325,16 +315,16 @@ class scsApp extends FormApplication {
         Hooks.on("updateSetting", setting => { setting.data.key === "scs.phase" ? pullValues() : null });
 
         // Execute one of the functions below this, depending on the button clicked
-        html.find('#lastRound').on('click', () => { lastRound() });
-        html.find('#lastPhase').on('click', () => { lastPhase() });
-        html.find('#nextPhase').on('click', () => { nextPhase() });
-        html.find('#nextRound').on('click', () => { nextRound() });
+        html.find("#lastRound").on("click", () => { lastRound() });
+        html.find("#lastPhase").on("click", () => { lastPhase() });
+        html.find("#nextPhase").on("click", () => { nextPhase() });
+        html.find("#nextRound").on("click", () => { nextRound() });
 
         // Return to the last round
         function lastRound() {
             pullValues();
-            round -= 1;
-            phase = 2;
+            currentRound -= 1;
+            currentPhase = 2;
             if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
             updateApp();
         };
@@ -342,22 +332,22 @@ class scsApp extends FormApplication {
         // Return to the last phase
         function lastPhase() {
             pullValues();
-            phase -= 1;
+            currentPhase -= 1;
             updateApp();
         };
 
         // Advance to the next phase
         function nextPhase() {
             pullValues();
-            phase += 1;
+            currentPhase += 1;
             updateApp();
         };
 
         // Advance to the next round
         function nextRound() {
             pullValues();
-            round += 1;
-            phase = 0;
+            currentRound += 1;
+            currentPhase = 0;
             if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
             updateApp();
         };
@@ -368,23 +358,23 @@ class scsApp extends FormApplication {
         function updateApp() {
             // Change rounds if limit phases is enabled
             if (game.settings.get("scs", "limitPhases")) {
-                if (phase === 3) { nextRound() }
-                else if (phase === -1) { lastRound() };
+                if (currentPhase === 3) { nextRound() }
+                else if (currentPhase === -1) { lastRound() };
             } else {
-                if (phase === 3) { phase = 0 };
-                if (phase === -1) { phase = 2 };
+                if (currentPhase === 3) { currentPhase = 0 };
+                if (currentPhase === -1) { currentPhase = 2 };
             };
 
             // Update the appearance of the buttons
             buttons.forEach(current => { current.classList.remove("checked") });
-            buttons[phase].classList.add("checked");
+            buttons[currentPhase].classList.add("checked");
 
             // Update the Round number
-            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), round].join(" ");
+            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), currentRound].join(" ");
 
             // Save new values
-            game.settings.set("scs", "phase", phase);
-            game.settings.set("scs", "round", round);
+            game.settings.set("scs", "currentPhase", currentPhase);
+            game.settings.set("scs", "currentRound", currentRound);
         };
     };
 
@@ -399,16 +389,16 @@ class scsApp extends FormApplication {
                     content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
                     buttons: {
                         yes: {
-                            icon: '<i class="fas fa-check"></i>',
+                            icon: "<i class='fas fa-check'></i>",
                             label: "Yes",
                             callback: () => game.Gametime.stopRunning()
                         },
                         no: {
-                            icon: '<i class="fas fa-times"></i>',
+                            icon: "<i class='fas fa-times'></i>",
                             label: "No"
                         },
                         never: {
-                            icon: '<i class="fas fa-skull"></i>',
+                            icon: "<i class='fas fa-skull'></i>",
                             label: "Never",
                             callback: () => game.settings.set("scs", "stopRealtime", false)
                         }
