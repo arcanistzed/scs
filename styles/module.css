@@ -28,23 +28,23 @@
   mix-blend-mode: soft-light;
 }
 
-.phase-button.one {
+.phase-button:nth-child(1) {
   background-image: linear-gradient(#e45f17, #e49b17);
   border-radius: 5px 0px 0px 5px;
   margin-left: 3px;
 }
 
-.phase-button.two {
+.phase-button:nth-child(2) {
   background-image: linear-gradient(#e5352d, #e52d9b);
 }
 
-.phase-button.three {
+.phase-button:nth-last-child(1) {
   background-image: linear-gradient(#326bb6, #32aab6);
   border-radius: 0px 5px 5px 0px;
   margin-right: 3px;
 }
 
-nav.flexrow.arrows {
+.scsArrows {
   text-align: center;
   color: white;
   align-items: center;
@@ -52,7 +52,7 @@ nav.flexrow.arrows {
   cursor: pointer;
 }
 
-nav.flexrow.buttons {
+.scsButtons {
   flex-wrap: nowrap;
 }
 

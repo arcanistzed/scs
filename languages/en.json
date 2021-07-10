@@ -1,14 +1,14 @@
 {
   "scs": {
-    "phases": {
-      "one": "Move",
-      "two": "Attacks",
-      "three": "Spells"
-    },
+    "phases": [
+      "Move",
+      "Attacks",
+      "Spells"
+    ],
     "settings": {
       "showTracker": {
         "Name": "Show Tracker",
-        "Hint": "Enable this to display the default combat tracker (requires reload)"
+        "Hint": "Enable this to display the default combat tracker"
       },
       "limitPhases": {
         "Name": "Limit Phases",
