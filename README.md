@@ -25,6 +25,10 @@ This package is under an [MIT license](LICENSE)
 # Bugs
 You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose).
 
+Known Issues:
+- With Canvas off, the app doesn't remember it's pinned location
+- No CSS for IntroJS [IMPORTANT]
+
 # Localization
 Please note that the `Phases` must be short enough to fit their boxes, so you shouldn't put anything over approximately eight characters.
 
