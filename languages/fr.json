@@ -1,10 +1,5 @@
 {
   "scs": {
-    "phases": [
-      "Déplacer",
-      "Attaquer",
-      "Sorts"
-    ],
     "settings": {
       "showTracker": {
         "Name": "Afficher l'onglet combat",
@@ -18,18 +13,33 @@
         "Name": "Affiché les instructions",
         "Hint": "Désactivé cela pour ne pas faire joué les instuctions à chaque fois"
       },
-      "phaseOne": {
-        "Name": "Première phase",
-        "Hint": "Configuré le nom de la première phase"
+      "phaseNames": {
+        "Name": "Noms des phases",
+        "Hint": "Une liste, séparé à l'aide de virgules, de nom de phases (laisser vide pour les défauts)",
+        "phases": [
+          "Déplacer",
+          "Attaquer",
+          "Sorts"
+        ]
       },
-      "phaseTwo": {
-        "Name": "Deuxième phase",
-        "Hint": "Configuré le nom de la deuxième phase"
-      },
-      "phaseThree": {
-        "Name": "Première phase",
-        "Hint": "Configuré le nom de la troisième phase"
-      }
+      "tutorial": {
+        "Avertissement": "Cette section doit encore être traduit",
+        "welcome": {
+          "Title": "Welcome to SCS",
+          "Intro": "This module is an implementation of the Simultaneous Combat System described in <a href=\"https://redd.it/nlyif8\">this reddit post</a><br/>Don\\'t show this tutorial again."
+        },
+        "howItWorks": {
+          "Title": "How it works",
+          "Intro": "Instead of each character taking their own turn sequentially, everything happens all at once. In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into phases: {scs.phases}."
+        },
+        "combatTracker": {
+          "Title": "Where is the Combat Tracker?",
+          "Intro": "Since combat happens simultaneously with this system, I've disabled the combat tracker. You can always renable it in the module's settings."
+        },
+        "movingAround": {
+          "Title": "How do I move this thing around?",
+          "Intro": "You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it."
+        }
     }
   }
 }
