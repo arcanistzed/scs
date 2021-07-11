@@ -15,7 +15,7 @@
       },
       "phaseNames": {
         "Name": "Phase Names",
-        "Hint": "A comma-seperated list of phase names",
+        "Hint": "A comma-seperated list of phase names (leave empty for defaults)",
         "defaults": [
           "Move",
           "Attacks",
