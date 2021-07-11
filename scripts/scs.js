@@ -1,9 +1,7 @@
 let pinOffset = 100;
-let phases = [];
 
 // Hide combat tab
 Hooks.on("renderCombatTracker", () => {
-    console.log("Hi")
     if (!game.settings.get("scs", "showTracker")) {
         document.querySelector("[data-tab='combat']").style.display = "none";
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
@@ -15,7 +13,6 @@ Hooks.on("renderCombatTracker", () => {
 
 Hooks.on("init", () => {
     game.settings.register("scs", "position", {
-        name: "Position",
         scope: "client",
         config: false,
         type: Object,
@@ -23,7 +20,6 @@ Hooks.on("init", () => {
     });
 
     game.settings.register("scs", "pinned", {
-        name: "Pinned",
         scope: "client",
         config: false,
         type: Boolean,
@@ -38,7 +34,6 @@ Hooks.on("init", () => {
     });
 
     game.settings.register("scs", "currentRound", {
-        name: "Current Round",
         scope: "world",
         config: false,
         type: Number,
@@ -46,7 +41,6 @@ Hooks.on("init", () => {
     });
 
     game.settings.register("scs", "stopRealtime", {
-        name: "stopRealtime",
         scope: "world",
         config: false,
         type: Boolean,
@@ -69,10 +63,9 @@ Hooks.on("init", () => {
         scope: "world",
         config: true,
         type: String,
-        default: game.i18n.localize("scs.settings.phaseNames.defaults").join(", "),
-        onchange: () => {
-            setPhases();
-            new scsApp().render(true);
+        onChange: value => {
+            scsPhases.names = value.split(", "); // Update phases from new settings 
+            new scsApp().render(true); // Re-render the app
         }
     });
 
@@ -98,14 +91,21 @@ Hooks.on("init", () => {
 Hooks.once("ready", async function () {
     if (game.modules.get("smalltime")?.active) { pinOffset += 67 }; // Move up if SmallTime is active
 
-    setPhases(); // Create phases array
-
+    // Initialize phase names
+    // Check if the user has custom phase names
+    if (game.settings.get("scs", "phases") != "undefined") {
+        // If yes, use the value in settings
+        scsPhases.names = game.settings.get("scs", "phases").split(", ");
+    } else {
+        // If not, use the default phases
+        scsPhases.names = game.i18n.localize("scs.settings.phaseNames.defaults"); 
+    };
     new scsApp().render(true); // Render the app
 });
 
-// Sets the phases with the value in settings
-function setPhases() {
-    phases.push([game.settings.get("scs", "phases").split(", ")]);
+let scsPhases = {
+    "names": [],
+    "colors": []
 };
 
 class scsApp extends FormApplication {
@@ -290,11 +290,15 @@ class scsApp extends FormApplication {
 
     // Adds the phases to the Application
     static addPhases() {
-        phases.forEach(data => {
+        // Remove any existing buttons
+        document.querySelectorAll(".phase-button").forEach(button => { button.remove() });
+
+        // Create "buttons" for phases
+        scsPhases.names.forEach(name => {
             let phaseButton = document.createElement("div");
             document.querySelector(".scsButtons").append(phaseButton);
             phaseButton.classList.add("phase-button");
-            phaseButton.innerText = data[0];
+            phaseButton.innerText = name;
         });
     };
 
@@ -312,7 +316,7 @@ class scsApp extends FormApplication {
             pullValues();
             updateApp();
         });
-        Hooks.on("updateSetting", setting => { setting.data.key === "scs.phase" ? pullValues() : null });
+        Hooks.on("updateSetting", setting => { setting.data.key === "scs.currentPhase" ? pullValues() : null });
 
         // Execute one of the functions below this, depending on the button clicked
         html.find("#lastRound").on("click", () => { lastRound() });
@@ -358,10 +362,10 @@ class scsApp extends FormApplication {
         function updateApp() {
             // Change rounds if limit phases is enabled
             if (game.settings.get("scs", "limitPhases")) {
-                if (currentPhase === 3) { nextRound() }
+                if (currentPhase === scsPhases.names.length + 1) { nextRound() }
                 else if (currentPhase === -1) { lastRound() };
             } else {
-                if (currentPhase === 3) { currentPhase = 0 };
+                if (currentPhase === scsPhases.names.length + 1) { currentPhase = 0 };
                 if (currentPhase === -1) { currentPhase = 2 };
             };
 
