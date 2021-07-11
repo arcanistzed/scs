@@ -1,17 +1,11 @@
 let pinOffset = 100;
+let scsPhases = {
+    "names": [],
+    "colors": []
+};
 
-// Hide combat tab
-Hooks.on("renderCombatTracker", () => {
-    if (!game.settings.get("scs", "showTracker")) {
-        document.querySelector("[data-tab='combat']").style.display = "none";
-        document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
-        Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
-            if (collapsed) document.querySelector("#sidebar").style.height = "min-content";
-        });
-    };
-});
-
-Hooks.on("init", () => {
+// Register settings asynchronously when ready
+Hooks.on("ready", async () => {
     game.settings.register("scs", "position", {
         scope: "client",
         config: false,
@@ -57,18 +51,6 @@ Hooks.on("init", () => {
         onChange: () => { game.setupGame(); }
     });
 
-    game.settings.register("scs", "phases", {
-        name: game.i18n.localize("scs.settings.phaseNames.Name"),
-        hint: game.i18n.localize("scs.settings.phaseNames.Hint"),
-        scope: "world",
-        config: true,
-        type: String,
-        onChange: value => {
-            scsPhases.names = value.split(", "); // Update phases from new settings 
-            new scsApp().render(true); // Re-render the app
-        }
-    });
-
     game.settings.register("scs", "limitPhases", {
         name: game.i18n.localize("scs.settings.limitPhases.Name"),
         hint: game.i18n.localize("scs.settings.limitPhases.Hint"),
@@ -86,27 +68,47 @@ Hooks.on("init", () => {
         type: Boolean,
         default: true,
     });
-});
 
-Hooks.once("ready", async function () {
-    if (game.modules.get("smalltime")?.active) { pinOffset += 67 }; // Move up if SmallTime is active
+    await game.settings.register("scs", "phases", {
+        name: game.i18n.localize("scs.settings.phaseNames.Name"),
+        hint: game.i18n.localize("scs.settings.phaseNames.Hint"),
+        scope: "world",
+        config: true,
+        type: String,
+        onChange: value => {
+            initPhaseNames(value);
+            new scsApp().render(true); // Re-render the app
+        }
+    });
 
     // Initialize phase names
-    // Check if the user has custom phase names
-    if (game.settings.get("scs", "phases") != "undefined") {
-        // If yes, use the value in settings
-        scsPhases.names = game.settings.get("scs", "phases").split(", ");
-    } else {
-        // If not, use the default phases
-        scsPhases.names = game.i18n.localize("scs.settings.phaseNames.defaults"); 
+    function initPhaseNames(settings) {
+        // Check if the user reset to default phase names
+        if (settings === "undefined") {
+            // If so, set to the default phases
+            scsPhases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
+        } else {
+            // If not, use the new value in settings
+            scsPhases.names = settings.split(", ");
+        };
     };
-    new scsApp().render(true); // Render the app
-});
+    initPhaseNames(game.settings.get("scs", "phases"));
 
-let scsPhases = {
-    "names": [],
-    "colors": []
-};
+    // Render the app
+    if (game.modules.get("smalltime")?.active) { pinOffset += 67 }; // Move the app up if SmallTime is active
+    new scsApp().render(true);
+
+    // Hide combat tab
+    Hooks.on("renderCombatTracker", () => {
+        if (!game.settings.get("scs", "showTracker")) {
+            document.querySelector("[data-tab='combat']").style.display = "none";
+            document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
+            Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
+                if (collapsed) document.querySelector("#sidebar").style.height = "min-content";
+            });
+        };
+    });
+});
 
 class scsApp extends FormApplication {
     // Override close() to prevent Escape presses from closing the scs app.
@@ -178,7 +180,7 @@ class scsApp extends FormApplication {
 
         scsApp.combat()
 
-        //scsApp.tutorial();
+        scsApp.tutorial();
 
         // Pin zone is the "jiggle area" in which the app will be locked
         // to a pinned position if dropped. pinZone stores whether or not
@@ -362,10 +364,10 @@ class scsApp extends FormApplication {
         function updateApp() {
             // Change rounds if limit phases is enabled
             if (game.settings.get("scs", "limitPhases")) {
-                if (currentPhase === scsPhases.names.length + 1) { nextRound() }
+                if (currentPhase === scsPhases.names.length) { nextRound() }
                 else if (currentPhase === -1) { lastRound() };
             } else {
-                if (currentPhase === scsPhases.names.length + 1) { currentPhase = 0 };
+                if (currentPhase === scsPhases.names.length) { currentPhase = 0 };
                 if (currentPhase === -1) { currentPhase = 2 };
             };
 
@@ -421,6 +423,7 @@ class scsApp extends FormApplication {
     // IntroJS tutorial
     static tutorial() {
         introJs().setOptions({
+            tooltipClass: "scs",
             steps: [{
                 title: game.i18n.localize("tutorial.welcome.Title"),
                 intro: game.i18n.localize("tutorial.welcome.Intro")
