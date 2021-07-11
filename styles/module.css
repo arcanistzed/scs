@@ -106,3 +106,20 @@
     animation-timing-function: ease-out;
   }
 }
+
+/* Custom styling for IntroJS tour */
+
+/* Fix IntroJS tooltip close button in incorrect position */
+.scs .introjs-tooltip-title {
+  padding-right: 5%;
+}
+.scs .introjs-skipbutton {
+  top: 1%;
+  right: 1%;
+  position: absolute;
+}
+
+/* Make it look more like Foundry's UI */
+.scs .introjs-tooltip {
+  background-image: url(../../ui/parchment.jpg);
+}
