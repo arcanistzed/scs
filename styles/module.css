@@ -1,12 +1,3 @@
-.draggable {
-  width: 100%;
-  cursor: move;
-}
-
-.draggable.is-dragging {
-  opacity: 0.7;
-}
-
 .phase-button {
   display: block;
   margin: 3px 0;
@@ -57,7 +48,6 @@
   text-align: center;
   color: white;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
 }
 
@@ -101,15 +91,20 @@
   flex: 100; /* It must take as much room as possible */
 }
 
+/* Lighter text when dragged around */
+#currentRound:active {
+  color: lightgrey;
+}
+
 /* The animation shown when pinning the app */
 @keyframes jiggle {
   0% {
-    transform: skew(1deg, 1deg);
+    transform: rotate(1deg);
     animation-timing-function: ease-in;
   }
 
   50% {
-    transform: skew(0deg, 0deg);
+    transform: rotate(0deg);
     animation-timing-function: ease-out;
   }
 }
