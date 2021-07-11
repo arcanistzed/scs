@@ -1,6 +1,5 @@
 .draggable {
-  width: 140px;
-  border-radius: 10px;
+  width: 100%;
   cursor: move;
 }
 
@@ -28,22 +27,32 @@
   mix-blend-mode: soft-light;
 }
 
+/* Styling for the phase "buttons" */
+
+/* Style the first one so that the corners are rounded correctly and so there is a margin on the left */
 .phase-button:nth-child(1) {
-  background-image: linear-gradient(#e45f17, #e49b17);
   border-radius: 5px 0px 0px 5px;
   margin-left: 3px;
 }
 
+/* Color the phase "buttons" with beautiful gradients */
+.phase-button:nth-child(1) {
+  background-image: linear-gradient(#e45f17, #e49b17);
+}
 .phase-button:nth-child(2) {
   background-image: linear-gradient(#e5352d, #e52d9b);
 }
-
-.phase-button:nth-last-child(1) {
+.phase-button:nth-child(3) {
   background-image: linear-gradient(#326bb6, #32aab6);
+}
+
+/* Style the last one so that the corners are rounded correctly and so there is a margin on the right */
+.phase-button:nth-last-child(1) {
   border-radius: 0px 5px 5px 0px;
   margin-right: 3px;
 }
 
+/* These are the small arrows which let you switch phase and round */
 .scsArrows {
   text-align: center;
   color: white;
@@ -52,22 +61,31 @@
   cursor: pointer;
 }
 
+/* Give the navigation arrows some room */
+.scsArrows > * {
+  min-width: 15%;
+}
+
+/* These are the various phase "buttons" */
 .scsButtons {
   flex-wrap: nowrap;
 }
 
+/* Controls the app itself */
 #scs-app {
+  /* Let the height be easily adjusted with JS*/
   --scsHeight: 75px;
   height: var(--scsHeight);
-  max-width: 200px;
   flex-wrap: nowrap;
   background: none;
 }
 
+/* Don't show any header */
 #scs-app .window-header {
   display: none;
 }
 
+/* Give the whole app a look that blends into the Foundry UI alongside the player list */
 #scs-app .window-content {
   border-radius: 5px;
   padding: 0;
@@ -76,16 +94,14 @@
   overflow: hidden;
 }
 
-.draggable {
-  width: 100%;
-}
-
+/* The current round indicator */
 #currentRound {
   color: grey;
   text-align: center;
-  flex: 2;
+  flex: 100; /* It must take as much room as possible */
 }
 
+/* The animation shown when pinning the app */
 @keyframes jiggle {
   0% {
     transform: skew(1deg, 1deg);
