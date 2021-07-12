@@ -21,25 +21,26 @@
           "Attaquer",
           "Sorts"
         ]
+      }
+    },
+    "tutorial": {
+      "Avertissement": "Cette section doit encore être traduit",
+      "welcome": {
+        "Title": "Welcome to SCS",
+        "Intro": "<form>This module is an implementation of the Simultaneous Combat System described in <a href='https://redd.it/nlyif8'>this reddit post</a><br/><br/><input type=\"checkbox\" id=\"scsTutorialAgain\" onchange=\"scsApp.stopTutorial(this)\"><label for=\"scsTutorialAgain\">Don't show again</label></form>"
       },
-      "tutorial": {
-        "Avertissement": "Cette section doit encore être traduit",
-        "welcome": {
-          "Title": "Welcome to SCS",
-          "Intro": "This module is an implementation of the Simultaneous Combat System described in <a href=\"https://redd.it/nlyif8\">this reddit post</a><br/>Don\\'t show this tutorial again."
-        },
-        "howItWorks": {
-          "Title": "How it works",
-          "Intro": "Instead of each character taking their own turn sequentially, everything happens all at once. In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into phases: {scs.phases}."
-        },
-        "combatTracker": {
-          "Title": "Where is the Combat Tracker?",
-          "Intro": "Since combat happens simultaneously with this system, I've disabled the combat tracker. You can always renable it in the module's settings."
-        },
-        "movingAround": {
-          "Title": "How do I move this thing around?",
-          "Intro": "You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it."
-        }
+      "howItWorks": {
+        "Title": "How it works",
+        "Intro": "Instead of each character taking their own turn sequentially, everything happens all at once.<br/>In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into phases: {scs.phases}."
+      },
+      "combatTracker": {
+        "Title": "Where is the Combat Tracker?",
+        "Intro": "Since combat happens simultaneously with this system, I've removed the default combat tracker. You can always re-enable it in the module's settings."
+      },
+      "movingAround": {
+        "Title": "How do I move this thing around?",
+        "Intro": "You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it."
+      }
     }
   }
 }
