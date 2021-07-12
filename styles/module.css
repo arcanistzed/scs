@@ -78,6 +78,7 @@
   border-radius: 5px;
   padding: 0;
   border: 1px solid #000;
+  color: #f0f0e0;
   background: url(/ui/denim075.png) repeat;
   overflow: hidden;
 }
@@ -110,16 +111,18 @@
 /* Custom styling for IntroJS tour */
 
 /* Fix IntroJS tooltip close button in incorrect position */
-.scs .introjs-tooltip-title {
+.introjs-tooltip-title {
   padding-right: 5%;
 }
-.scs .introjs-skipbutton {
+.introjs-skipbutton {
   top: 1%;
   right: 1%;
   position: absolute;
 }
 
 /* Make it look more like Foundry's UI */
-.scs .introjs-tooltip {
-  background-image: url(../../ui/parchment.jpg);
+.introjs-tooltip {
+  background: url(../../../ui/parchment.jpg) repeat;
+  color: #191813;
+  box-shadow: 0 0 20px #000;
 }
