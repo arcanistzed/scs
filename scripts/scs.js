@@ -443,7 +443,9 @@ class scsApp extends FormApplication {
     };
 
     // Don't show IntroJS tutorial again
-    static stopTutorial(...args) {
-        console.log(arguments, ...args)
+    static stopTutorial() {
+        game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
+        document.querySelector(".introjs-skipbutton").click(); // End tutorial
+
     }
 };

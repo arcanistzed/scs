@@ -26,7 +26,7 @@
     "tutorial": {
       "welcome": {
         "Title": "Welcome to SCS",
-        "Intro": "<form>This module is an implementation of the Simultaneous Combat System described in <a href='https://redd.it/nlyif8'>this reddit post</a><br/><br/><input type=\"checkbox\" id=\"scsTutorialAgain\" onchange=\"scsApp.stopTutorial(this)\"><label for=\"scsTutorialAgain\">Don't show again</label></form>"
+        "Intro": "<form>This module is an implementation of the Simultaneous Combat System described in <a href='https://redd.it/nlyif8'>this reddit post</a><br/><br/><input type=\"checkbox\" id=\"scsTutorialAgain\" onchange=\"scsApp.stopTutorial()\"><label for=\"scsTutorialAgain\">Don't show again</label></form>"
       },
       "howItWorks": {
         "Title": "How it works",
