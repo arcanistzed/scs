@@ -75,22 +75,9 @@ Hooks.on("ready", async () => {
         }
     });
 
-    scsApp.initPhaseNames(game.settings.get(scsApp.ID, "phases"));
-
     // Render the app
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 }; // Move the app up if SmallTime is active
     new scsApp().render(true);
-
-    // Hide combat tab
-    Hooks.on("renderCombatTracker", () => {
-        if (!game.settings.get(scsApp.ID, "showTracker")) {
-            document.querySelector("[data-tab='combat']").style.display = "none";
-            document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
-            Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
-                if (collapsed) document.querySelector("#sidebar").style.height = "min-content";
-            });
-        };
-    });
 });
 
 class scsApp extends FormApplication {
@@ -100,6 +87,8 @@ class scsApp extends FormApplication {
         "names": [],
         "colors": []
     };
+    static currentPhase = 0;
+    static currentRound = 1;
 
     // Override close() to prevent Escape presses from closing the scs app.
     async close(options = {}) {
@@ -154,21 +143,16 @@ class scsApp extends FormApplication {
     activateListeners(html) {
         super.activateListeners(html);
 
+        // Make the app draggable
         const drag = new Draggable(this, html, document.getElementById("currentRound"), false);
 
-        // Hide buttons for players and re-adjust app size
-        if (!game.user.isGM) {
-            html.find("scsArrows").hide();
-            document.querySelector("#scs-app").style.setProperty("--scsHeight", "50px");
-            scsApp.pinOffset -= 25;
-        };
-
+        // Application startup
+        scsApp.initPhaseNames(game.settings.get(scsApp.ID, "phases"));
         scsApp.addPhases();
-
+        scsApp.hideTracker();
+        scsApp.hideFromPlayers();
         scsApp.display(html);
-
         scsApp.combat()
-
         if (game.settings.get(scsApp.ID, "startupTutorial")) scsApp.startTutorial();
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
@@ -248,18 +232,6 @@ class scsApp extends FormApplication {
         };
     };
 
-    // Initialize phase names
-    static initPhaseNames(settings) {
-        // Check if the user reset to default phase names
-        if (settings === "undefined") {
-            // If so, set to the default phases
-            scsApp.phases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
-        } else {
-            // If not, use the new value in settings
-            scsApp.phases.names = settings.split(", ");
-        };
-    };
-
     // Pin the app above the Players list.
     static async pinApp(_expanded) {
         // Only do this if a pin lock isn"t already in place.
@@ -288,6 +260,18 @@ class scsApp extends FormApplication {
         $("#pin-lock").remove();
     };
 
+    // Initialize phase names
+    static initPhaseNames(settings) {
+        // Check if the user reset to default phase names
+        if (settings === "undefined") {
+            // If so, set to the default phases
+            scsApp.phases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
+        } else {
+            // If not, use the new value in settings
+            scsApp.phases.names = settings.split(", ");
+        };
+    };
+
     // Adds the phases to the Application
     static addPhases() {
         // Remove any existing buttons
@@ -302,15 +286,36 @@ class scsApp extends FormApplication {
         });
     };
 
+    // Hide default combat tracker
+    static hideTracker() {
+        Hooks.on("renderCombatTracker", () => {
+            if (!game.settings.get(scsApp.ID, "showTracker")) {
+                document.querySelector("[data-tab='combat']").style.display = "none";
+                document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
+                Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
+                    if (collapsed) document.querySelector("#sidebar").style.height = "min-content";
+                });
+            };
+        });
+    };
+
+    // Hide buttons for players and re-adjust app size
+    static hideFromPlayers() {
+        if (!game.user.isGM) {
+            html.find("scsArrows").hide();
+            document.querySelector("#scs-app").style.setProperty("--scsHeight", "50px");
+            scsApp.pinOffset -= 25;
+        };
+    };
+
     // Manage phase and round diplay
     static display(html) {
         const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
         const aboutTime = game.modules.get("about-time")?.active;
-        var currentPhase, currentRound;
 
         function pullValues() {
-            currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
-            currentRound = game.settings.get(scsApp.ID, "currentRound"); // counts the current round
+            scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
+            scsApp.currentRound = game.settings.get(scsApp.ID, "currentRound"); // counts the current round
         };
         Hooks.on("renderscsApp", () => {
             pullValues();
@@ -327,8 +332,8 @@ class scsApp extends FormApplication {
         // Return to the last round
         function lastRound() {
             pullValues();
-            currentRound -= 1;
-            currentPhase = 2;
+            scsApp.currentRound -= 1;
+            scsApp.currentPhase = 2;
             if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
             updateApp();
         };
@@ -336,22 +341,22 @@ class scsApp extends FormApplication {
         // Return to the last phase
         function lastPhase() {
             pullValues();
-            currentPhase -= 1;
+            scsApp.currentPhase -= 1;
             updateApp();
         };
 
         // Advance to the next phase
         function nextPhase() {
             pullValues();
-            currentPhase += 1;
+            scsApp.currentPhase += 1;
             updateApp();
         };
 
         // Advance to the next round
         function nextRound() {
             pullValues();
-            currentRound += 1;
-            currentPhase = 0;
+            scsApp.currentRound += 1;
+            scsApp.currentPhase = 0;
             if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
             updateApp();
         };
@@ -362,23 +367,23 @@ class scsApp extends FormApplication {
         function updateApp() {
             // Change rounds if limit phases is enabled
             if (game.settings.get(scsApp.ID, "limitPhases")) {
-                if (currentPhase === scsApp.phases.names.length) { nextRound() }
-                else if (currentPhase === -1) { lastRound() };
+                if (scsApp.currentPhase === scsApp.phases.names.length) { nextRound() }
+                else if (scsApp.currentPhase === -1) { lastRound() };
             } else {
-                if (currentPhase === scsApp.phases.names.length) { currentPhase = 0 };
-                if (currentPhase === -1) { currentPhase = 2 };
+                if (scsApp.currentPhase === scsApp.phases.names.length) { scsApp.currentPhase = 0 };
+                if (scsApp.currentPhase === -1) { scsApp.currentPhase = 2 };
             };
 
             // Update the appearance of the buttons
             buttons.forEach(current => { current.classList.remove("checked") });
-            buttons[currentPhase].classList.add("checked");
+            buttons[scsApp.currentPhase].classList.add("checked");
 
             // Update the Round number
-            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), currentRound].join(" ");
+            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
 
             // Save new values
-            game.settings.set(scsApp.ID, "currentPhase", currentPhase);
-            game.settings.set(scsApp.ID, "currentRound", currentRound);
+            game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
+            game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
         };
     };
 
@@ -446,6 +451,5 @@ class scsApp extends FormApplication {
     static stopTutorial() {
         game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
         document.querySelector(".introjs-skipbutton").click(); // End tutorial
-
-    }
+    };
 };
