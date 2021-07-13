@@ -1,5 +1,5 @@
 /* Style the phase "buttons" */
-.phase-button {
+#scsApp .phase-button {
   display: block;
   margin: 3px 0;
   text-align: center;
@@ -11,7 +11,7 @@
 }
 
 /* Add a shadow on the active phase */
-.checked {
+#scsApp .checked {
   box-shadow: inset 2px 2px 5px rgb(0, 0, 0);
   mix-blend-mode: soft-light;
 }
@@ -19,30 +19,42 @@
 /* Styling for the phase "buttons" */
 
 /* Style the first one so that the corners are rounded correctly and so there is a margin on the left */
-.phase-button:nth-child(1) {
+#scsApp .phase-button:nth-child(1) {
   border-radius: 5px 0px 0px 5px;
   margin-left: 3px;
 }
 
 /* Color the phase "buttons" with beautiful gradients */
-.phase-button:nth-child(1) {
-  background-image: linear-gradient(hsl(21 80% 49%), hsl(39 80% 49%));
+#scsApp .phase-button:nth-child(1) {
+  background-image: linear-gradient(
+    hsl(var(--hue) 80% 40%),
+    hsl(calc(var(--hue) + 20) 80% 40%)
+  );
+  --hue: 20;
 }
-.phase-button:nth-child(2) {
-  background-image: linear-gradient(hsl(3 80% 54%), hsl(324 80% 54%));
+#scsApp .phase-button:nth-child(2) {
+  background-image: linear-gradient(
+    hsl(var(--hue) 80% 40%),
+    hsl(calc(var(--hue) + -40) 80% 40%)
+  );
+  --hue: 0;
 }
-.phase-button:nth-child(3) {
-  background-image: linear-gradient(hsl(214 80% 45%), hsl(185 80% 45%));
+#scsApp .phase-button:nth-child(3) {
+  background-image: linear-gradient(
+    hsl(var(--hue) 80% 40%),
+    hsl(calc(var(--hue) + -30) 80% 40%)
+  );
+  --hue: 210;
 }
 
 /* Style the last one so that the corners are rounded correctly and so there is a margin on the right */
-.phase-button:nth-last-child(1) {
+#scsApp .phase-button:nth-last-child(1) {
   border-radius: 0px 5px 5px 0px;
   margin-right: 3px;
 }
 
 /* These are the small arrows which let you switch phase and round */
-.scsArrows {
+#scsApp .scsArrows {
   text-align: center;
   color: white;
   align-items: center;
@@ -50,17 +62,17 @@
 }
 
 /* Give the navigation arrows some room */
-.scsArrows > * {
+#scsApp .scsArrows > * {
   min-width: 15%;
 }
 
 /* These are the various phase "buttons" */
-.scsButtons {
+#scsApp .scsButtons {
   flex-wrap: nowrap;
 }
 
 /* Controls the app itself */
-#scs-app {
+#scsApp {
   /* Let the height be easily adjusted with JS*/
   --scsHeight: 75px;
   height: var(--scsHeight);
@@ -69,12 +81,12 @@
 }
 
 /* Don't show any header */
-#scs-app .window-header {
+#scsApp .window-header {
   display: none;
 }
 
 /* Give the whole app a look that blends into the Foundry UI alongside the player list */
-#scs-app .window-content {
+#scsApp .window-content {
   border-radius: 5px;
   padding: 0;
   border: 1px solid #000;
@@ -84,14 +96,14 @@
 }
 
 /* The current round indicator */
-#currentRound {
+#scsApp #currentRound {
   color: grey;
   text-align: center;
   flex: 100; /* It must take as much room as possible */
 }
 
 /* Lighter text when dragged around */
-#currentRound:active {
+#scsApp #currentRound:active {
   color: lightgrey;
 }
 
@@ -113,7 +125,7 @@
 /* Fix IntroJS tooltip close button in incorrect position */
 .introjs-tooltip-title {
   padding-right: 5%;
-  font-family: "Modesto Condensed"!important;
+  font-family: "Modesto Condensed" !important;
   font-size: 28px;
 }
 .introjs-skipbutton {
