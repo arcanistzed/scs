@@ -154,7 +154,7 @@ class scsApp extends FormApplication {
         scsApp.hideFromPlayers();
         scsApp.display(html);
         scsApp.combat()
-        if (game.settings.get(scsApp.ID, "startupTutorial")) scsApp.startTutorial();
+        if (game.settings.get(scsApp.ID, "startupTutorial") && !document.getElementById("scsTutorialAgain")) scsApp.startTutorial();
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
         let pinZone = false;
@@ -381,6 +381,9 @@ class scsApp extends FormApplication {
                 if (scsApp.currentPhase === scsApp.phases.count + 1) { scsApp.currentPhase = 1 };
                 if (scsApp.currentPhase === 0) { scsApp.currentPhase = scsApp.phases.count };
             };
+
+            // Correct phase if it excedes new limit
+            if(scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
             // Update the appearance of the buttons
             buttons.forEach(current => { current.classList.remove("checked") });
