@@ -134,7 +134,7 @@ class scsApp extends FormApplication {
 
         return mergeObject(super.defaultOptions, {
             template: "modules/scs/templates/template.hbs",
-            id: "scs-app",
+            id: "scsApp",
             title: "Simultaneous Combat System",
             top: this.initialPosition.top,
             left: this.initialPosition.left
@@ -199,10 +199,10 @@ class scsApp extends FormApplication {
                 event.clientY > playerAppUpperBound &&
                 event.clientY < playerAppLowerBound
             ) {
-                $("#scs-app").css("animation", "jiggle 0.2s infinite");
+                $("#scsApp").css("animation", "jiggle 0.2s infinite");
                 pinZone = true;
             } else {
-                $("#scs-app").css("animation", "");
+                $("#scsApp").css("animation", "");
                 pinZone = false;
             }
         };
@@ -226,14 +226,14 @@ class scsApp extends FormApplication {
                     top: window.innerHeight - myOffset,
                 });
             } else {
-                let windowPos = $("#scs-app").position();
+                let windowPos = $("#scsApp").position();
                 let newPos = { top: windowPos.top, left: windowPos.left };
                 await game.settings.set(scsApp.ID, "position", newPos);
                 await game.settings.set(scsApp.ID, "pinned", false);
             }
 
             // Kill the jiggle animation on mouseUp.
-            $("#scs-app").css("animation", "");
+            $("#scsApp").css("animation", "");
         };
     };
 
@@ -249,7 +249,7 @@ class scsApp extends FormApplication {
             // I could get it to enable the locking behaviour.
             $("body").append(`
         <style id="pin-lock">
-          #scs-app {
+          #scsApp {
             top: calc(100vh - ${myOffset}px) !important;
             left: 15px !important;
           }
@@ -289,6 +289,8 @@ class scsApp extends FormApplication {
             phaseButton.classList.add("phase-button");
             phaseButton.innerText = name;
         });
+
+        // Generate color gradients
     };
 
     // Hide default combat tracker
@@ -306,7 +308,7 @@ class scsApp extends FormApplication {
     static hideFromPlayers() {
         if (!game.user.isGM) {
             html.find("scsArrows").hide();
-            document.querySelector("#scs-app").style.setProperty("--scsHeight", "50px");
+            document.querySelector("#scsApp").style.setProperty("--scsHeight", "50px");
             scsApp.pinOffset -= 25;
         };
     };
