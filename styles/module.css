@@ -26,13 +26,13 @@
 
 /* Color the phase "buttons" with beautiful gradients */
 .phase-button:nth-child(1) {
-  background-image: linear-gradient(#e45f17, #e49b17);
+  background-image: linear-gradient(hsl(21 82% 49%), hsl(39 82% 49%));
 }
 .phase-button:nth-child(2) {
-  background-image: linear-gradient(#e5352d, #e52d9b);
+  background-image: linear-gradient(hsl(3 78% 54%), hsl(324 78% 54%));
 }
 .phase-button:nth-child(3) {
-  background-image: linear-gradient(#326bb6, #32aab6);
+  background-image: linear-gradient(hsl(214 57% 45%), hsl(185 57% 45%));
 }
 
 /* Style the last one so that the corners are rounded correctly and so there is a margin on the right */
