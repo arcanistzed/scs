@@ -145,7 +145,7 @@ class scsApp extends FormApplication {
         super.activateListeners(html);
 
         // Make the app draggable
-        const drag = new Draggable(this, html, document.getElementById("currentRound"), false);
+        const drag = new Draggable(this, html, document.querySelector("#scsApp #currentRound"), false);
 
         // Application startup
         scsApp.initPhaseNames(game.settings.get(scsApp.ID, "phases"));
@@ -291,6 +291,7 @@ class scsApp extends FormApplication {
         });
 
         // Generate color gradients
+        document.getElementById
     };
 
     // Hide default combat tracker
@@ -458,7 +459,7 @@ class scsApp extends FormApplication {
             },
             {
                 title: game.i18n.localize("scs.tutorial.movingAround.Title"),
-                element: document.getElementById("currentRound"),
+                element: document.querySelector("#scsApp #currentRound"),
                 intro: game.i18n.localize("scs.tutorial.movingAround.Intro")
             }]
         }).start();
