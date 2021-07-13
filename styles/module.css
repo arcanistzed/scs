@@ -26,13 +26,13 @@
 
 /* Color the phase "buttons" with beautiful gradients */
 .phase-button:nth-child(1) {
-  background-image: linear-gradient(hsl(21 82% 49%), hsl(39 82% 49%));
+  background-image: linear-gradient(hsl(21 80% 49%), hsl(39 80% 49%));
 }
 .phase-button:nth-child(2) {
-  background-image: linear-gradient(hsl(3 78% 54%), hsl(324 78% 54%));
+  background-image: linear-gradient(hsl(3 80% 54%), hsl(324 80% 54%));
 }
 .phase-button:nth-child(3) {
-  background-image: linear-gradient(hsl(214 57% 45%), hsl(185 57% 45%));
+  background-image: linear-gradient(hsl(214 80% 45%), hsl(185 80% 45%));
 }
 
 /* Style the last one so that the corners are rounded correctly and so there is a margin on the right */
@@ -162,8 +162,8 @@ a way to deal with :hover, :active,
   padding: 0;
 }
 
-/* Style checkbox */
-#scsTutorialAgain {
+/* Style checkbox Div */
+#scsTutorialAgainDiv {
   display: flex;
   align-items: center;
   text-align: center;
@@ -171,7 +171,7 @@ a way to deal with :hover, :active,
   padding: 0.5em 1em;
 }
 
-/* Move line above checkbox */
+/* Move line above checkbox Div */
 .introjs-tooltipbuttons {
   border: transparent;
   padding: 1em;

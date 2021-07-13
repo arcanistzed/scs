@@ -154,7 +154,11 @@ class scsApp extends FormApplication {
         scsApp.hideFromPlayers();
         scsApp.display(html);
         scsApp.combat()
-        if (game.settings.get(scsApp.ID, "startupTutorial") && !document.getElementById("scsTutorialAgain")) scsApp.startTutorial();
+
+        // If the user hasn't denied the tutorial or it has already rendered, show it once after this app is rendered
+        if (game.settings.get(scsApp.ID, "startupTutorial") && !document.getElementById("scsTutorialAgain")) {
+            Hooks.once("renderscsApp", () => { scsApp.startTutorial() })
+        };
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
         let pinZone = false;
@@ -383,7 +387,7 @@ class scsApp extends FormApplication {
             };
 
             // Correct phase if it excedes new limit
-            if(scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
+            if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
             // Update the appearance of the buttons
             buttons.forEach(current => { current.classList.remove("checked") });
@@ -459,8 +463,8 @@ class scsApp extends FormApplication {
 
         // Create "Don't Show Again" checkbox
         let stopButton = document.createElement("div");
-        stopButton.id = "scsTutorialAgain";
-        stopButton.innerHTML = `<input type="checkbox" onchange="scsApp.stopTutorial()"><label for="scsTutorialAgain">Don't show again</label>`;
+        stopButton.id = "scsTutorialAgainDiv";
+        stopButton.innerHTML = `<input id="scsTutorialAgain" type="checkbox" onchange="scsApp.stopTutorial()"><label for="scsTutorialAgain">Don't show again</label>`;
         document.querySelector(".introjs-tooltipbuttons").before(stopButton);
     };
 
