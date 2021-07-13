@@ -70,6 +70,7 @@ Hooks.on("ready", async () => {
         scope: "world",
         config: true,
         type: String,
+        default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
         onChange: value => {
             scsApp.initPhaseNames(value);
             new scsApp().render(true); // Re-render the app
@@ -149,6 +150,8 @@ class scsApp extends FormApplication {
 
         // Application startup
         scsApp.initPhaseNames(game.settings.get(scsApp.ID, "phases"));
+        //debugger
+        scsApp.generateColors();
         scsApp.addPhases();
         scsApp.hideTracker();
         scsApp.hideFromPlayers();
@@ -290,8 +293,63 @@ class scsApp extends FormApplication {
             phaseButton.innerText = name;
         });
 
-        // Generate color gradients
-        document.getElementById
+        // Add colors
+        scsApp.phases.colors.forEach((color, i) => {
+            document.querySelector("#scsApp #colorGradients").innerHTML += `
+            #scsApp .phase-button:nth-child(${i + 1}) {
+                background-image: linear-gradient(
+                hsl(${color[0]} 80% 40%),
+                hsl(${color[1]} 80% 40%)
+                );
+            }`
+        })
+    };
+
+    // Generate random beautiful color gradients
+    static generateColors() {
+        scsApp.phases.names.forEach(() => {
+            let hueTop = Math.round(Math.random() * 360);
+            console.log("top: " + hueTop);
+            let hueBottom = Math.round(Math.random() * 360);
+            while (
+                hueBottom - hueTop < 15
+                ||
+                (hueBottom - hueTop > 100 && hueBottom - hueTop < 260)
+                ||
+                (hueBottom >= 50 && hueBottom <= 150)
+            ) {
+                hueBottom = Math.round(Math.random() * 360);
+                console.log(hueBottom);
+            };
+            scsApp.phases.colors.push([hueTop, hueBottom]);
+        });
+
+        // Add settings for choosing custom colors
+        try {
+            scsApp.phases.colors.forEach((color, i) => {
+                new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.top`, {
+                    name: "Custom Phase Colors",
+                    hint: "",
+                    label: "Color Picker",
+                    restricted: true,
+                    defaultColor: color[0],
+                    scope: "world",
+                    onChange: (value) => { scsApp.phases.colors[0] = value }
+                });
+
+                new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.bottom`, {
+                    name: "Custom Phase Colors",
+                    hint: "",
+                    label: "Color Picker",
+                    restricted: true,
+                    defaultColor: color[1],
+                    scope: "world",
+                    onChange: (value) => { scsApp.phases.colors[1] = value }
+                });
+            });
+        } catch {  // Test if color settings is installed
+            ui.notifications.notify('You won\'t be able to pick custom phase colors unless you have the "lib - ColorSettings" module installed and enabled.', "error");
+        };
     };
 
     // Hide default combat tracker

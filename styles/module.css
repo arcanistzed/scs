@@ -24,29 +24,6 @@
   margin-left: 3px;
 }
 
-/* Color the phase "buttons" with beautiful gradients */
-#scsApp .phase-button:nth-child(1) {
-  background-image: linear-gradient(
-    hsl(var(--hue) 80% 40%),
-    hsl(calc(var(--hue) + 20) 80% 40%)
-  );
-  --hue: 20;
-}
-#scsApp .phase-button:nth-child(2) {
-  background-image: linear-gradient(
-    hsl(var(--hue) 80% 40%),
-    hsl(calc(var(--hue) + -40) 80% 40%)
-  );
-  --hue: 0;
-}
-#scsApp .phase-button:nth-child(3) {
-  background-image: linear-gradient(
-    hsl(var(--hue) 80% 40%),
-    hsl(calc(var(--hue) + -30) 80% 40%)
-  );
-  --hue: 210;
-}
-
 /* Style the last one so that the corners are rounded correctly and so there is a margin on the right */
 #scsApp .phase-button:nth-last-child(1) {
   border-radius: 0px 5px 5px 0px;
