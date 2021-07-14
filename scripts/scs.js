@@ -64,6 +64,32 @@ Hooks.on("ready", async () => {
         onChange: () => { if (!document.getElementById("scsTutorialAgain")) new scsApp().render(true); } // Re-render the app
     });
 
+    game.settings.register(scsApp.ID, "color", {
+        scope: "world",
+        config: false,
+        type: Object
+    });
+
+    /*     if (game.modules.get("colorsettings")?.active) {
+            new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.top`, {
+                name: "Custom Phase Colors",
+                label: "Color Picker",
+                restricted: true,
+                defaultColor: (() => scsApp.phases.colors,
+                scope: "world",
+                onChange: value => { scsApp.phases.colors[0] = value }
+            });
+    
+            new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.bottom`, {
+                name: "",
+                label: "Color Picker",
+                restricted: true,
+                defaultColor: color[1],
+                scope: "world",
+                onChange: value => { scsApp.phases.colors[1] = value }
+            });
+        }; */
+
     await game.settings.register(scsApp.ID, "phases", {
         name: game.i18n.localize("scs.settings.phaseNames.Name"),
         hint: game.i18n.localize("scs.settings.phaseNames.Hint"),
@@ -72,7 +98,9 @@ Hooks.on("ready", async () => {
         type: String,
         default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
         onChange: value => {
-            scsApp.initPhaseNames(value);
+            // Reset colors
+            game.settings.set(scsApp.ID, "color", []);
+            scsApp.phases.colors = [];
             new scsApp().render(true); // Re-render the app
         }
     });
@@ -151,7 +179,6 @@ class scsApp extends FormApplication {
 
         // Application startup
         scsApp.initPhaseNames(game.settings.get(scsApp.ID, "phases"));
-        //debugger
         scsApp.generateColors();
         scsApp.addPhases();
         scsApp.hideTracker();
@@ -276,9 +303,71 @@ class scsApp extends FormApplication {
             // If so, set to the default phases
             scsApp.phases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
         } else {
-            // If not, parse and use the new values in settings
-            scsApp.phases.names = settings.split(",").map(val => val.trim());
+            // If not, parse and use the first 50 new values from settings
+            scsApp.phases.names = settings.split(",").slice(0, 50).map(val => val.trim());
         };
+    };
+
+    // Generate random beautiful color gradients
+    static generateColors() {
+
+        // A hue for each phase
+        scsApp.phases.names.forEach((_name, i) => {
+            let hueTop, hueBottom;
+
+            // If there is already a hue for this phase, map it
+            if (game.settings.get(scsApp.ID, "color")[i]) {
+                hueTop = game.settings.get(scsApp.ID, "color").map(([top]) => top)[i];
+                hueBottom = game.settings.get(scsApp.ID, "color").map(([, bottom]) => bottom)[i];
+
+            } else { // If not, generate new hues
+                hueTop = Math.round(Math.random() * 360);
+                hueBottom = Math.round(Math.random() * 360);
+
+                // Get array of hues that are very close
+                let closeHuesTop = [], closeHuesBottom = [];
+                for (i = hueTop - 5; i <= hueTop + 5; i++) { closeHuesTop.push(i) }
+                for (i = hueBottom - 5; i <= hueBottom + 5; i++) { closeHuesBottom.push(i) }
+
+                // Test if the new value is too close
+                let hueTopTooClose = false, hueBottomTooClose = false;
+                closeHuesTop.forEach(hue => scsApp.phases.colors.deepFlatten().includes(hue) ? hueTopTooClose = true : null)
+                closeHuesBottom.forEach(hue => scsApp.phases.colors.deepFlatten().includes(hue) ? hueBottomTooClose = true : null)
+
+                // Keep trying to generate a complementary hue for the bottom that looks nice
+                while (
+                    hueBottom - hueTop < 15 // The hue should be different enough that the top and bottom don't look the same
+                    ||
+                    (hueBottom - hueTop > 100 && hueBottom - hueTop < 260) // It shouldn't be too different that it clashes
+                    ||
+                    (hueBottom >= 50 && hueBottom <= 150) // Green doesn't look good
+                    ||
+                    hueTopTooClose || hueBottomTooClose // Too similar to another hue
+                ) {
+                    hueBottom = Math.round(Math.random() * 360);
+                };
+            };
+
+            // Push the hues
+            scsApp.phases.colors.push([hueTop, hueBottom]);
+        });
+
+        // Update settings for storage if GM
+        if (game.user.isGM) game.settings.set(scsApp.ID, "color", scsApp.phases.colors);
+
+        /* // 
+        scsApp.phases.colors.forEach((color, i) => {
+            try { // Test if the library is there
+
+            } catch (err) {  // Test if lib is installed
+
+                // Alert user once
+                if (i === 0) ui.notifications.notify('SCS: You won\'t be able to pick custom phase colors unless you have "lib - ColorSettings" module enabled.', "info");
+
+                // Save colors in a hidden default setting
+
+            };
+        }); */
     };
 
     // Adds the phases to the Application
@@ -304,88 +393,6 @@ class scsApp extends FormApplication {
                 );
             }`
         })
-    };
-
-    // Generate random beautiful color gradients
-    static generateColors() {
-
-        // For each color, create settings for more permanent storage
-        scsApp.phases.colors.forEach((color, i) => {
-            try { // Add settings for choosing custom colors, if the library is there
-                new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.top`, {
-                    name: "Custom Phase Colors",
-                    hint: "",
-                    label: "Color Picker",
-                    restricted: true,
-                    defaultColor: color[0],
-                    scope: "world",
-                    onChange: value => { scsApp.phases.colors[0] = value }
-                });
-
-                new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.bottom`, {
-                    name: "Custom Phase Colors",
-                    hint: "",
-                    label: "Color Picker",
-                    restricted: true,
-                    defaultColor: color[1],
-                    scope: "world",
-                    onChange: value => { scsApp.phases.colors[1] = value }
-                });
-            } catch (err) {  // Test if lib is installed
-
-                // Alert user once
-                if (i === 0) ui.notifications.notify('SCS: You won\'t be able to pick custom phase colors unless you have "lib - ColorSettings" module enabled.', "info");
-
-                // Save colors in a hidden default setting
-                game.settings.register(scsApp.ID, `color.${i}.top`, {
-                    name: "Custom Phase Colors",
-                    hint: "",
-                    scope: "world",
-                    config: false,
-                    type: String,
-                    default: color[0],
-                    onChange: value => { scsApp.phases.colors[0] = value }
-                });
-                game.settings.register(scsApp.ID, `color.${i}.bottom`, {
-                    name: "Custom Phase Colors",
-                    hint: "",
-                    scope: "world",
-                    config: false,
-                    type: String,
-                    default: color[1],
-                    onChange: value => { scsApp.phases.colors[1] = value }
-                });
-            };
-        });
-
-        // A hue for each phase
-        scsApp.phases.names.forEach((_name, i) => {
-            let hueTop, hueBottom;
-
-            // If there are already hues for the phase's gradient, begin setting it up
-            try {
-                hueTop = game.settings.get(scsApp.ID, `color.${i}.top`);
-                hueBottom = game.settings.get(scsApp.ID, `color.${i}.bottom`);
-
-            } catch (err) { // If not, generate new hues 
-                hueTop = Math.round(Math.random() * 360);
-                hueBottom = Math.round(Math.random() * 360);
-
-                // Keep trying to generate a complementary hue for the bottom that looks nice
-                while (
-                    hueBottom - hueTop < 15 // The hue should be different enough that they don't look the same
-                    ||
-                    (hueBottom - hueTop > 100 && hueBottom - hueTop < 260) // It shouldn't be too different that it clashes
-                    ||
-                    (hueBottom >= 50 && hueBottom <= 150) // I don't like green
-                ) {
-                    hueBottom = Math.round(Math.random() * 360);
-                };
-            };
-
-            // Push the hues
-            scsApp.phases.colors.push([hueTop, hueBottom]);
-        });
     };
 
     // Hide default combat tracker
