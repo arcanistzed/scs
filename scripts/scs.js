@@ -70,25 +70,14 @@ Hooks.on("ready", async () => {
         type: Object
     });
 
-    /*     if (game.modules.get("colorsettings")?.active) {
-            new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.top`, {
-                name: "Custom Phase Colors",
-                label: "Color Picker",
-                restricted: true,
-                defaultColor: (() => scsApp.phases.colors,
-                scope: "world",
-                onChange: value => { scsApp.phases.colors[0] = value }
-            });
-    
-            new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.bottom`, {
-                name: "",
-                label: "Color Picker",
-                restricted: true,
-                defaultColor: color[1],
-                scope: "world",
-                onChange: value => { scsApp.phases.colors[1] = value }
-            });
-        }; */
+    game.settings.registerMenu(scsApp.ID, "generateColors", {
+        name: "Change Colors",
+        label: "Generate",
+        hint: "Click to generate new random phase colors",
+        icon: "fas fa-rainbow",
+        type: GenerateColors,
+        restricted: true
+    });
 
     await game.settings.register(scsApp.ID, "phases", {
         name: game.i18n.localize("scs.settings.phaseNames.Name"),
@@ -163,7 +152,7 @@ class scsApp extends FormApplication {
         };
 
         return mergeObject(super.defaultOptions, {
-            template: "modules/scs/templates/template.hbs",
+            template: "modules/scs/templates/app.hbs",
             id: "scsApp",
             title: "Simultaneous Combat System",
             top: this.initialPosition.top,
@@ -354,20 +343,6 @@ class scsApp extends FormApplication {
 
         // Update settings for storage if GM
         if (game.user.isGM) game.settings.set(scsApp.ID, "color", scsApp.phases.colors);
-
-        /* // 
-        scsApp.phases.colors.forEach((color, i) => {
-            try { // Test if the library is there
-
-            } catch (err) {  // Test if lib is installed
-
-                // Alert user once
-                if (i === 0) ui.notifications.notify('SCS: You won\'t be able to pick custom phase colors unless you have "lib - ColorSettings" module enabled.', "info");
-
-                // Save colors in a hidden default setting
-
-            };
-        }); */
     };
 
     // Adds the phases to the Application
@@ -510,17 +485,27 @@ class scsApp extends FormApplication {
     static combat() {
         // Integration with About Time
         if (game.modules.get("about-time")?.active) {
+
+            // If a combatant is being added, there must be a combat
             Hooks.on("createCombatant", () => {
-                if (game.settings.get(scsApp.ID, "stopRealtime") && scsApp.inCombat === false) {
-                    scsApp.inCombat = true;
+
+                // Check that the user wants to use this feature, that the clock is running, and that we aren't already in another combat
+                if (game.settings.get(scsApp.ID, "stopRealtime") && game.Gametime.isRunning() && scsApp.inCombat === false) {
+                    scsApp.inCombat = true; // Now we are in a combat
+                    let clockStopped = false;
+
+                    // Prompt for what to do
                     let d = new Dialog({
-                        title: "Slow down time?",
+                        title: "SCS: Slow down time?",
                         content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
                         buttons: {
                             yes: {
                                 icon: "<i class='fas fa-check'></i>",
                                 label: "Yes",
-                                callback: () => game.Gametime.stopRunning()
+                                callback: () => {
+                                    game.Gametime.stopRunning(); // Stop time
+                                    clockStopped = true; // So that we can restart it
+                                }
                             },
                             no: {
                                 icon: "<i class='fas fa-times'></i>",
@@ -529,7 +514,7 @@ class scsApp extends FormApplication {
                             never: {
                                 icon: "<i class='fas fa-skull'></i>",
                                 label: "Never",
-                                callback: () => game.settings.set(scsApp.ID, "stopRealtime", false)
+                                callback: () => game.settings.set(scsApp.ID, "stopRealtime", false) // This Dialog won't appear anymore
                             }
                         },
                         default: "yes",
@@ -539,8 +524,8 @@ class scsApp extends FormApplication {
                     // Resume counting time once the combat has no particpants
                     Hooks.on("deleteCombatant", () => {
                         if (game.combat?.turns.length) {
-                            scsApp.inCombat = false;
-                            game.Gametime.startRunning();
+                            scsApp.inCombat = false; // We aren't in combat
+                            if (clockStopped) game.Gametime.startRunning(); // Restart the clock
                         };
                     });
                 };
@@ -582,5 +567,22 @@ class scsApp extends FormApplication {
     static stopTutorial() {
         game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
         // document.querySelector(".introjs-skipbutton").click(); // End tutorial
+    };
+};
+
+class GenerateColors extends FormApplication {
+    defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            classes: ['form'],
+            template: "modules/scs/templates/color.hbs",
+            id: "scsColor",
+            title: "Colors",
+            top: 0,
+            left: 0
+        });
+    }
+    activateListeners() {
+        game.settings.set(scsApp.ID, "color", []); // Unset colors
+        new scsApp().render(true); // Re-render app 
     };
 };
