@@ -98,7 +98,6 @@ Hooks.on("ready", async () => {
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 }; // Move the app up if SmallTime is active
     new scsApp().render(true);
 });
-
 class scsApp extends FormApplication {
     static ID = "scs";
     static pinOffset = 100;
@@ -384,9 +383,7 @@ class scsApp extends FormApplication {
     // Hide buttons for players and re-adjust app size
     static hideFromPlayers() {
         if (!game.user.isGM) {
-            document.querySelector(".scsArrows").style.display = "none";
-            document.querySelector("#scsApp").style.setProperty("--scsHeight", "50px");
-            scsApp.pinOffset -= 25;
+            document.querySelectorAll("#scsApp .scsArrows > *.fas").forEach(arrow => { arrow.style.display = "none" })
         };
     };
 

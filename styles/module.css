@@ -50,9 +50,7 @@
 
 /* Controls the app itself */
 #scsApp {
-  /* Let the height be easily adjusted with JS*/
-  --scsHeight: 75px;
-  height: var(--scsHeight);
+  height: 75px;
   flex-wrap: nowrap;
   background: none;
 }
