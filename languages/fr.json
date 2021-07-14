@@ -15,7 +15,7 @@
       },
       "phaseNames": {
         "Name": "Noms des phases",
-        "Hint": "Une liste, séparé à l'aide de virgules, de nom de phases (laisser vide pour les défauts)",
+        "Hint": "Une liste, séparé à l'aide de virgules, de nom de phases",
         "phases": [
           "Déplacer",
           "Attaquer",
