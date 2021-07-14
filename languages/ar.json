@@ -1,0 +1,21 @@
+{
+  "scs.settings.showTracker.Name": "إظهار المقتفي",
+  "scs.settings.showTracker.Hint": "تمكين هذا لعرض تعقب القتال الافتراضي",
+  "scs.settings.limitPhases.Name": "الحد من مراحل",
+  "scs.settings.limitPhases.Hint": "بعد الانتهاء من المراحل الثلاث، انتقل إلى الجولة التالية من القتال.",
+  "scs.settings.startupTutorial.Name": "تشغيل البرنامج التعليمي لبدء التشغيل",
+  "scs.settings.startupTutorial.Hint": "تعطيل هذا إذا كنت لا تريد البرنامج التعليمي للعب في كل مرة يتم تحميل الصفحة",
+  "scs.settings.phaseNames.Name": "أسماء المرحلة",
+  "scs.settings.phaseNames.Hint": "قائمة مفصولة بفاصل بأسماء المراحل",
+  "scs.settings.phaseNames.defaults.0": "نقل",
+  "scs.settings.phaseNames.defaults.1": "الهجمات",
+  "scs.settings.phaseNames.defaults.2": "نوبات",
+  "scs.tutorial.welcome.Title": "مرحبا بكم في SCS",
+  "scs.tutorial.welcome.Intro": "هذه الوحدة هي تنفيذ نظام القتال المتزامن وصفها في <a href=\"https://redd.it/nlyif8\">هذا المنصب رديت</a>.",
+  "scs.tutorial.howItWorks.Title": "كيف يعمل",
+  "scs.tutorial.howItWorks.Intro": "<p>بدلا من كل حرف يأخذ بدوره الخاص بالتتابع، كل شيء يحدث في كل مرة. <br/> من أجل منع الفوضى الكاملة, القتال لا يزال يحدث في جولات وهناك هيكل لكل جولة. أي أنها مقسمة إلى مراحل:</p>",
+  "scs.tutorial.combatTracker.Title": "أين تعقب القتال؟",
+  "scs.tutorial.combatTracker.Intro": "<p>منذ القتال يحدث في وقت واحد مع هذا النظام, لقد أزلت تعقب القتال الافتراضي. يمكنك دائمًا إعادة تمكينه في إعدادات الوحدة النمطية.</p>",
+  "scs.tutorial.movingAround.Title": "كيف يمكنني تحريك هذا الشيء؟",
+  "scs.tutorial.movingAround.Intro": "<p>يمكنك سحب التطبيق من خلال النقر مع الاستمرار على هذا النص. فإنه يستقر إلى الزاوية اليسرى السفلى، ولكن سوف نتذكر انها موقف أينما اخترت لوضعه.</p>"
+}

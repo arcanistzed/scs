@@ -1,0 +1,21 @@
+{
+  "scs.settings.showTracker.Name": "Mostrar Rastreador",
+  "scs.settings.showTracker.Hint": "Habilite esto para mostrar el rastreador de combate predeterminado",
+  "scs.settings.limitPhases.Name": "Límite de fases",
+  "scs.settings.limitPhases.Hint": "Una vez terminadas las tres fases, pasa a la siguiente ronda de combate.",
+  "scs.settings.startupTutorial.Name": "Jugar Tutorial de inicio",
+  "scs.settings.startupTutorial.Hint": "Deshabilite esta opción si no desea que el tutorial se reproduzca cada vez que se cargue la página",
+  "scs.settings.phaseNames.Name": "Nombres de fase",
+  "scs.settings.phaseNames.Hint": "Una lista separada por comas de nombres de fase",
+  "scs.settings.phaseNames.defaults.0": "Mover",
+  "scs.settings.phaseNames.defaults.1": "Ataques",
+  "scs.settings.phaseNames.defaults.2": "Hechizos",
+  "scs.tutorial.welcome.Title": "Bienvenido a SCS",
+  "scs.tutorial.welcome.Intro": "Este módulo es una implementación del Sistema de Combate Simultáneo descrito en <a href=\"https://redd.it/nlyif8\">este post de reddit</a>.",
+  "scs.tutorial.howItWorks.Title": "Cómo funciona",
+  "scs.tutorial.howItWorks.Intro": "<p>En lugar de que cada personaje tome su propio turno secuencialmente, todo sucede a la vez. <br/> Para evitar el caos total, el combate aún ocurre en rondas y hay una estructura en cada ronda. Es decir, se dividen en fases:</p>",
+  "scs.tutorial.combatTracker.Title": "¿Dónde está el rastreador de combate?",
+  "scs.tutorial.combatTracker.Intro": "<p>Dado que el combate ocurre simultáneamente con este sistema, he eliminado el rastreador de combate predeterminado. Siempre puede volver a habilitarlo en la configuración del módulo.</p>",
+  "scs.tutorial.movingAround.Title": "¿Cómo muevo esta cosa?",
+  "scs.tutorial.movingAround.Intro": "<p>Puedes arrastrar la aplicación haciendo clic y manteniendo pulsado este texto. Se ajusta a la esquina inferior izquierda, pero recordará su posición dondequiera que elijas ponerla.</p>"
+}

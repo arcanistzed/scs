@@ -1,0 +1,21 @@
+{
+  "scs.settings.showTracker.Name": "Tracker anzeigen",
+  "scs.settings.showTracker.Hint": "Aktivieren Sie diese Option, um den Standard-Kampf-Tracker anzuzeigen",
+  "scs.settings.limitPhases.Name": "Phasen begrenzen",
+  "scs.settings.limitPhases.Hint": "Nachdem die drei Phasen beendet sind, fahren Sie mit der nächsten Runde des Kampfes fort.",
+  "scs.settings.startupTutorial.Name": "Startup-Tutorial abspielen",
+  "scs.settings.startupTutorial.Hint": "Deaktivieren Sie diese Option, wenn Sie nicht möchten, dass das Tutorial jedes Mal wiedergegeben wird, wenn die Seite geladen wird",
+  "scs.settings.phaseNames.Name": "Phasen-Namen",
+  "scs.settings.phaseNames.Hint": "Eine kommagetrennte Liste von Phasennamen",
+  "scs.settings.phaseNames.defaults.0": "Verschieben",
+  "scs.settings.phaseNames.defaults.1": "Angriffe",
+  "scs.settings.phaseNames.defaults.2": "Zauber",
+  "scs.tutorial.welcome.Title": "Willkommen bei SCS",
+  "scs.tutorial.welcome.Intro": "Dieses Modul ist eine Implementierung des Simultaneous Combat System, das in <a href=\"https://redd.it/nlyif8\">diesem reddit Beitrag</a>beschrieben wird.",
+  "scs.tutorial.howItWorks.Title": "Wie es funktioniert",
+  "scs.tutorial.howItWorks.Intro": "<p>Statt dass jeder Charakter nacheinander seine eigene Reihe nimmt, geschieht alles auf einmal. <br/> Um totales Chaos zu verhindern, findet der Kampf immer noch in Runden statt und es gibt eine Struktur in jeder Runde. Das heißt, sie sind in Phasen unterteilt:</p>",
+  "scs.tutorial.combatTracker.Title": "Wo ist der Combat Tracker?",
+  "scs.tutorial.combatTracker.Intro": "<p>Da der Kampf gleichzeitig mit diesem System stattfindet, habe ich den Standard-Kampf-Tracker entfernt. Sie können es jederzeit in den Einstellungen des Moduls wieder aktivieren.</p>",
+  "scs.tutorial.movingAround.Title": "Wie kann ich das Ding bewegen?",
+  "scs.tutorial.movingAround.Intro": "<p>Sie können die App ziehen, indem Sie auf diesen Text klicken und halten. Es rastet an der unteren linken Ecke, aber es wird seine Position erinnern, wo immer Sie es setzen wollen.</p>"
+}

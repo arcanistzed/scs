@@ -11,7 +11,7 @@
       },
       "startupTutorial": {
         "Name": "Play Startup Tutorial",
-        "Hint": "Disable this if you don't want the tutorial to play each time the page loads"
+        "Hint": "Disable this if you don't want the tutorial to display each time the page loads"
       },
       "phaseNames": {
         "Name": "Phase Names",
@@ -33,7 +33,7 @@
         "Intro": "<p>Instead of each character taking their own turn sequentially, everything happens all at once. <br/> In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into phases:</p>"
       },
       "combatTracker": {
-        "Title": "Where is the Combat Tracker?",
+        "Title": "Where is the combat tracker?",
         "Intro": "<p>Since combat happens simultaneously with this system, I've removed the default combat tracker. You can always re-enable it in the module's settings.</p>"
       },
       "movingAround": {
