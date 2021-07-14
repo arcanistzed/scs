@@ -61,7 +61,7 @@ Hooks.on("ready", async () => {
         config: true,
         type: Boolean,
         default: true,
-        onChange: () => { new scsApp().render(true); } // Re-render the app
+        onChange: () => { if (!document.getElementById("scsTutorialAgain")) new scsApp().render(true); } // Re-render the app
     });
 
     await game.settings.register(scsApp.ID, "phases", {
@@ -91,6 +91,7 @@ class scsApp extends FormApplication {
     };
     static currentPhase = 1;
     static currentRound = 1;
+    static inCombat = false;
 
     // Override close() to prevent Escape presses from closing the scs app.
     async close(options = {}) {
@@ -276,7 +277,7 @@ class scsApp extends FormApplication {
             scsApp.phases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
         } else {
             // If not, parse and use the new values in settings
-            scsApp.phases.names = settings.split(", ").map(val => val.split(",")).deepFlatten();
+            scsApp.phases.names = settings.split(",").map(val => val.trim());
         };
     };
 
@@ -307,26 +308,10 @@ class scsApp extends FormApplication {
 
     // Generate random beautiful color gradients
     static generateColors() {
-        scsApp.phases.names.forEach(() => {
-            let hueTop = Math.round(Math.random() * 360);
-            console.log("top: " + hueTop);
-            let hueBottom = Math.round(Math.random() * 360);
-            while (
-                hueBottom - hueTop < 15
-                ||
-                (hueBottom - hueTop > 100 && hueBottom - hueTop < 260)
-                ||
-                (hueBottom >= 50 && hueBottom <= 150)
-            ) {
-                hueBottom = Math.round(Math.random() * 360);
-                console.log(hueBottom);
-            };
-            scsApp.phases.colors.push([hueTop, hueBottom]);
-        });
 
-        // Add settings for choosing custom colors
-        try {
-            scsApp.phases.colors.forEach((color, i) => {
+        // For each color, create settings for more permanent storage
+        scsApp.phases.colors.forEach((color, i) => {
+            try { // Add settings for choosing custom colors, if the library is there
                 new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.top`, {
                     name: "Custom Phase Colors",
                     hint: "",
@@ -334,7 +319,7 @@ class scsApp extends FormApplication {
                     restricted: true,
                     defaultColor: color[0],
                     scope: "world",
-                    onChange: (value) => { scsApp.phases.colors[0] = value }
+                    onChange: value => { scsApp.phases.colors[0] = value }
                 });
 
                 new window.Ardittristan.ColorSetting(scsApp.ID, `color.${i}.bottom`, {
@@ -344,12 +329,63 @@ class scsApp extends FormApplication {
                     restricted: true,
                     defaultColor: color[1],
                     scope: "world",
-                    onChange: (value) => { scsApp.phases.colors[1] = value }
+                    onChange: value => { scsApp.phases.colors[1] = value }
                 });
-            });
-        } catch {  // Test if color settings is installed
-            ui.notifications.notify('You won\'t be able to pick custom phase colors unless you have the "lib - ColorSettings" module installed and enabled.', "error");
-        };
+            } catch (err) {  // Test if lib is installed
+
+                // Alert user once
+                if (i === 0) ui.notifications.notify('SCS: You won\'t be able to pick custom phase colors unless you have "lib - ColorSettings" module enabled.', "info");
+
+                // Save colors in a hidden default setting
+                game.settings.register(scsApp.ID, `color.${i}.top`, {
+                    name: "Custom Phase Colors",
+                    hint: "",
+                    scope: "world",
+                    config: false,
+                    type: String,
+                    default: color[0],
+                    onChange: value => { scsApp.phases.colors[0] = value }
+                });
+                game.settings.register(scsApp.ID, `color.${i}.bottom`, {
+                    name: "Custom Phase Colors",
+                    hint: "",
+                    scope: "world",
+                    config: false,
+                    type: String,
+                    default: color[1],
+                    onChange: value => { scsApp.phases.colors[1] = value }
+                });
+            };
+        });
+
+        // A hue for each phase
+        scsApp.phases.names.forEach((_name, i) => {
+            let hueTop, hueBottom;
+
+            // If there are already hues for the phase's gradient, begin setting it up
+            try {
+                hueTop = game.settings.get(scsApp.ID, `color.${i}.top`);
+                hueBottom = game.settings.get(scsApp.ID, `color.${i}.bottom`);
+
+            } catch (err) { // If not, generate new hues 
+                hueTop = Math.round(Math.random() * 360);
+                hueBottom = Math.round(Math.random() * 360);
+
+                // Keep trying to generate a complementary hue for the bottom that looks nice
+                while (
+                    hueBottom - hueTop < 15 // The hue should be different enough that they don't look the same
+                    ||
+                    (hueBottom - hueTop > 100 && hueBottom - hueTop < 260) // It shouldn't be too different that it clashes
+                    ||
+                    (hueBottom >= 50 && hueBottom <= 150) // I don't like green
+                ) {
+                    hueBottom = Math.round(Math.random() * 360);
+                };
+            };
+
+            // Push the hues
+            scsApp.phases.colors.push([hueTop, hueBottom]);
+        });
     };
 
     // Hide default combat tracker
@@ -366,7 +402,7 @@ class scsApp extends FormApplication {
     // Hide buttons for players and re-adjust app size
     static hideFromPlayers() {
         if (!game.user.isGM) {
-            html.find("scsArrows").hide();
+            document.querySelector(".scsArrows").style.display = "none";
             document.querySelector("#scsApp").style.setProperty("--scsHeight", "50px");
             scsApp.pinOffset -= 25;
         };
@@ -466,37 +502,43 @@ class scsApp extends FormApplication {
     // Manage combat
     static combat() {
         // Integration with About Time
-        const aboutTime = game.modules.get("about-time")?.active;
-        if (aboutTime && game.settings.get(scsApp.ID, "stopRealtime")) {
+        if (game.modules.get("about-time")?.active) {
             Hooks.on("createCombatant", () => {
-                let d = new Dialog({
-                    title: "Slow down time?",
-                    content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
-                    buttons: {
-                        yes: {
-                            icon: "<i class='fas fa-check'></i>",
-                            label: "Yes",
-                            callback: () => game.Gametime.stopRunning()
+                if (game.settings.get(scsApp.ID, "stopRealtime") && scsApp.inCombat === false) {
+                    scsApp.inCombat = true;
+                    let d = new Dialog({
+                        title: "Slow down time?",
+                        content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
+                        buttons: {
+                            yes: {
+                                icon: "<i class='fas fa-check'></i>",
+                                label: "Yes",
+                                callback: () => game.Gametime.stopRunning()
+                            },
+                            no: {
+                                icon: "<i class='fas fa-times'></i>",
+                                label: "No"
+                            },
+                            never: {
+                                icon: "<i class='fas fa-skull'></i>",
+                                label: "Never",
+                                callback: () => game.settings.set(scsApp.ID, "stopRealtime", false)
+                            }
                         },
-                        no: {
-                            icon: "<i class='fas fa-times'></i>",
-                            label: "No"
-                        },
-                        never: {
-                            icon: "<i class='fas fa-skull'></i>",
-                            label: "Never",
-                            callback: () => game.settings.set(scsApp.ID, "stopRealtime", false)
-                        }
-                    },
-                    default: "yes",
-                });
-                d.render(true);
+                        default: "yes",
+                    });
+                    d.render(true);
+
+                    // Resume counting time once the combat has no particpants
+                    Hooks.on("deleteCombatant", () => {
+                        if (game.combat?.turns.length) {
+                            scsApp.inCombat = false;
+                            game.Gametime.startRunning();
+                        };
+                    });
+                };
             });
         };
-
-        Hooks.on("deleteCombatant", () => {
-            if (game.combat?.turns.length && aboutTime) game.Gametime.startRunning();
-        });
     };
 
     // Start IntroJS tutorial
