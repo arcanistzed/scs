@@ -86,7 +86,7 @@ Hooks.on("ready", async () => {
         config: true,
         type: String,
         default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
-        onChange: value => {
+        onChange: () => {
             // Reset colors
             game.settings.set(scsApp.ID, "color", []);
             scsApp.phases.colors = [];
@@ -145,7 +145,7 @@ class scsApp extends FormApplication {
         // The actual pin location is set elsewhere, but we need to insert something
         // manually here to feed it values for the initial render.
         if (pinned) {
-            var playerOffset = !game.user.isGM ? 36 : 12;
+            var playerOffset = 12;
             this.initialPosition.top = playerAppPos.top - scsApp.pinOffset + playerOffset;
             this.initialPosition.left = playerAppPos.left;
         };
@@ -383,7 +383,7 @@ class scsApp extends FormApplication {
     // Hide buttons for players and re-adjust app size
     static hideFromPlayers() {
         if (!game.user.isGM) {
-            document.querySelectorAll("#scsApp .scsArrows > *.fas").forEach(arrow => { arrow.style.display = "none" })
+            document.querySelectorAll("#scsApp .scsArrows > *.fas").forEach(arrow => { arrow.style.display = "none" });
         };
     };
 
@@ -399,23 +399,33 @@ class scsApp extends FormApplication {
         };
 
         const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
-        const aboutTime = game.modules.get("about-time")?.active;
+        const aboutTime = game.modules.get("about-time")?.active; // Is About Time active?
 
         function pullValues() {
             scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
             scsApp.currentRound = game.settings.get(scsApp.ID, "currentRound"); // counts the current round
         };
+
         Hooks.on("renderscsApp", () => {
             pullValues();
             updateApp();
         });
-        Hooks.on("updateSetting", setting => { setting.data.key === "scs.currentPhase" ? pullValues() : null });
 
-        // Execute one of the functions below this, depending on the button clicked
-        html.find("#lastRound").on("click", () => { lastRound() });
-        html.find("#lastPhase").on("click", () => { lastPhase() });
-        html.find("#nextPhase").on("click", () => { nextPhase() });
-        html.find("#nextRound").on("click", () => { nextRound() });
+        // Update for players
+        Hooks.on("updateSetting", setting => {
+            if ((setting.data.key === "scs.currentPhase" || setting.data.key === "scs.currentRound") && !game.user.isGM) {
+                pullValues();
+                updateApp();
+            };
+        });
+
+        // If GM, execute one of the functions below this, depending on the button clicked
+        if (game.user.isGM) {
+            html.find("#lastRound").on("click", () => { lastRound() });
+            html.find("#lastPhase").on("click", () => { lastPhase() });
+            html.find("#nextPhase").on("click", () => { nextPhase() });
+            html.find("#nextRound").on("click", () => { nextRound() });
+        };
 
         // Return to the last round
         function lastRound() {
@@ -449,9 +459,7 @@ class scsApp extends FormApplication {
             updateApp();
         };
 
-        /**
-         * Updates the app to display the correct state
-         */
+        // Updates the app to display the correct state
         function updateApp() {
             // Change rounds if limit phases is enabled
             if (game.settings.get(scsApp.ID, "limitPhases")) {
@@ -471,6 +479,7 @@ class scsApp extends FormApplication {
 
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
+            console.log(scsApp.currentRound)
 
             // Save new values
             game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
@@ -568,18 +577,20 @@ class scsApp extends FormApplication {
 };
 
 class GenerateColors extends FormApplication {
-    defaultOptions() {
+    static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            classes: ['form'],
             template: "modules/scs/templates/color.hbs",
             id: "scsColor",
-            title: "Colors",
-            top: 0,
-            left: 0
+            title: "SCS: Colors",
+            minimized: true
         });
     }
     activateListeners() {
         game.settings.set(scsApp.ID, "color", []); // Unset colors
         new scsApp().render(true); // Re-render app 
+        document.querySelectorAll("#scsColor").forEach(element => element.remove()); // Hide this window (hacky solution for now)
     };
 };
+
+// Get this to work ^ for resetting colors
+
