@@ -21,6 +21,11 @@
           "Attacks",
           "Spells"
         ]
+      },
+      "generateColors": {
+        "Name": "Change Colors",
+        "Label": "Generate",
+        "Hint": "Click to generate new random colors (reloads page)"
       }
     },
     "tutorial": {

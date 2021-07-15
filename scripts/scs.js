@@ -71,9 +71,9 @@ Hooks.on("ready", async () => {
     });
 
     game.settings.registerMenu(scsApp.ID, "generateColors", {
-        name: "Change Colors",
-        label: "Generate",
-        hint: "Click to generate new random phase colors",
+        name: game.i18n.localize("scs.settings.generateColors.Name"),
+        label: game.i18n.localize("scs.settings.generateColors.Label"),
+        hint: game.i18n.localize("scs.settings.generateColors.Hint"),
         icon: "fas fa-rainbow",
         type: GenerateColors,
         restricted: true
@@ -586,11 +586,11 @@ class GenerateColors extends FormApplication {
         });
     }
     activateListeners() {
-        game.settings.set(scsApp.ID, "color", []); // Unset colors
-        new scsApp().render(true); // Re-render app 
-        document.querySelectorAll("#scsColor").forEach(element => element.remove()); // Hide this window (hacky solution for now)
+        // Unset colors
+        game.settings.set(scsApp.ID, "color", []); 
+        scsApp.phases.colors = [];
+
+        // Reload the page
+        location.reload()
     };
 };
-
-// Get this to work ^ for resetting colors
-
