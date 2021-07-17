@@ -54,6 +54,15 @@ Hooks.on("ready", async () => {
         default: false,
     });
 
+    game.settings.register(scsApp.ID, "alternateChecked", {
+        name: game.i18n.localize("scs.settings.alternateChecked.Name"),
+        hint: game.i18n.localize("scs.settings.alternateChecked.Hint"),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+    });
+
     game.settings.register(scsApp.ID, "startupTutorial", {
         name: game.i18n.localize("scs.settings.startupTutorial.Name"),
         hint: game.i18n.localize("scs.settings.startupTutorial.Hint"),
@@ -473,13 +482,17 @@ class scsApp extends FormApplication {
             // Correct phase if it excedes new limit
             if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
-            // Update the appearance of the buttons
-            buttons.forEach(current => { current.classList.remove("checked") });
-            buttons[scsApp.currentPhase - 1].classList.add("checked");
+            // Update the appearance of the buttons depending on the user's settings
+            if (!game.settings.get(scsApp.ID, "alternateChecked")) { // Checked is darker
+                buttons.forEach(current => { current.classList.remove("checked") });
+                buttons[scsApp.currentPhase - 1].classList.add("checked");
+            } else { // Checked is lighter
+                buttons.forEach(current => { current.classList.add("checked") });
+                buttons[scsApp.currentPhase - 1].classList.remove("checked");
+            };
 
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
-            console.log(scsApp.currentRound)
 
             // Save new values
             game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);

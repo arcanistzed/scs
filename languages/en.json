@@ -26,6 +26,10 @@
         "Name": "Change Colors",
         "Label": "Generate",
         "Hint": "Click to generate new random colors (reloads page)"
+      },
+      "alternateChecked": {
+        "Name": "Alternate Appearance",
+        "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker."
       }
     },
     "tutorial": {
