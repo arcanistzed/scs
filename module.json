@@ -5,14 +5,15 @@
   "version": "This is auto replaced",
   "manifestPlusVersion": "1.2.0",
   "minimumCoreVersion": "0.7.9",
-  "compatibleCoreVersion": "0.8.7",
+  "compatibleCoreVersion": "0.8.8",
   "author": "arcanist",
   "authors": [
     {
       "name": "arcanist",
       "url": "https://arcanistzed.github.io/",
       "email": "arcanistzed@gmail.com",
-      "discord": "arcanist#4317"
+      "discord": "arcanist#4317",
+      "reddit": "u/arcanistzed"
     }
   ],
   "scripts": [
@@ -87,5 +88,17 @@
   ],
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
-  "download": "This is auto replaced"
+  "download": "This is auto replaced",
+  "media": [
+    {
+      "type": "screenshot",
+      "url": "https://img.itch.zone/aW1hZ2UvMTEyNDU0My82NTA4NTcyLnBuZw==/347x500/04ycw3.png",
+      "caption": "See it in action on the bottom left of the screen."
+    },
+    {
+      "type": "cover",
+      "url": "https://img.itch.zone/aW1hZ2UvMTEyNDU0My82NTA4NDgxLmdpZg==/347x500/rngeuv.gif",
+      "caption": "Simultaneous Combat System"
+    }
+  ]
 }
