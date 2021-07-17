@@ -13,6 +13,8 @@
   "scs.settings.generateColors.Name": "Alterar cores",
   "scs.settings.generateColors.Label": "Gerar",
   "scs.settings.generateColors.Hint": "Clique para gerar novas cores aleatórias (página recarrega)",
+  "scs.settings.alternateChecked.Name": "Aparência alternativa",
+  "scs.settings.alternateChecked.Hint": "Inverta a aparência da fase ativa, de modo que ela seja mais clara do que as outras, em vez de mais escura.",
   "scs.tutorial.welcome.Title": "Bem-vindo ao SCS",
   "scs.tutorial.welcome.Intro": "Este módulo é uma implementação do Sistema de Combate Simultâneo descrito <a href=\"https://redd.it/nlyif8\">neste post reddit</a>.",
   "scs.tutorial.howItWorks.Title": "Como funciona",

@@ -13,6 +13,8 @@
   "scs.settings.generateColors.Name": "更改颜色",
   "scs.settings.generateColors.Label": "生成",
   "scs.settings.generateColors.Hint": "点击生成新的随机颜色（重新加载页面）",
+  "scs.settings.alternateChecked.Name": "替代外观",
+  "scs.settings.alternateChecked.Hint": "反转活动相位的外观，使其比其他相位更亮，而不是暗。",
   "scs.tutorial.welcome.Title": "欢迎来到 SCS",
   "scs.tutorial.welcome.Intro": "本模块是本 <a href=\"https://redd.it/nlyif8\"> reddit 帖子 </a> 中描述的同时作战系统的实现。",
   "scs.tutorial.howItWorks.Title": "它的工作原理",

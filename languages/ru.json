@@ -13,6 +13,8 @@
   "scs.settings.generateColors.Name": "Изменить цвета",
   "scs.settings.generateColors.Label": "Генерировать",
   "scs.settings.generateColors.Hint": "Нажмите, чтобы создать новые случайные цвета (страница перезагрузки)",
+  "scs.settings.alternateChecked.Name": "Альтернативный внешний вид",
+  "scs.settings.alternateChecked.Hint": "Инвертируйте внешний вид активной фазы, чтобы она была легче остальных, а не темнее.",
   "scs.tutorial.welcome.Title": "Добро пожаловать в SCS",
   "scs.tutorial.welcome.Intro": "Данный модуль представляет собой реализацию системы одновременного боя, описанной в <a href=\"https://redd.it/nlyif8\">этом посте reddit</a>.",
   "scs.tutorial.howItWorks.Title": "Как это работает",
