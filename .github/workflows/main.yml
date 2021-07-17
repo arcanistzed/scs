@@ -38,9 +38,3 @@ jobs:
         artifacts: './module.json, ./module.zip'
         tag: ${{ github.event.release.tag_name }}
         body: ${{ github.event.release.body }}
-        
-    # Get translations from Foundry Magic L10n
-    - name: Get Translations
-      run: |
-        npm install foundry-magic-l10n
-        foundry-magic-l10n run https://github.com/arcanistzed/scs/releases/download/${{ github.event.release.tag_name }}/module.json
