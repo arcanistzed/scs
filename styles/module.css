@@ -97,59 +97,7 @@
 
 /* Custom styling for IntroJS tour */
 
-/* Fix IntroJS tooltip close button in incorrect position */
-.introjs-tooltip-title {
-  padding-right: 5%;
-  font-family: "Modesto Condensed" !important;
-  font-size: 28px;
-}
-.introjs-skipbutton {
-  top: 1%;
-  right: 1%;
-  position: absolute;
-}
-
-/* Make it look more like Foundry's UI */
-.introjs-tooltip {
-  background: url(../../../ui/parchment.jpg) repeat;
-  color: #191813;
-  box-shadow: 0 0 20px #000;
-}
-.introjs-tooltipReferenceLayer * {
-  font-family: "Signika";
-}
-/* For Foundry-like buttons. I need
-a way to deal with :hover, :active,
-:focus before this can look good
-.introjs-button {
-  background: rgba(0, 0, 0, 0.1);
-  border: 2px groove #f0f0e0;
-}*/
-.introjs-disabled {
-  display: none;
-}
-
-/* Recolor Bullets */
-.introjs-bullets ul li a.active {
-  background: #782e22;
-}
-.introjs-bullets ul li a {
-  background: #00000070;
-}
-
-/* Fix padding */
-.introjs-tooltip-header {
-  padding: 1em;
-  padding-bottom: 0;
-}
-.introjs-tooltiptext {
-  padding: 1em;
-}
-.introjs-bullets {
-  padding: 0;
-}
-
-/* Style checkbox Div */
+/* Style checkbox */
 #scsTutorialAgainDiv {
   display: flex;
   align-items: center;
@@ -158,9 +106,16 @@ a way to deal with :hover, :active,
   padding: 0.5em 1em;
 }
 
-/* Move line above checkbox Div */
+/* Move line above checkbox */
 .introjs-tooltipbuttons {
   border: transparent;
   padding: 1em;
   padding-top: 0;
+}
+
+/* Font Awesome Icons */
+.introjs-tooltipReferenceLayer .fa,
+.far,
+.fas {
+  font-family: "Font Awesome 5 Free";
 }

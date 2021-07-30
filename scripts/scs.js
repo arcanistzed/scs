@@ -572,7 +572,8 @@ class scsApp extends FormApplication {
                 title: game.i18n.localize("scs.tutorial.movingAround.Title"),
                 element: document.querySelector("#scsApp #currentRound"),
                 intro: game.i18n.localize("scs.tutorial.movingAround.Intro")
-            }]
+            }],
+            skipLabel: '<a><i class="fas fa-times"></i></a>'
         }).start();
 
         // Create "Don't Show Again" checkbox

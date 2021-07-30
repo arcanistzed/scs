@@ -82,7 +82,6 @@
   "dependencies": [
     {
       "name": "_introjs",
-      "manifest": "https://github.com/League-of-Foundry-Developers/intro.js-lib/releases/download/3.2.1-fvtt1/module.json",
       "type": "module"
     }
   ],
