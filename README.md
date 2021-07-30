@@ -13,24 +13,31 @@ On the player's side:
 
 ![scs-player](https://user-images.githubusercontent.com/82790112/123030629-15012200-d3b1-11eb-8e4e-d058e1eb8800.png)
 
-# Usage
+## Usage
+
 Please follow the built-in tutorial (built with IntoJS), for instructions. You can always relaunch the tutorial from within the settings. If you have any questions, feel free to contact me.
 
-# Installation
-In the setup screen, use the URL https://github.com/arcanistzed/scs/releases/latest/download/module.json to install the module.
+## Installation
 
-# License
+In the setup screen, use the URL `https://github.com/arcanistzed/scs/releases/latest/download/module.json` to install the module.
+
+## License
+
 This package is under an [MIT license](LICENSE)
 
-# Bugs
+## Bugs
+
 You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose).
 
 Known Issues:
+
 - With Canvas off, the app doesn't remember it's pinned location
 - No CSS for IntroJS [IMPORTANT]
 
-# Localization
+## Localization
+
 Please note that the `Phases` must be short enough to fit their boxes, so you shouldn't put anything over approximately eight characters.
 
-# Contact me
-Come hang out on my Discord server: https://discord.gg/AAkZWWqVav where my username is [@arcanist#4317](https://discord.com/users/455117777745870860) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=NAME%20module%20for%20Foundry%20VTT).
+## Contact me
+
+Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) where my username is [@arcanist#4317](https://discord.com/users/455117777745870860) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=NAME%20module%20for%20Foundry%20VTT).
