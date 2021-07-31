@@ -95,6 +95,11 @@
   }
 }
 
+/* Don't show form app for Generate Colors settings button */
+#scsColor {
+  display: none!important;
+}
+
 /* Custom styling for IntroJS tour */
 
 /* Style checkbox */
