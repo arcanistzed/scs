@@ -305,6 +305,36 @@ class scsApp extends FormApplication {
         };
     };
 
+    // Returns an array of hues that validate certain rules from a given base hue
+    static allAllowedHues = base => Array.from(new Array(360)) // Hue is in degrees
+        .map((_, i) => i + 1) // Insert numbers into the Array from 1 to 300
+        .filter(h => // Filter the Array
+            Math.abs(base - h) > 15 // Must be sufficiently different than the base
+            && Math.abs(base - h) <= 100 // Must not be too different
+            && (h < 50 || h > 150) // Must not be green
+        );
+
+    // Last hue generated
+    static lastHue;
+
+    // Generate a new hue from a base hue
+    static generateHue(base) {
+
+        // Initialize an Array that will contain the valid hues for the current base
+        let validHues = scsApp.allAllowedHues(base);
+
+        // If there is a last hue, set the valid hues to everything that isn't within 25 from the last hue
+        if (scsApp.lastHue) validHues = scsApp.allAllowedHues(base).filter(h => Math.abs(scsApp.lastHue - h) >= 25);
+
+        // Pick the a random hue from the valid hues
+        let chosenHue = validHues[Math.floor(Math.random() * validHues.length)];
+
+        // Set lastHue to the chosen hue for the next generation
+        scsApp.lastHue = chosenHue;
+
+        return chosenHue; // Return the chosen hue
+    };
+
     // Generate random beautiful color gradients
     static generateColors() {
 
@@ -312,40 +342,22 @@ class scsApp extends FormApplication {
         scsApp.phases.names.forEach((_name, i) => {
             let hueTop, hueBottom;
 
-            // If there is already a hue for this phase, map it
-            if (game.settings.get(scsApp.ID, "color")[i]) {
+            // Try and assign existing hues for this phase
+            try {
                 hueTop = game.settings.get(scsApp.ID, "color").map(([top]) => top)[i];
                 hueBottom = game.settings.get(scsApp.ID, "color").map(([, bottom]) => bottom)[i];
+                if (!hueTop || !hueBottom) throw "no hues stored"
 
-            } else { // If not, generate new hues
-                hueTop = Math.round(Math.random() * 360);
-                hueBottom = Math.round(Math.random() * 360);
+            } catch (err) { // If not, generate new hues
 
-                // Get array of hues that are very close
-                let closeHuesTop = [], closeHuesBottom = [];
-                for (i = hueTop - 5; i <= hueTop + 5; i++) { closeHuesTop.push(i) }
-                for (i = hueBottom - 5; i <= hueBottom + 5; i++) { closeHuesBottom.push(i) }
+                // Generate the top hue from a random base
+                hueTop = scsApp.generateHue(Math.floor(Math.random() * 360));
 
-                // Test if the new value is too close
-                let hueTopTooClose = false, hueBottomTooClose = false;
-                closeHuesTop.forEach(hue => scsApp.phases.colors.deepFlatten().includes(hue) ? hueTopTooClose = true : null)
-                closeHuesBottom.forEach(hue => scsApp.phases.colors.deepFlatten().includes(hue) ? hueBottomTooClose = true : null)
-
-                // Keep trying to generate a complementary hue for the bottom that looks nice
-                while (
-                    hueBottom - hueTop < 15 // The hue should be different enough that the top and bottom don't look the same
-                    ||
-                    (hueBottom - hueTop > 100 && hueBottom - hueTop < 260) // It shouldn't be too different that it clashes
-                    ||
-                    (hueBottom >= 50 && hueBottom <= 150) // Green doesn't look good
-                    ||
-                    hueTopTooClose || hueBottomTooClose // Too similar to another hue
-                ) {
-                    hueBottom = Math.round(Math.random() * 360);
-                };
+                // Generate the bottom hue with the top hue as the base
+                hueBottom = scsApp.generateHue(hueTop);
             };
 
-            // Push the hues
+            // Push the hues to temp storage
             scsApp.phases.colors.push([hueTop, hueBottom]);
         });
 
@@ -599,12 +611,12 @@ class GenerateColors extends FormApplication {
             minimized: true
         });
     }
-    activateListeners() {
+    async activateListeners() {
         // Unset colors
-        game.settings.set(scsApp.ID, "color", []); 
+        await game.settings.set(scsApp.ID, "color", []);
         scsApp.phases.colors = [];
 
         // Reload the page
-        location.reload()
+        location.reload();
     };
 };
