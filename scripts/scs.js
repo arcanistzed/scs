@@ -76,7 +76,15 @@ Hooks.on("ready", async () => {
     game.settings.register(scsApp.ID, "color", {
         scope: "world",
         config: false,
-        type: Object
+        type: Object,
+        onChange: () => {
+            // Don't cause a reload loop for the GM
+            if (!game.user.isGM) {
+                // After a small wait, update the players' colors as well
+                ui.notifications.notify("SCS | The page will reload shortly as your GM has begun regenerating the colors.")
+                setTimeout(() => new GenerateColors().render(true), 10000);
+            };
+        }
     });
 
     game.settings.registerMenu(scsApp.ID, "generateColors", {
@@ -96,17 +104,25 @@ Hooks.on("ready", async () => {
         type: String,
         default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
         onChange: () => {
-            // Reset colors
-            game.settings.set(scsApp.ID, "color", []);
-            scsApp.phases.colors = [];
+            // Reset colors if GM
+            if (game.user.isGM) {
+                game.settings.set(scsApp.ID, "color", []);
+                scsApp.phases.colors = [];
+            };
             new scsApp().render(true); // Re-render the app
         }
     });
+});
+
+// Render when ready
+Hooks.on("ready", () => {
+    // Move the app up if SmallTime is active
+    if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };
 
     // Render the app
-    if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 }; // Move the app up if SmallTime is active
-    new scsApp().render(true);
+    new scsApp().render(true)
 });
+
 class scsApp extends FormApplication {
     static ID = "scs";
     static pinOffset = 100;
@@ -171,6 +187,9 @@ class scsApp extends FormApplication {
     activateListeners(html) {
         super.activateListeners(html);
 
+        // Make sure the app is pinned properly once loaded
+        if (game.settings.get(scsApp.ID, "pinned")) scsApp.pinApp();
+
         // Make the app draggable
         const drag = new Draggable(this, html, document.querySelector("#scsApp #currentRound"), false);
 
@@ -181,7 +200,7 @@ class scsApp extends FormApplication {
         scsApp.hideTracker();
         scsApp.hideFromPlayers();
         scsApp.display(html);
-        scsApp.combat()
+        if (game.user.isGM) scsApp.combat();
 
         // If the user hasn't denied the tutorial or it has already rendered, show it once after this app is rendered
         if (game.settings.get(scsApp.ID, "startupTutorial") && !document.getElementById("scsTutorialAgain")) {
@@ -203,15 +222,15 @@ class scsApp extends FormApplication {
             if (now - this._moveTime < 1000 / 60) return;
             this._moveTime = now;
 
-            scsApp.unPinApp();
-
             // Follow the mouse.
             // TODO: Figure out how to account for changes to the viewport size
             // between drags.
             let conditionalOffset = 0;
             if (game.settings.get(scsApp.ID, "pinned")) {
                 conditionalOffset = 20;
-            }
+            };
+
+            if (document.getElementById("pin-lock")) scsApp.unPinApp(this);
 
             this.app.setPosition({
                 left: this.position.left + (event.clientX - this._initial.x),
@@ -263,6 +282,14 @@ class scsApp extends FormApplication {
             // Kill the jiggle animation on mouseUp.
             $("#scsApp").css("animation", "");
         };
+
+        // Re-pin the app when the player list is re-rendered
+        Hooks.on("renderPlayerList", () => {
+            if (game.settings.get(scsApp.ID, "pinned")) {
+                scsApp.unPinApp(false);
+                scsApp.pinApp();
+            };
+        });
     };
 
     // Pin the app above the Players list.
@@ -288,8 +315,15 @@ class scsApp extends FormApplication {
     };
 
     // Un-pin the app.
-    static unPinApp() {
-        // Remove the style tag that"s pinning the window.
+    static unPinApp(app) {
+        // Set initial position to what is being enforced by pin lock if triggered by app
+        if (app) {
+            let pinnedApp = document.getElementById("scsApp");
+            app.position.left = pinnedApp.offsetLeft;
+            app.position.top = pinnedApp.offsetTop;
+        };
+
+        // Remove the style tag that's pinning the window.
         $("#pin-lock").remove();
     };
 
@@ -517,9 +551,11 @@ class scsApp extends FormApplication {
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
 
-            // Save new values
-            game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
-            game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
+            // Save new values if GM
+            if (game.user.isGM) {
+                game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
+                game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
+            };
 
             // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
             setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
@@ -626,9 +662,12 @@ class GenerateColors extends FormApplication {
         });
     }
     async activateListeners() {
-        // Unset colors
-        await game.settings.set(scsApp.ID, "color", []);
-        scsApp.phases.colors = [];
+
+        // Unset colors if GM
+        if (game.user.isGM) {
+            await game.settings.set(scsApp.ID, "color", []);
+            scsApp.phases.colors = [];
+        };
 
         // Reload the page
         location.reload();
