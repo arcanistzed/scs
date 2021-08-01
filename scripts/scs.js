@@ -430,7 +430,7 @@ class scsApp extends FormApplication {
 
         function pullValues() {
             scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
-            scsApp.currentRound = game.settings.get(scsApp.ID, "currentRound"); // counts the current round
+            scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
         };
 
         Hooks.on("renderscsApp", () => {
@@ -446,6 +446,9 @@ class scsApp extends FormApplication {
             };
         });
 
+        // Reset when a new combat is created
+        Hooks.on("createCombat", () => { pullValues(); updateApp(); });
+
         // If GM, execute one of the functions below this, depending on the button clicked
         if (game.user.isGM) {
             html.find("#lastRound").on("click", () => { lastRound() });
@@ -457,9 +460,10 @@ class scsApp extends FormApplication {
         // Return to the last round
         function lastRound() {
             pullValues();
-            scsApp.currentRound -= 1;
+            if (scsApp.currentRound > 0) scsApp.currentRound -= 1;
             scsApp.currentPhase = scsApp.phases.count;
             if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
+            game.combat?.previousRound();
             updateApp();
         };
 
@@ -483,6 +487,7 @@ class scsApp extends FormApplication {
             scsApp.currentRound += 1;
             scsApp.currentPhase = 1;
             if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
+            game.combat?.nextRound();
             updateApp();
         };
 
@@ -515,6 +520,9 @@ class scsApp extends FormApplication {
             // Save new values
             game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
             game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
+
+            // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
+            setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
         };
     };
 
