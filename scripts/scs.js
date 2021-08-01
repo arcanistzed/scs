@@ -324,13 +324,20 @@ class scsApp extends FormApplication {
         let validHues = scsApp.allAllowedHues(base);
 
         // If there is a last hue, set the valid hues to everything that isn't within 25 from the last hue
-        if (scsApp.lastHue) validHues = scsApp.allAllowedHues(base).filter(h => Math.abs(scsApp.lastHue - h) >= 25);
+        if (scsApp.lastHue != null) {
+            validHues = scsApp.allAllowedHues(base).filter(h => Math.abs(scsApp.lastHue - h) >= 25);
+        };
 
         // Pick the a random hue from the valid hues
         let chosenHue = validHues[Math.floor(Math.random() * validHues.length)];
 
         // Set lastHue to the chosen hue for the next generation
         scsApp.lastHue = chosenHue;
+
+        if (chosenHue == undefined) {
+            ui.notifications.error("SCS | Error in color generation. Trying again...");
+            
+        };
 
         return chosenHue; // Return the chosen hue
     };
