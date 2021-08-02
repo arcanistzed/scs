@@ -54,6 +54,15 @@ Hooks.on("ready", async () => {
         default: false,
     });
 
+    game.settings.register(scsApp.ID, "actionLocking", {
+        name: game.i18n.localize("scs.settings.actionLocking.Name"),
+        hint: game.i18n.localize("scs.settings.actionLocking.Hint"),
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+    });
+
     game.settings.register(scsApp.ID, "alternateChecked", {
         name: game.i18n.localize("scs.settings.alternateChecked.Name"),
         hint: game.i18n.localize("scs.settings.alternateChecked.Hint"),
@@ -112,15 +121,15 @@ Hooks.on("ready", async () => {
             new scsApp().render(true); // Re-render the app
         }
     });
-});
 
-// Render when ready
-Hooks.on("ready", () => {
     // Move the app up if SmallTime is active
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };
 
     // Render the app
     new scsApp().render(true)
+
+    // Manage Action Locking
+    scsApp.actionLocking();
 });
 
 class scsApp extends FormApplication {
@@ -200,7 +209,7 @@ class scsApp extends FormApplication {
         scsApp.hideTracker();
         scsApp.hideFromPlayers();
         scsApp.display(html);
-        if (game.user.isGM) scsApp.combat();
+        if (game.user.isGM) scsApp.clock();
 
         // If the user hasn't denied the tutorial or it has already rendered, show it once after this app is rendered
         if (game.settings.get(scsApp.ID, "startupTutorial") && !document.getElementById("scsTutorialAgain")) {
@@ -562,8 +571,8 @@ class scsApp extends FormApplication {
         };
     };
 
-    // Manage combat
-    static combat() {
+    // Manage about time realtime clock
+    static clock() {
         // Integration with About Time
         if (game.modules.get("about-time")?.active) {
 
@@ -609,6 +618,43 @@ class scsApp extends FormApplication {
                             if (clockStopped) game.Gametime.startRunning(); // Restart the clock
                         };
                     });
+                };
+            });
+        };
+    };
+
+    // Lock users to only certain actions depending on the phase
+    static actionLocking() {
+
+        // Check if enabled
+        if (game.settings.get(scsApp.ID, "actionLocking")) {
+
+            // Wrap Item Roll for Action Locking
+            libWrapper.register(scsApp.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
+
+                let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
+                // Don't change anything if this is not a known phase and notify user
+                if (!["Move", "Attacks", "Spells"].includes(thisPhase)) {
+                    ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
+                    return wrapped(...args);
+                };
+
+                // Manage action locking
+                if (thisPhase === "Move" && (this.data.type === "spell" || this.hasAttack)) {
+                    // If it is currently the move phase and this is a spell or an attack, alert user and do nothing
+                    ui.notifications.error("SCS | It's currently the move phase, so you cannot cast spells or attack");
+                    return;
+                } else if (thisPhase === "Attacks" && !this.hasAttack) {
+                    // If it is currently the attack phase and this is not an attack, alert user and do nothing
+                    ui.notifications.error("SCS | It's currently the attack phase, so you can only attack");
+                    return;
+                } else if (thisPhase === "Spells" && (this.data.type !== "spell" || this.hasAttack)) {
+                    // If it is currently the spells phase and this is not a spell or this has an attack, alert user and do nothing
+                    ui.notifications.error("SCS | It's currently the spells phase, so you can only cast non-attacking spells");
+                    return;
+                } else {
+                    // If not one of the cases above, allow action
+                    return wrapped(...args);
                 };
             });
         };
