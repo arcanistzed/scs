@@ -30,6 +30,10 @@
       "alternateChecked": {
         "Name": "Alternate Appearance",
         "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker."
+      },
+      "actionLocking": {
+        "Name": "NEW! Action Locking",
+        "Hint": "Lock to only specific actions for known phases. Feel free to make suggestions for phases to add!"
       }
     },
     "tutorial": {
