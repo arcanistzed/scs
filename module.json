@@ -16,7 +16,7 @@
       "reddit": "u/arcanistzed"
     }
   ],
-  "scripts": [
+  "esmodules": [
     "/scripts/scs.js"
   ],
   "styles": [
