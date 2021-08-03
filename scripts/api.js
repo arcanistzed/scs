@@ -1,17 +1,12 @@
+// Import application
+import scsApp from './app.js'
+
 /**
  * Provides a public API
  */
 export default class scs {
-    static ID = "scs";
-    static phases = {
-        "names": [],
-        "colors": []
-    };
-    static currentPhase = 1;
-    static currentRound = 1;
-    static inCombat = false;
 
-    // Hide default combat tracker
+    /** Hide default combat tracker */
     static hideTracker() {
         document.querySelector("[data-tab='combat']").style.display = "none";
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
@@ -20,7 +15,7 @@ export default class scs {
         });
     };
 
-    // Start IntroJS tutorial
+    /** Start IntroJS tutorial tour */
     static startTutorial() {
         introJs().setOptions({
             steps: [{
@@ -29,7 +24,7 @@ export default class scs {
             },
             {
                 title: game.i18n.localize("scs.tutorial.howItWorks.Title"),
-                intro: `${game.i18n.localize("scs.tutorial.howItWorks.Intro")}<ul>${scs.phases.names.map(name => `<li>${name}</li>`).join("")}</ul>`
+                intro: `${game.i18n.localize("scs.tutorial.howItWorks.Intro")}<ul>${scsApp.phases.names.map(name => `<li>${name}</li>`).join("")}</ul>`
             },
             {
                 title: game.i18n.localize("scs.tutorial.combatTracker.Title"),
@@ -51,9 +46,9 @@ export default class scs {
         document.querySelector(".introjs-tooltipbuttons").before(stopButton);
     };
 
-    // Don't show IntroJS tutorial again
+    /** Stop showing IntroJS tutorial */
     static stopTutorial() {
-        game.settings.set(scs.ID, "startupTutorial", false); // Don't show again
+        game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
         // document.querySelector(".introjs-skipbutton").click(); // End tutorial
     };
 };

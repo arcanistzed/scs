@@ -1,8 +1,5 @@
-// Import public API
-import { } from './api.js';
-
-// Import application for re-rendering
-import { } from './app.js'
+// Import application
+import scsApp from './app.js'
 
 /**
  * Manages color generation button in module settings menu
@@ -22,8 +19,8 @@ class GenerateColors extends FormApplication {
 
         // Unset colors if GM
         if (game.user.isGM) {
-            await game.settings.set(scs.ID, "color", []);
-            scs.phases.colors = [];
+            await game.settings.set(scsApp.ID, "colors", []);
+            scsApp.phases.colors = [];
         };
 
         // Reload the page
@@ -35,42 +32,42 @@ class GenerateColors extends FormApplication {
  * Register all settings for SCS
  */
 export default function registerSettings() {
-    game.settings.register(scs.ID, "position", {
+    game.settings.register(scsApp.ID, "position", {
         scope: "client",
         config: false,
         type: Object,
         default: { top: 446, left: 15 }
     });
 
-    game.settings.register(scs.ID, "pinned", {
+    game.settings.register(scsApp.ID, "pinned", {
         scope: "client",
         config: false,
         type: Boolean,
         default: true
     });
 
-    game.settings.register(scs.ID, "currentPhase", {
+    game.settings.register(scsApp.ID, "currentPhase", {
         scope: "world",
         config: false,
         type: Number,
         default: 0
     });
 
-    game.settings.register(scs.ID, "currentRound", {
+    game.settings.register(scsApp.ID, "currentRound", {
         scope: "world",
         config: false,
         type: Number,
         default: 1
     });
 
-    game.settings.register(scs.ID, "stopRealtime", {
+    game.settings.register(scsApp.ID, "stopRealtime", {
         scope: "world",
         config: false,
         type: Boolean,
         default: true,
     });
 
-    game.settings.register(scs.ID, "showTracker", {
+    game.settings.register(scsApp.ID, "showTracker", {
         name: game.i18n.localize("scs.settings.showTracker.Name"),
         hint: game.i18n.localize("scs.settings.showTracker.Hint"),
         scope: "world",
@@ -80,7 +77,7 @@ export default function registerSettings() {
         onChange: () => { game.setupGame(); }
     });
 
-    game.settings.register(scs.ID, "limitPhases", {
+    game.settings.register(scsApp.ID, "limitPhases", {
         name: game.i18n.localize("scs.settings.limitPhases.Name"),
         hint: game.i18n.localize("scs.settings.limitPhases.Hint"),
         scope: "world",
@@ -89,7 +86,7 @@ export default function registerSettings() {
         default: false,
     });
 
-    game.settings.register(scs.ID, "actionLocking", {
+    game.settings.register(scsApp.ID, "actionLocking", {
         name: game.i18n.localize("scs.settings.actionLocking.Name"),
         hint: game.i18n.localize("scs.settings.actionLocking.Hint"),
         scope: "world",
@@ -98,7 +95,7 @@ export default function registerSettings() {
         default: true,
     });
 
-    game.settings.register(scs.ID, "alternateChecked", {
+    game.settings.register(scsApp.ID, "alternateChecked", {
         name: game.i18n.localize("scs.settings.alternateChecked.Name"),
         hint: game.i18n.localize("scs.settings.alternateChecked.Hint"),
         scope: "client",
@@ -107,7 +104,7 @@ export default function registerSettings() {
         default: false,
     });
 
-    game.settings.register(scs.ID, "startupTutorial", {
+    game.settings.register(scsApp.ID, "startupTutorial", {
         name: game.i18n.localize("scs.settings.startupTutorial.Name"),
         hint: game.i18n.localize("scs.settings.startupTutorial.Hint"),
         scope: "client",
@@ -117,7 +114,7 @@ export default function registerSettings() {
         onChange: () => { if (!document.getElementById("scsTutorialAgain")) new scsApp().render(true); } // Re-render the app
     });
 
-    game.settings.register(scs.ID, "color", {
+    game.settings.register(scsApp.ID, "colors", {
         scope: "world",
         config: false,
         type: Object,
@@ -131,7 +128,7 @@ export default function registerSettings() {
         }
     });
 
-    game.settings.registerMenu(scs.ID, "generateColors", {
+    game.settings.registerMenu(scsApp.ID, "generateColors", {
         name: game.i18n.localize("scs.settings.generateColors.Name"),
         label: game.i18n.localize("scs.settings.generateColors.Label"),
         hint: game.i18n.localize("scs.settings.generateColors.Hint"),
@@ -140,7 +137,7 @@ export default function registerSettings() {
         restricted: true
     });
 
-    game.settings.register(scs.ID, "phases", {
+    game.settings.register(scsApp.ID, "names", {
         name: game.i18n.localize("scs.settings.phaseNames.Name"),
         hint: game.i18n.localize("scs.settings.phaseNames.Hint"),
         scope: "world",
@@ -150,8 +147,8 @@ export default function registerSettings() {
         onChange: () => {
             // Reset colors if GM
             if (game.user.isGM) {
-                game.settings.set(scs.ID, "color", []);
-                scs.phases.colors = [];
+                game.settings.set(scsApp.ID, "colors", []);
+                scsApp.phases.colors = [];
             };
             new scsApp().render(true); // Re-render the app
         }

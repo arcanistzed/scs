@@ -1,16 +1,40 @@
 // Import libWrapper shim
 import { libWrapper } from './shim.js';
 
-// Import public API
-import { } from './api.js';
-
 /**
  * Manages the SCS form app itself and it's functionality
  */
 export default class scsApp extends FormApplication {
+
+    /** Pixels by which to offset the app */
     static pinOffset = 100;
 
-    // Override close() to prevent Escape presses from closing the scs app.
+    /** The module's ID */
+    static ID = "scs";
+
+    /**
+     * An object containing the current phase names and colors
+     */
+    static phases = {
+        "names": [],
+        "colors": []
+    };
+
+    /** The current phase */
+    static currentPhase = 1;
+
+    /** The current round
+     *  This mirrors the Core round during Core combats and is overriden whenever one is started
+     */
+    static currentRound = 1;
+
+    /** A boolean representing whether SCS thinks there is currently a combat which is used for About Time integration
+     * If a new combatant is created, this will become true.
+     * If all combatants are removed, this will return to false.
+     */
+    static inCombat = false;
+
+    // Override close() to prevent Escape presses from closing the SCS app
     async close(options = {}) {
         // If called by scs or SmallTime, use original method to handle app closure.
         if (options.scs || options.smallTime) return super.close();
@@ -36,12 +60,12 @@ export default class scsApp extends FormApplication {
     };
 
     static get defaultOptions() {
-        const pinned = game.settings.get(scs.ID, "pinned");
+        const pinned = game.settings.get(scsApp.ID, "pinned");
 
         const playerApp = document.getElementById("players");
         const playerAppPos = playerApp.getBoundingClientRect();
 
-        this.initialPosition = game.settings.get(scs.ID, "position");
+        this.initialPosition = game.settings.get(scsApp.ID, "position");
 
         // The actual pin location is set elsewhere, but we need to insert something
         // manually here to feed it values for the initial render.
@@ -64,13 +88,22 @@ export default class scsApp extends FormApplication {
         super.activateListeners(html);
 
         // Make sure the app is pinned properly once loaded
-        if (game.settings.get(scs.ID, "pinned")) scsApp.pinApp();
+        if (game.settings.get(scsApp.ID, "pinned")) scsApp.pinApp();
 
         // Make the app draggable
         const drag = new Draggable(this, html, document.querySelector("#scsApp #currentRound"), false);
 
+        // If not already done, define a property to count the number of phases, but disallow change
+        if (!scsApp.phases.count) {
+            Object.defineProperty(scsApp.phases, "count", {
+                get: () => scsApp.phases.names.length,
+                set: () => { throw "SCS | The phase count is calculated from the phase names and cannot be changed directly." },
+                configurable: false
+            });
+        };
+
         // Application startup
-        scsApp.initPhaseNames(game.settings.get(scs.ID, "phases"));
+        scsApp.initPhaseNames();
         scsApp.generateColors();
         scsApp.addPhases();
         scsApp.hideFromPlayers();
@@ -96,7 +129,7 @@ export default class scsApp extends FormApplication {
             // TODO: Figure out how to account for changes to the viewport size
             // between drags.
             let conditionalOffset = 0;
-            if (game.settings.get(scs.ID, "pinned")) {
+            if (game.settings.get(scsApp.ID, "pinned")) {
                 conditionalOffset = 20;
             };
 
@@ -137,7 +170,7 @@ export default class scsApp extends FormApplication {
             // If the mouseup happens inside the Pin zone, pin the app.
             if (pinZone) {
                 scsApp.pinApp(true);
-                await game.settings.set(scs.ID, "pinned", true);
+                await game.settings.set(scsApp.ID, "pinned", true);
                 this.app.setPosition({
                     left: 15,
                     top: window.innerHeight - myOffset,
@@ -145,8 +178,8 @@ export default class scsApp extends FormApplication {
             } else {
                 let windowPos = $("#scsApp").position();
                 let newPos = { top: windowPos.top, left: windowPos.left };
-                await game.settings.set(scs.ID, "position", newPos);
-                await game.settings.set(scs.ID, "pinned", false);
+                await game.settings.set(scsApp.ID, "position", newPos);
+                await game.settings.set(scsApp.ID, "pinned", false);
             }
 
             // Kill the jiggle animation on mouseUp.
@@ -155,15 +188,15 @@ export default class scsApp extends FormApplication {
 
         // Re-pin the app when the player list is re-rendered
         Hooks.on("renderPlayerList", () => {
-            if (game.settings.get(scs.ID, "pinned")) {
+            if (game.settings.get(scsApp.ID, "pinned")) {
                 scsApp.unPinApp(false);
                 scsApp.pinApp();
             };
         });
     };
 
-    // Pin the app above the Players list.
-    static async pinApp(_expanded) {
+    /** Pin the app above the Players list **/
+    static async pinApp() {
         // Only do this if a pin lock isn"t already in place.
         if (!$("#pin-lock").length) {
             const playerApp = document.getElementById("players");
@@ -180,11 +213,11 @@ export default class scsApp extends FormApplication {
           }
         </style>
       `);
-            await game.settings.set(scs.ID, "pinned", true);
+            await game.settings.set(scsApp.ID, "pinned", true);
         }
     };
 
-    // Un-pin the app.
+    /** Un-pin the app */
     static unPinApp(app) {
         // Set initial position to what is being enforced by pin lock if triggered by app
         if (app) {
@@ -197,19 +230,26 @@ export default class scsApp extends FormApplication {
         $("#pin-lock").remove();
     };
 
-    // Initialize phase names
-    static initPhaseNames(settings) {
+    /** Initialize phase names */
+    static initPhaseNames() {
+
+        // Get phase names
+        let settings = game.settings.get(scsApp.ID, "names");
+
         // Check if the user reset to default phase names
         if (settings === "undefined") {
             // If so, set to the default phases
-            scs.phases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
+            scsApp.phases.names = game.i18n.localize("scs.settings.phaseNames.defaults");
         } else {
             // If not, parse and use the first 50 new values from settings
-            scs.phases.names = settings.split(",").slice(0, 50).map(val => val.trim());
+            scsApp.phases.names = settings.split(",").slice(0, 50).map(val => val.trim());
         };
     };
 
-    // Returns an array of hues that validate certain rules from a given base hue
+    /**
+     * All allowed hues
+     * @returns {Array} Hues that validate certain rules from a given base hue
+     */
     static allAllowedHues = base => Array.from(new Array(360)) // Hue is in degrees
         .map((_, i) => i + 1) // Insert numbers into the Array from 1 to 300
         .filter(h => // Filter the Array
@@ -218,10 +258,12 @@ export default class scsApp extends FormApplication {
             && (h < 50 || h > 150) // Must not be green
         );
 
-    // Last hue generated
+    /** Last hue generated */
     static lastHue;
 
-    // Generate a new hue from a base hue
+    /** Generate a new hue
+     * @param {Number} base A base hue from which to generate another hue
+     */
     static generateHue(base) {
 
         // Initialize an Array that will contain the valid hues for the current base
@@ -245,17 +287,17 @@ export default class scsApp extends FormApplication {
         return chosenHue; // Return the chosen hue
     };
 
-    // Generate random beautiful color gradients
+    /** Generate random beautiful color gradients */
     static generateColors() {
 
         // A hue for each phase
-        scs.phases.names.forEach((_name, i) => {
+        scsApp.phases.names.forEach((_name, i) => {
             let hueTop, hueBottom;
 
             // Try and assign existing hues for this phase
             try {
-                hueTop = game.settings.get(scs.ID, "color").map(([top]) => top)[i];
-                hueBottom = game.settings.get(scs.ID, "color").map(([, bottom]) => bottom)[i];
+                hueTop = game.settings.get(scsApp.ID, "colors").map(([top]) => top)[i];
+                hueBottom = game.settings.get(scsApp.ID, "colors").map(([, bottom]) => bottom)[i];
                 if (!hueTop || !hueBottom) throw "no hues stored"
 
             } catch (err) { // If not, generate new hues
@@ -268,20 +310,20 @@ export default class scsApp extends FormApplication {
             };
 
             // Push the hues to temp storage
-            scs.phases.colors.push([hueTop, hueBottom]);
+            scsApp.phases.colors.push([hueTop, hueBottom]);
         });
 
         // Update settings for storage if GM
-        if (game.user.isGM) game.settings.set(scs.ID, "color", scs.phases.colors);
+        if (game.user.isGM) game.settings.set(scsApp.ID, "colors", scsApp.phases.colors);
     };
 
-    // Adds the phases to the Application
+    /** Adds the phases to the Application */
     static addPhases() {
         // Remove any existing buttons
         document.querySelectorAll(".phase-button").forEach(button => { button.remove() });
 
         // Create "buttons" for phases
-        scs.phases.names.forEach(name => {
+        scsApp.phases.names.forEach(name => {
             let phaseButton = document.createElement("div");
             document.querySelector(".scsButtons").append(phaseButton);
             phaseButton.classList.add("phase-button");
@@ -289,7 +331,7 @@ export default class scsApp extends FormApplication {
         });
 
         // Add colors
-        scs.phases.colors.forEach((color, i) => {
+        scsApp.phases.colors.forEach((color, i) => {
             document.querySelector("#scsApp #colorGradients").innerHTML += `
             #scsApp .phase-button:nth-child(${i + 1}) {
                 background-image: linear-gradient(
@@ -300,30 +342,24 @@ export default class scsApp extends FormApplication {
         })
     };
 
-    // Hide buttons for players and re-adjust app size
+    /** Hide buttons for players and re-adjust app size */
     static hideFromPlayers() {
         if (!game.user.isGM) {
             document.querySelectorAll("#scsApp .scsArrows > *.fas").forEach(arrow => { arrow.style.display = "none" });
         };
     };
 
-    // Manage phase and round diplay
+    /** Manage phase and round diplay
+     * @param {HTMLElement} html The apps html
+    */
     static display(html) {
-        // Count the number of phases
-        if (!scs.phases.count) {
-            Object.defineProperty(scs.phases, "count", {
-                get: () => {
-                    return scs.phases.names.length;
-                }
-            });
-        };
 
         const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
         const aboutTime = game.modules.get("about-time")?.active; // Is About Time active?
 
         function pullValues() {
-            scs.currentPhase = game.settings.get(scs.ID, "currentPhase"); // counts the current phase
-            scs.currentRound = game.combat ? game.combat.round : game.settings.get(scs.ID, "currentRound"); // get the current round
+            scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
+            scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
         };
 
         Hooks.on("renderscsApp", () => {
@@ -333,7 +369,7 @@ export default class scsApp extends FormApplication {
 
         // Update for players
         Hooks.on("updateSetting", setting => {
-            if ((setting.data.key === "scs.currentPhase" || setting.data.key === "scs.currentRound") && !game.user.isGM) {
+            if ((setting.data.key === "scsApp.currentPhase" || setting.data.key === "scsApp.currentRound") && !game.user.isGM) {
                 pullValues();
                 updateApp();
             };
@@ -353,8 +389,8 @@ export default class scsApp extends FormApplication {
         // Return to the last round
         function lastRound() {
             pullValues();
-            if (scs.currentRound > 0) scs.currentRound -= 1;
-            scs.currentPhase = scs.phases.count;
+            if (scsApp.currentRound > 0) scsApp.currentRound -= 1;
+            scsApp.currentPhase = scsApp.phases.count;
             if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
             game.combat?.previousRound();
             updateApp();
@@ -363,22 +399,22 @@ export default class scsApp extends FormApplication {
         // Return to the last phase
         function lastPhase() {
             pullValues();
-            scs.currentPhase -= 1;
+            scsApp.currentPhase -= 1;
             updateApp();
         };
 
         // Advance to the next phase
         function nextPhase() {
             pullValues();
-            scs.currentPhase += 1;
+            scsApp.currentPhase += 1;
             updateApp();
         };
 
         // Advance to the next round
         function nextRound() {
             pullValues();
-            scs.currentRound += 1;
-            scs.currentPhase = 1;
+            scsApp.currentRound += 1;
+            scsApp.currentPhase = 1;
             if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
             game.combat?.nextRound();
             updateApp();
@@ -387,41 +423,41 @@ export default class scsApp extends FormApplication {
         // Updates the app to display the correct state
         function updateApp() {
             // Change rounds if limit phases is enabled
-            if (game.settings.get(scs.ID, "limitPhases")) {
-                if (scs.currentPhase === scs.phases.count + 1) { nextRound() }
-                else if (scs.currentPhase === 0) { lastRound() };
+            if (game.settings.get(scsApp.ID, "limitPhases")) {
+                if (scsApp.currentPhase === scsApp.phases.count + 1) { nextRound() }
+                else if (scsApp.currentPhase === 0) { lastRound() };
             } else {
-                if (scs.currentPhase === scs.phases.count + 1) { scs.currentPhase = 1 };
-                if (scs.currentPhase === 0) { scs.currentPhase = scs.phases.count };
+                if (scsApp.currentPhase === scsApp.phases.count + 1) { scsApp.currentPhase = 1 };
+                if (scsApp.currentPhase === 0) { scsApp.currentPhase = scsApp.phases.count };
             };
 
             // Correct phase if it excedes new limit
-            if (scs.currentPhase > scs.phases.count) { scs.currentPhase = scs.phases.count }
+            if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
             // Update the appearance of the buttons depending on the user's settings
-            if (!game.settings.get(scs.ID, "alternateChecked")) { // Checked is darker
+            if (!game.settings.get(scsApp.ID, "alternateChecked")) { // Checked is darker
                 buttons.forEach(current => { current.classList.remove("checked") });
-                buttons[scs.currentPhase - 1].classList.add("checked");
+                buttons[scsApp.currentPhase - 1].classList.add("checked");
             } else { // Checked is lighter
                 buttons.forEach(current => { current.classList.add("checked") });
-                buttons[scs.currentPhase - 1].classList.remove("checked");
+                buttons[scsApp.currentPhase - 1].classList.remove("checked");
             };
 
             // Update the Round number
-            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scs.currentRound].join(" ");
+            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
 
             // Save new values if GM
             if (game.user.isGM) {
-                game.settings.set(scs.ID, "currentPhase", scs.currentPhase);
-                game.settings.set(scs.ID, "currentRound", scs.currentRound);
+                game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
+                game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
             };
 
             // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
-            setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scs.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
+            setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
         };
     };
 
-    // Manage about time realtime clock
+    /** Manage about time realtime clock */
     static clock() {
 
         // Integration with About Time
@@ -432,12 +468,12 @@ export default class scsApp extends FormApplication {
 
                 // Check that the user wants to use this feature, that the clock is running, and that we aren't already in another combat
                 if (
-                    game.settings.get(scs.ID, "stopRealtime")
+                    game.settings.get(scsApp.ID, "stopRealtime")
                     && game.Gametime.isRunning()
-                    && scs.inCombat === false
+                    && scsApp.inCombat === false
                 ) {
 
-                    scs.inCombat = true; // Now we are in a combat
+                    scsApp.inCombat = true; // Now we are in a combat
                     let clockStopped = false;
 
                     // Prompt for what to do
@@ -460,7 +496,7 @@ export default class scsApp extends FormApplication {
                             never: {
                                 icon: "<i class='fas fa-skull'></i>",
                                 label: "Never",
-                                callback: () => game.settings.set(scs.ID, "stopRealtime", false) // This Dialog won't appear anymore
+                                callback: () => game.settings.set(scsApp.ID, "stopRealtime", false) // This Dialog won't appear anymore
                             }
                         },
                         default: "yes",
@@ -470,7 +506,7 @@ export default class scsApp extends FormApplication {
                     // Resume counting time once the combat has no particpants
                     Hooks.on("deleteCombatant", () => {
                         if (game.combat?.turns.length) {
-                            scs.inCombat = false; // We aren't in combat
+                            scsApp.inCombat = false; // We aren't in combat
                             if (clockStopped) game.Gametime.startRunning(); // Restart the clock
                         };
                     });
@@ -479,16 +515,16 @@ export default class scsApp extends FormApplication {
         };
     };
 
-    // Lock users to only certain actions depending on the phase
+    /** Lock users to only certain actions depending on the phase */
     static actionLocking() {
 
         // Check if enabled
-        if (game.settings.get(scs.ID, "actionLocking")) {
+        if (game.settings.get(scsApp.ID, "actionLocking")) {
 
             // Wrap Item Roll for Action Locking
-            libWrapper.register(scs.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
+            libWrapper.register(scsApp.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
 
-                let thisPhase = scs.phases.names[scs.currentPhase - 1];
+                let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
                 // Don't change anything if this is not a known phase and notify user
                 if (!["Move", "Attacks", "Spells"].includes(thisPhase)) {
                     ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
