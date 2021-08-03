@@ -21,6 +21,22 @@ Please follow the built-in tutorial (built with IntoJS), for instructions. You c
 
 In the setup screen, use the URL `https://github.com/arcanistzed/scs/releases/latest/download/module.json` to install the module.
 
+## API
+
+SCS has a small API with a few methods that can be called by others. They are accessible under the global variable `scs`.
+
+### `hideTracker()`
+
+This will elegantly hide the default combat tracker from the sidebar.
+
+### `startTutorial()`
+
+This will show the IntroJS tutorial tour once.
+
+### `stopTutorial()`
+
+This will stop the tour from showing everytime the page is loaded unless the user re-enabled the tutorial from within the module settings.
+
 ## License
 
 This package is under an [MIT license](LICENSE)
