@@ -65,21 +65,21 @@
   border-radius: 5px;
   padding: 0;
   border: 1px solid #000;
-  color: #f0f0e0;
-  background: url(/ui/denim075.png) repeat;
+  color: var(--Whetstone-text-highlight-lighter, #f0f0e0);
+  background: var(--Whetstone-bg-app, url(/ui/denim075.png) repeat);
   overflow: hidden;
 }
 
 /* The current round indicator */
 #scsApp #currentRound {
-  color: grey;
+  color: var(--Whetstone-text-highlight-darker, grey);
   text-align: center;
   flex: 100; /* It must take as much room as possible */
 }
 
 /* Lighter text when dragged around */
 #scsApp #currentRound:active {
-  color: lightgrey;
+  color: var(--Whetstone-text-highlight-half, lightgrey);
 }
 
 /* The animation shown when pinning the app */
