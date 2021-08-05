@@ -355,13 +355,13 @@ export default class scsApp extends FormApplication {
     static display(html) {
 
         const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
-        const aboutTime = game.modules.get("about-time")?.active; // Is About Time active?
 
         function pullValues() {
             scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
             scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
         };
 
+        // Update on Render
         Hooks.on("renderscsApp", () => {
             pullValues();
             updateApp();
@@ -380,43 +380,51 @@ export default class scsApp extends FormApplication {
 
         // If GM, execute one of the functions below this, depending on the button clicked
         if (game.user.isGM) {
-            html.find("#lastRound").on("click", () => { lastRound() });
-            html.find("#lastPhase").on("click", () => { lastPhase() });
-            html.find("#nextPhase").on("click", () => { nextPhase() });
-            html.find("#nextRound").on("click", () => { nextRound() });
+            html[0].querySelector("#lastRound").addEventListener("click", () => changeRound(-1));
+            html[0].querySelector("#lastPhase").addEventListener("click", () => changePhase(-1));
+            html[0].querySelector("#nextPhase").addEventListener("click", () => changePhase(1));
+            html[0].querySelector("#nextRound").addEventListener("click", () => changeRound(1));
+            html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => changePhase((i + 1) - scsApp.currentPhase)));
         };
 
-        // Return to the last round
-        function lastRound() {
+        // Change round by delta
+        async function changeRound(delta) {
+
+            // Pull current values
             pullValues();
-            if (scsApp.currentRound > 0) scsApp.currentRound -= 1;
-            scsApp.currentPhase = scsApp.phases.count;
-            if (aboutTime) game.Gametime.advanceClock(-game.settings.get("about-time", "seconds-per-round"));
-            game.combat?.previousRound();
+
+            // If more than zero, change round by delta
+            console.log("delta: " + delta, "test: " + (scsApp.currentRound + delta));
+            if (scsApp.currentRound + delta >= 0) scsApp.currentRound += delta;
+
+            // If going forwards, reset to phase 1; if going back, reset to max phase
+            scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
+
+            // While delta is not zero, adjust Core round
+            while (delta !== 0) {
+                if (delta > 0) { // If positive, go to next round and bring delta towards zero
+                    await game.combat?.nextRound();
+                    delta--;
+                } else { // If negative, go to previous round and bring delta towards zero
+                    await game.combat?.previousRound();
+                    delta++;
+                }
+            };
+
+            // Update app to display new values
             updateApp();
         };
 
-        // Return to the last phase
-        function lastPhase() {
-            pullValues();
-            scsApp.currentPhase -= 1;
-            updateApp();
-        };
+        // Change phase by delta
+        function changePhase(delta) {
 
-        // Advance to the next phase
-        function nextPhase() {
+            // Pull current values
             pullValues();
-            scsApp.currentPhase += 1;
-            updateApp();
-        };
 
-        // Advance to the next round
-        function nextRound() {
-            pullValues();
-            scsApp.currentRound += 1;
-            scsApp.currentPhase = 1;
-            if (aboutTime) game.Gametime.advanceClock(game.settings.get("about-time", "seconds-per-round"));
-            game.combat?.nextRound();
+            // Change phase by delta
+            scsApp.currentPhase += delta;
+
+            // Update app to display new values
             updateApp();
         };
 
@@ -424,8 +432,8 @@ export default class scsApp extends FormApplication {
         function updateApp() {
             // Change rounds if limit phases is enabled
             if (game.settings.get(scsApp.ID, "limitPhases")) {
-                if (scsApp.currentPhase === scsApp.phases.count + 1) { nextRound() }
-                else if (scsApp.currentPhase === 0) { lastRound() };
+                if (scsApp.currentPhase === scsApp.phases.count + 1) { changeRound(1) }
+                else if (scsApp.currentPhase === 0) { changeRound(-1) };
             } else {
                 if (scsApp.currentPhase === scsApp.phases.count + 1) { scsApp.currentPhase = 1 };
                 if (scsApp.currentPhase === 0) { scsApp.currentPhase = scsApp.phases.count };
