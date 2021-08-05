@@ -393,9 +393,9 @@ export default class scsApp extends FormApplication {
             // Pull current values
             pullValues();
 
-            // If more than zero, change round by delta
-            console.log("delta: " + delta, "test: " + (scsApp.currentRound + delta));
-            if (scsApp.currentRound + delta >= 0) scsApp.currentRound += delta;
+            // If more than or equal to zero + the delta, change round by delta; else, notify user
+            if (scsApp.currentRound + delta >= 0) { scsApp.currentRound += delta }
+            else { ui.notifications.error("SCS | You cannot bring the current round below zero.") };
 
             // If going forwards, reset to phase 1; if going back, reset to max phase
             scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
