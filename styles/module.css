@@ -90,14 +90,14 @@
   }
 
   50% {
-    transform: rotate(0deg);
+    transform: rotate(-1deg);
     animation-timing-function: ease-out;
   }
 }
 
 /* Don't show form app for Generate Colors settings button */
 #scsColor {
-  display: none!important;
+  display: none !important;
 }
 
 /* Custom styling for IntroJS tour */
