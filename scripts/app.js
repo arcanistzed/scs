@@ -385,6 +385,16 @@ export default class scsApp extends FormApplication {
             html[0].querySelector("#nextPhase").addEventListener("click", () => changePhase(1));
             html[0].querySelector("#nextRound").addEventListener("click", () => changeRound(1));
             html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => changePhase((i + 1) - scsApp.currentPhase)));
+
+
+            /* document.querySelector("#sidebar-tabs > a:nth-child(1)").addEventListener("click", () => changePhase(parseInt(prompt("change phase?"))));
+            document.querySelector("#sidebar-tabs > a:nth-child(3)").addEventListener("click", () => changeRound(parseInt(prompt("change round?"))));
+            console.log(`
+            TODO:
+            - Entering arbitrary phase change delta should loop around phases
+               - Don't reset phases to 1 or max on loop, rather determine what to reset to dynamically
+            - Expose phase/round switching in API
+            `); */
         };
 
         // Change round by delta
@@ -529,34 +539,38 @@ export default class scsApp extends FormApplication {
         // Check if enabled
         if (game.settings.get(scsApp.ID, "actionLocking")) {
 
-            // Wrap Item Roll for Action Locking
-            libWrapper.register(scsApp.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
+            if (!["dnd5e"].includes(game.system.id)) {
+                ui.notifications.notify("SCS | There is no action locking available for this system yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
+            } else {
+                // Wrap Item Roll for Action Locking
+                libWrapper.register(scsApp.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
 
-                let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
-                // Don't change anything if this is not a known phase and notify user
-                if (!["Move", "Attacks", "Spells"].includes(thisPhase)) {
-                    ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
-                    return wrapped(...args);
-                };
+                    let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
+                    // Don't change anything if this is not a known phase and notify user
+                    if (!["Move", "Attacks", "Spells"].includes(thisPhase)) {
+                        ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
+                        return wrapped(...args);
+                    };
 
-                // Manage action locking
-                if (thisPhase === "Move" && (this.data.type === "spell" || this.hasAttack)) {
-                    // If it is currently the move phase and this is a spell or an attack, alert user and do nothing
-                    ui.notifications.error("SCS | It's currently the move phase, so you cannot cast spells or attack");
-                    return;
-                } else if (thisPhase === "Attacks" && !this.hasAttack) {
-                    // If it is currently the attack phase and this is not an attack, alert user and do nothing
-                    ui.notifications.error("SCS | It's currently the attack phase, so you can only attack");
-                    return;
-                } else if (thisPhase === "Spells" && (this.data.type !== "spell" || this.hasAttack)) {
-                    // If it is currently the spells phase and this is not a spell or this has an attack, alert user and do nothing
-                    ui.notifications.error("SCS | It's currently the spells phase, so you can only cast non-attacking spells");
-                    return;
-                } else {
-                    // If not one of the cases above, allow action
-                    return wrapped(...args);
-                };
-            });
+                    // Manage action locking
+                    if (thisPhase === "Move" && (this.data.type === "spell" || this.hasAttack)) {
+                        // If it is currently the move phase and this is a spell or an attack, alert user and do nothing
+                        ui.notifications.error("SCS | It's currently the move phase, so you cannot cast spells or attack");
+                        return;
+                    } else if (thisPhase === "Attacks" && !this.hasAttack) {
+                        // If it is currently the attack phase and this is not an attack, alert user and do nothing
+                        ui.notifications.error("SCS | It's currently the attack phase, so you can only attack");
+                        return;
+                    } else if (thisPhase === "Spells" && (this.data.type !== "spell" || this.hasAttack)) {
+                        // If it is currently the spells phase and this is not a spell or this has an attack, alert user and do nothing
+                        ui.notifications.error("SCS | It's currently the spells phase, so you can only cast non-attacking spells");
+                        return;
+                    } else {
+                        // If not one of the cases above, allow action
+                        return wrapped(...args);
+                    };
+                });
+            };
         };
     };
 };
