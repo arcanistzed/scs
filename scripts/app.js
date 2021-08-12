@@ -7,7 +7,7 @@ import { libWrapper } from './shim.js';
 export default class scsApp extends FormApplication {
 
     /** Pixels by which to offset the app */
-    static pinOffset = 200;
+    static pinOffset = 100;
 
     /** The module's ID */
     static ID = "scs";
