@@ -7,7 +7,7 @@ import { libWrapper } from './shim.js';
 export default class scsApp extends FormApplication {
 
     /** Pixels by which to offset the app */
-    static pinOffset = 100;
+    static pinOffset = 200;
 
     /** The module's ID */
     static ID = "scs";
@@ -338,8 +338,8 @@ export default class scsApp extends FormApplication {
                 hsl(${color[0]} 80% 40%),
                 hsl(${color[1]} 80% 40%)
                 );
-            }`
-        })
+            }`;
+        });
     };
 
     /** Hide buttons for players and re-adjust app size */
@@ -369,7 +369,7 @@ export default class scsApp extends FormApplication {
 
         // Update for players
         Hooks.on("updateSetting", setting => {
-            if ((setting.data.key === "scsApp.currentPhase" || setting.data.key === "scsApp.currentRound") && !game.user.isGM) {
+            if ((setting.data.key === "scs.currentPhase" || setting.data.key === "scs.currentRound") && !game.user.isGM) {
                 pullValues();
                 updateApp();
             };
