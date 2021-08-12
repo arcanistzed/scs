@@ -43,7 +43,7 @@ This package is under an [MIT license](LICENSE)
 
 ## Bugs
 
-You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose).
+You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose) or on [my Discord server](https://discord.gg/AAkZWWqVav).
 
 Known Issues:
 
@@ -56,4 +56,4 @@ Please note that the `Phases` must be short enough to fit their boxes, so you sh
 
 ## Contact me
 
-Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) where my username is [@arcanist#4317](https://discord.com/users/455117777745870860) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=NAME%20module%20for%20Foundry%20VTT).
+Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=SCS%20module%20for%20Foundry%20VTT).
