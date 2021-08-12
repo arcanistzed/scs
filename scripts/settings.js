@@ -149,8 +149,8 @@ export default function registerSettings() {
             if (game.user.isGM) {
                 game.settings.set(scsApp.ID, "colors", []);
                 scsApp.phases.colors = [];
+                location.reload(); // Reload the page
             };
-            new scsApp().render(true); // Re-render the app
         }
     });
 };
