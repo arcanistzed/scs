@@ -7,7 +7,7 @@ import { libWrapper } from './shim.js';
 export default class scsApp extends FormApplication {
 
     /** Pixels by which to offset the app */
-    static pinOffset = 100;
+    static pinOffset = 50;
 
     /** The module's ID */
     static ID = "scs";
@@ -70,8 +70,9 @@ export default class scsApp extends FormApplication {
         // The actual pin location is set elsewhere, but we need to insert something
         // manually here to feed it values for the initial render.
         if (pinned) {
-            var playerOffset = 12;
-            this.initialPosition.top = playerAppPos.top - scsApp.pinOffset + playerOffset;
+            let rowsHeight = 46 * Math.min(Math.ceil(scsApp.phases.count / 3), 3); // Height of all rows of phases
+
+            this.initialPosition.top = playerAppPos.top - scsApp.pinOffset - rowsHeight + 12;
             this.initialPosition.left = playerAppPos.left;
         };
 
@@ -93,17 +94,7 @@ export default class scsApp extends FormApplication {
         // Make the app draggable
         const drag = new Draggable(this, html, document.querySelector("#scsApp #currentRound"), false);
 
-        // If not already done, define a property to count the number of phases, but disallow change
-        if (!scsApp.phases.count) {
-            Object.defineProperty(scsApp.phases, "count", {
-                get: () => scsApp.phases.names.length,
-                set: () => { throw "SCS | The phase count is calculated from the phase names and cannot be changed directly." },
-                configurable: false
-            });
-        };
-
         // Application startup
-        scsApp.initPhaseNames();
         scsApp.generateColors();
         scsApp.addPhases();
         scsApp.hideFromPlayers();
@@ -140,8 +131,10 @@ export default class scsApp extends FormApplication {
                 top: this.position.top + (event.clientY - this._initial.y - conditionalOffset),
             });
 
-            // Defining a region above the PlayerList that will trigger the jiggle.
-            let playerAppUpperBound = playerAppPos.top - scsApp.pinOffset;
+            let rowsHeight = 46 * Math.min(Math.ceil(scsApp.phases.count / 3), 3); // Height of all rows of phases
+
+            // Defining a region above the PlayerList that will trigger the jiggle.            
+            let playerAppUpperBound = playerAppPos.top - scsApp.pinOffset - rowsHeight;
             let playerAppLowerBound = playerAppPos.top + scsApp.pinOffset;
 
             if (
@@ -165,7 +158,8 @@ export default class scsApp extends FormApplication {
 
             const playerApp = document.getElementById("players");
             const playerAppPos = playerApp.getBoundingClientRect();
-            let myOffset = playerAppPos.height + scsApp.pinOffset;
+            let rowsHeight = 46 * Math.min(Math.ceil(scsApp.phases.count / 3), 3); // Height of all rows of phases
+            let myOffset = playerAppPos.height + scsApp.pinOffset + rowsHeight + 12;
 
             // If the mouseup happens inside the Pin zone, pin the app.
             if (pinZone) {
@@ -201,7 +195,8 @@ export default class scsApp extends FormApplication {
         if (!$("#pin-lock").length) {
             const playerApp = document.getElementById("players");
             const playerAppPos = playerApp.getBoundingClientRect();
-            let myOffset = playerAppPos.height + scsApp.pinOffset;
+            let rowsHeight = 46 * Math.min(Math.ceil(scsApp.phases.count / 3), 3); // Height of all rows of phases
+            let myOffset = playerAppPos.height + scsApp.pinOffset + rowsHeight + 12;
 
             // Dropping this into the DOM with an !important was the only way
             // I could get it to enable the locking behaviour.
@@ -453,13 +448,16 @@ export default class scsApp extends FormApplication {
             if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
             // Update the appearance of the buttons depending on the user's settings
-            if (!game.settings.get(scsApp.ID, "alternateChecked")) { // Checked is darker
-                buttons.forEach(current => { current.classList.remove("checked") });
-                buttons[scsApp.currentPhase - 1].classList.add("checked");
-            } else { // Checked is lighter
-                buttons.forEach(current => { current.classList.add("checked") });
-                buttons[scsApp.currentPhase - 1].classList.remove("checked");
+            if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
+                buttons.forEach(current => { current.classList.remove("active") });
+                buttons[scsApp.currentPhase - 1].classList.add("active");
+            } else { // Active is lighter
+                buttons.forEach(current => { current.classList.add("active") });
+                buttons[scsApp.currentPhase - 1].classList.remove("active");
             };
+
+            // Scroll the active phase button into view
+            document.querySelector(".phase-button.active").scrollIntoViewIfNeeded();
 
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
@@ -547,7 +545,7 @@ export default class scsApp extends FormApplication {
 
                     let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
                     // Don't change anything if this is not a known phase and notify user
-                    if (!["Move", "Attacks", "Spells"].includes(thisPhase)) {
+                    if (!["Move", "Attacks", "Magic"].includes(thisPhase)) {
                         ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
                         return wrapped(...args);
                     };
@@ -555,7 +553,7 @@ export default class scsApp extends FormApplication {
                     // Manage action locking
                     if (thisPhase === "Move" && (this.data.type === "spell" || this.hasAttack)) {
                         // If it is currently the move phase and this is a spell or an attack, alert user and do nothing
-                        ui.notifications.error("SCS | It's currently the move phase, so you cannot cast spells or attack");
+                        ui.notifications.error("SCS | It's currently the Movement & Misc. phase, so you cannot cast spells or attack");
                         return;
                     } else if (thisPhase === "Attacks" && !this.hasAttack) {
                         // If it is currently the attack phase and this is not an attack, alert user and do nothing
@@ -563,7 +561,7 @@ export default class scsApp extends FormApplication {
                         return;
                     } else if (thisPhase === "Spells" && (this.data.type !== "spell" || this.hasAttack)) {
                         // If it is currently the spells phase and this is not a spell or this has an attack, alert user and do nothing
-                        ui.notifications.error("SCS | It's currently the spells phase, so you can only cast non-attacking spells");
+                        ui.notifications.error("SCS | It's currently the magic phase, so you can only cast non-attacking spells");
                         return;
                     } else {
                         // If not one of the cases above, allow action

@@ -95,9 +95,9 @@ export default function registerSettings() {
         default: true,
     });
 
-    game.settings.register(scsApp.ID, "alternateChecked", {
-        name: game.i18n.localize("scs.settings.alternateChecked.Name"),
-        hint: game.i18n.localize("scs.settings.alternateChecked.Hint"),
+    game.settings.register(scsApp.ID, "alternateActive", {
+        name: game.i18n.localize("scs.settings.alternateActive.Name"),
+        hint: game.i18n.localize("scs.settings.alternateActive.Hint"),
         scope: "client",
         config: true,
         type: Boolean,

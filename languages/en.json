@@ -19,7 +19,7 @@
         "defaults": [
           "Move",
           "Attacks",
-          "Spells"
+          "Magic"
         ]
       },
       "generateColors": {
@@ -27,7 +27,7 @@
         "Label": "Generate",
         "Hint": "Click to generate new random colors (reloads page)"
       },
-      "alternateChecked": {
+      "alternateActive": {
         "Name": "Alternate Appearance",
         "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker."
       },
@@ -43,7 +43,7 @@
       },
       "howItWorks": {
         "Title": "How it works",
-        "Intro": "<p>Instead of each character taking their own turn sequentially, everything happens all at once. <br/> In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into phases:</p>"
+        "Intro": "<p>Instead of each character taking their own turn sequentially, everything happens all at once. <br/> In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into resolution phases:</p>"
       },
       "combatTracker": {
         "Title": "Where is the combat tracker?",

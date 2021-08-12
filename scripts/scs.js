@@ -21,6 +21,18 @@ Hooks.on("ready", () => {
     // Move the app up if SmallTime is active
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };
 
+    // Initialize phase names
+    scsApp.initPhaseNames();
+
+    // If not already done, define a property to count the number of phases, but disallow change
+    if (!scsApp.phases.count) {
+        Object.defineProperty(scsApp.phases, "count", {
+            get: () => scsApp.phases.names.length,
+            set: () => { throw "SCS | The phase count is calculated from the phase names and cannot be changed directly." },
+            configurable: false
+        });
+    };
+
     // Render the app
     new scsApp().render(true);
 
