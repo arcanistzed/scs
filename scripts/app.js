@@ -457,7 +457,7 @@ export default class scsApp extends FormApplication {
             };
 
             // Scroll the active phase button into view
-            document.querySelector(".phase-button.active").scrollIntoViewIfNeeded();
+            try { document.querySelector(".phase-button.active").scrollIntoViewIfNeeded() } catch (err) { };
 
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
