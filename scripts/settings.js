@@ -50,7 +50,14 @@ export default function registerSettings() {
         scope: "world",
         config: false,
         type: Number,
-        default: 0
+        default: 1
+    });
+
+    game.settings.register(scsApp.ID, "currentCycle", {
+        scope: "world",
+        config: false,
+        type: Number,
+        default: 1
     });
 
     game.settings.register(scsApp.ID, "currentRound", {
@@ -75,6 +82,24 @@ export default function registerSettings() {
         type: Boolean,
         default: false,
         onChange: () => { game.setupGame(); }
+    });
+
+    game.settings.register(scsApp.ID, "limitCycles", {
+        name: game.i18n.localize("scs.settings.limitCycles.Name"),
+        hint: game.i18n.localize("scs.settings.limitCycles.Hint"),
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+    });
+
+    game.settings.register(scsApp.ID, "maxCycle", {
+        name: game.i18n.localize("scs.settings.maxCycle.Name"),
+        hint: game.i18n.localize("scs.settings.maxCycle.Hint"),
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 3,
     });
 
     game.settings.register(scsApp.ID, "limitPhases", {

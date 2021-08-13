@@ -5,9 +5,17 @@
         "Name": "Show Tracker",
         "Hint": "Enable this to display the default combat tracker"
       },
+      "limitCycles": {
+        "Name": "NEW! Limit Cycles",
+        "Hint": "Move on to the next round of combat after the number of cycles configured below."
+      },
+      "maxCycle": {
+        "Name": "NEW! Maximum Cycle",
+        "Hint": "Set a maximum number of cycles before continuing on to the next round. You must enable Limit Cycles to use this."
+      },
       "limitPhases": {
         "Name": "Limit Phases",
-        "Hint": "After the three phases are finished, move on to the next round of combat."
+        "Hint": "Move on to the next round of combat at the end of each cycle of phases. This will override Limit Cycles above."
       },
       "startupTutorial": {
         "Name": "Play Startup Tutorial",
@@ -32,7 +40,7 @@
         "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker."
       },
       "actionLocking": {
-        "Name": "NEW! Action Locking",
+        "Name": "Action Locking",
         "Hint": "Lock to only specific actions for known phases. Feel free to make suggestions for phases to add!"
       }
     },

@@ -23,6 +23,9 @@ export default class scsApp extends FormApplication {
     /** The current phase */
     static currentPhase = 1;
 
+    /** The current cycle */
+    static currentCycle = 1;
+
     /** The current round
      *  This mirrors the Core round during Core combats and is overriden whenever one is started
      */
@@ -353,6 +356,7 @@ export default class scsApp extends FormApplication {
 
         function pullValues() {
             scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
+            scsApp.currentCycle = game.settings.get(scsApp.ID, "currentCycle"); // counts the current cycle
             scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
         };
 
@@ -386,8 +390,6 @@ export default class scsApp extends FormApplication {
             document.querySelector("#sidebar-tabs > a:nth-child(3)").addEventListener("click", () => changeRound(parseInt(prompt("change round?"))));
             console.log(`
             TODO:
-            - Entering arbitrary phase change delta should loop around phases
-               - Don't reset phases to 1 or max on loop, rather determine what to reset to dynamically
             - Expose phase/round switching in API
             `); */
         };
@@ -398,12 +400,15 @@ export default class scsApp extends FormApplication {
             // Pull current values
             pullValues();
 
-            // If more than or equal to zero + the delta, change round by delta; else, notify user
-            if (scsApp.currentRound + delta >= 0) { scsApp.currentRound += delta }
-            else { ui.notifications.error("SCS | You cannot bring the current round below zero.") };
-
             // If going forwards, reset to phase 1; if going back, reset to max phase
             scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
+
+            // If more than or equal to zero + the delta, change round by delta; else, notify user
+            if (scsApp.currentRound + delta >= 0) { scsApp.currentRound += delta }
+            else {
+                scsApp.currentPhase = 1;
+                ui.notifications.error("SCS | You cannot bring the current round below zero.");
+            };
 
             // While delta is not zero, adjust Core round
             while (delta !== 0) {
@@ -429,23 +434,44 @@ export default class scsApp extends FormApplication {
             // Change phase by delta
             scsApp.currentPhase += delta;
 
+            // Loop phases if limit cycles is enabled
+            if (game.settings.get(scsApp.ID, "limitCycles")) {
+                // Increment cycle if at the end of all phases
+                if (scsApp.currentPhase === scsApp.phases.count + 1) scsApp.currentCycle += 1;
+
+                // If the maximum amount of cycles is reached, loop and reset cycles
+                if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
+                    changeRound(1);
+                    scsApp.currentCycle = 1;
+                };
+            };
+
+            // Change rounds if limit phases is enabled
+            if (game.settings.get(scsApp.ID, "limitPhases")) {
+                if (scsApp.currentPhase === scsApp.phases.count + 1) {
+                    changeRound(1);
+                } else if (scsApp.currentPhase === 0) {
+                    changeRound(-1);
+                };
+            } else {
+                // Loop over phases
+                if (scsApp.currentPhase === scsApp.phases.count + 1) {
+                    scsApp.currentPhase = 1;
+                } else if (scsApp.currentPhase === 0) {
+                    scsApp.currentPhase = scsApp.phases.count;
+                };
+            };
+
+            // Correct phase if it excedes new limit
+            if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
+
             // Update app to display new values
             updateApp();
         };
 
         // Updates the app to display the correct state
         function updateApp() {
-            // Change rounds if limit phases is enabled
-            if (game.settings.get(scsApp.ID, "limitPhases")) {
-                if (scsApp.currentPhase === scsApp.phases.count + 1) { changeRound(1) }
-                else if (scsApp.currentPhase === 0) { changeRound(-1) };
-            } else {
-                if (scsApp.currentPhase === scsApp.phases.count + 1) { scsApp.currentPhase = 1 };
-                if (scsApp.currentPhase === 0) { scsApp.currentPhase = scsApp.phases.count };
-            };
 
-            // Correct phase if it excedes new limit
-            if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
             // Update the appearance of the buttons depending on the user's settings
             if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
@@ -465,6 +491,7 @@ export default class scsApp extends FormApplication {
             // Save new values if GM
             if (game.user.isGM) {
                 game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
+                game.settings.set(scsApp.ID, "currentCycle", scsApp.currentCycle);
                 game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
             };
 
