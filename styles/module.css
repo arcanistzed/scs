@@ -83,7 +83,7 @@
   color: var(--Whetstone-accent-primary-contrast, var(--palette-app-background-shaded-text, grey));
   text-align: center;
   flex: 100; /* It must take as much room as possible */
-  cursor: m;
+  cursor: move;
 }
 
 /* Lighter text when dragged around */
