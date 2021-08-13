@@ -39,7 +39,7 @@
     "tutorial": {
       "welcome": {
         "Title": "Welcome to the SCS",
-        "Intro": "This module is an implementation of the Simultaneous Combat System described in <a href=\"https://redd.it/nlyif8\">this reddit post</a>."
+        "Intro": "This module is an implementation of the Simultaneous Combat System described in <a href=\"https://redd.it/p11h35\">this reddit post</a>."
       },
       "howItWorks": {
         "Title": "How it works",
