@@ -90,7 +90,7 @@ export default function registerSettings() {
         scope: "world",
         config: true,
         type: Boolean,
-        default: false,
+        default: true,
     });
 
     game.settings.register(scsApp.ID, "maxCycle", {
