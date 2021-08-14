@@ -52,6 +52,7 @@
   flex-wrap: wrap;
   max-height: calc(46px * 3);
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* Controls the app itself */

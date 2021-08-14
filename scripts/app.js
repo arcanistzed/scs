@@ -483,7 +483,12 @@ export default class scsApp extends FormApplication {
             };
 
             // Scroll the active phase button into view
-            try { document.querySelector(".phase-button.active").scrollIntoViewIfNeeded() } catch (err) { };
+            let scrollTarget = document.querySelector(".phase-button.active");
+            if (scrollTarget.parentNode.scrollTop + document.querySelector(".scsButtons").clientHeight < scrollTarget.offsetTop) {
+                scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
+            } else if ( scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
+                scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
+            };
 
             // Update the Round number
             document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
