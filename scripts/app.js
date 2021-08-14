@@ -591,7 +591,7 @@ export default class scsApp extends FormApplication {
                         // If it is currently the attack phase and this is not an attack, alert user and do nothing
                         ui.notifications.error("SCS | It's currently the attack phase, so you can only attack");
                         return;
-                    } else if (thisPhase === "Spells" && (this.data.type !== "spell" || this.hasAttack)) {
+                    } else if (thisPhase === "Magic" && (this.data.type !== "spell" || this.hasAttack)) {
                         // If it is currently the spells phase and this is not a spell or this has an attack, alert user and do nothing
                         ui.notifications.error("SCS | It's currently the magic phase, so you can only cast non-attacking spells");
                         return;
