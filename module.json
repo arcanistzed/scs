@@ -79,6 +79,11 @@
       "path": "languages/cn.json"
     }
   ],
+  "keywords": [
+    "simultaneous",
+    "combat",
+    "system"
+  ],
   "dependencies": [
     {
       "name": "_introjs",
