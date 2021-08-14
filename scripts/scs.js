@@ -21,6 +21,9 @@ Hooks.on("ready", () => {
     // Move the app up if SmallTime is active
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };
 
+    // Hide Argon's "End Turn" button
+    Hooks.on("renderCombatHudCanvasElement", (_app, html) => html[0].querySelector("[data-title='Pass']").style.display = "none");
+
     // Initialize phase names
     scsApp.initPhaseNames();
 
