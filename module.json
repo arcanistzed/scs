@@ -89,7 +89,7 @@
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
   "readme": "https://raw.githubusercontent.com/arcanistzed/scs/main/README.md",
-  "changelog": "https://github.com/arcanistzed/scs/releases",
+  "changelog": "https://raw.githubusercontent.com/arcanistzed/scs/main/CHANGELOG.md",
   "license": "https://raw.githubusercontent.com/arcanistzed/scs/main/LICENSE",
   "bugs": "https://github.com/arcanistzed/scs/issues/new/choose",
   "media": [
