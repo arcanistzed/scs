@@ -23,7 +23,7 @@ jobs:
         download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.zip
 
     # Create a zip file with all files required by the module to add to the release
-    - run: zip -r ./module.zip module.json LICENSE styles/ scripts/ templates/ languages/
+    - run: zip -r ./module.zip module.json LICENSE CHANGELOG.md styles/ scripts/ templates/ languages/
 
     # Create a release for this specific version
     - name: Update Release with Files
@@ -38,3 +38,13 @@ jobs:
         artifacts: './module.json, ./module.zip'
         tag: ${{ github.event.release.tag_name }}
         body: ${{ github.event.release.body }}
+
+
+      - name: FoundryVTT AutoPublish
+        uses: Varriount/fvtt-autopublish@v1.0.2a
+        with:
+          username: ${{ secrets.FOUNDRY_ADMIN_USER }}
+          password: ${{ secrets.FOUNDRY_ADMIN_PW }}
+          module-id: 26
+          manifest-url: https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.json
+          manifest-file: ./module.json
