@@ -2,8 +2,8 @@
 
 ## 2.4.3 - 15 Aug 2021
 
-Fix action locking for Magic phase
-Removed Argon's "End Turn" button
+* Fix action locking for Magic phase
+* Removed [Argon's](https://foundryvtt.com/packages/enhancedcombathud) "End Turn" button
 
 ## 2.3.0 - 13 Aug 2021 - Cycles & Smooth scrolling
 
