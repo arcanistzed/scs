@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.4 - 15 Aug 2021
+## 2.4.5 - 15 Aug 2021
 
 * Fix action locking for Magic phase
 * Removed [Argon's](https://foundryvtt.com/packages/enhancedcombathud) "End Turn" button
