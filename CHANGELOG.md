@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.4.0 - 15 Aug 2021
+## 2.4.2 - 15 Aug 2021
 
 Fix action locking for Magic phase
 Removed Argon's "End Turn" button
