@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0 - 15 Aug 2021
+
+Fix action locking for Magic phase
+Removed Argon's "End Turn" button
+
 ## 2.3.0 - 13 Aug 2021 - Cycles & Smooth scrolling
 
 * Implemented cycles (which are one complete run through all phases) in order to allow for the round to end after three as per [SCSv2](https://redd.it/p11h35)
