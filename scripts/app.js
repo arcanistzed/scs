@@ -84,7 +84,9 @@ export default class scsApp extends FormApplication {
             id: "scsApp",
             title: "Simultaneous Combat System",
             top: this.initialPosition.top,
-            left: this.initialPosition.left
+            left: this.initialPosition.left,
+            closeOnSubmit: false,
+            minimizable: false
         });
     };
 
