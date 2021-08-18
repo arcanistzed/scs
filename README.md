@@ -2,15 +2,11 @@
 
 ![Version](https://img.shields.io/github/v/tag/arcanistzed/scs?label=Version&style=flat-square&color=2577a1) ![Latest Release Download Count](https://img.shields.io/github/downloads/arcanistzed/scs/latest/module.zip?label=Downloads&style=flat-square&color=9b43a8) ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Farcanistzed%2Fscs%2Fmain%2Fmodule.json&label=Foundry%20Core%20Compatible%20Version&query=$.compatibleCoreVersion&style=flat-square&color=ff6400)
 
-An implementation of the Simultaneous Combat System for Foundry VTT. See the [Reddit post](https://redd.it/p11h35) from the author.
+A beautiful mostly system-agnostic and completely customizable implementation of a Simultaneous Combat System. See the [Reddit post](https://redd.it/p11h35) from the author.
 
-The DM can control the current phase and round with easy-to-use controls floating in the bottom corner:
+Have you ever tired of waiting for the turns of your friends to be over? Are you fed up with your players taking so long in *every* combat encounter? Do you feel like changing things up in your game and trying something new?
 
 ![gradient](https://user-images.githubusercontent.com/82790112/123046244-ddeb3a80-d3c9-11eb-98db-da2f4a6abd68.gif)
-
-On the player's side:
-
-![scs-player](https://user-images.githubusercontent.com/82790112/123030629-15012200-d3b1-11eb-8e4e-d058e1eb8800.png)
 
 ## Usage
 
@@ -60,10 +56,6 @@ This setting will automatically switch the round at the end of the cycle of all 
 
 This setting will put a limit on how many cycles can take place before switching to the next round. For example, if Maximum Cycle is set to 3, after each phase has been completed three times, it will be the next round. It is recommended using the arrows to navigate between phases when using this.
 
-## Installation
-
-In the setup screen, use the URL `https://github.com/arcanistzed/scs/releases/latest/download/module.json` to install the module.
-
 ## API
 
 SCS has a small API with a few methods that can be called by others. They are accessible under the global variable `scs`.
@@ -80,6 +72,10 @@ This will show the IntroJS tutorial tour once.
 
 This will stop the tour from showing everytime the page is loaded unless the user re-enabled the tutorial from within the module settings.
 
+## Installation
+
+In the setup screen, use the URL `https://github.com/arcanistzed/scs/releases/latest/download/module.json` to install the module.
+
 ## License
 
 Copyright © 2021 arcanist
@@ -89,11 +85,6 @@ This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tableto
 ## Bugs
 
 You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose) or on [my Discord server](https://discord.gg/AAkZWWqVav).
-
-Known Issues:
-
-- With Canvas off, the app doesn't remember it's pinned location
-- No CSS for IntroJS [IMPORTANT]
 
 ## Localization
 
