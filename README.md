@@ -6,7 +6,6 @@ An implementation of the Simultaneous Combat System for Foundry VTT. See the [Re
 
 The DM can control the current phase and round with easy-to-use controls floating in the bottom corner:
 
-![scs](https://user-images.githubusercontent.com/82790112/123032659-4e875c80-d3b4-11eb-853e-1609a45cda56.gif)
 ![gradient](https://user-images.githubusercontent.com/82790112/123046244-ddeb3a80-d3c9-11eb-98db-da2f4a6abd68.gif)
 
 On the player's side:
@@ -16,6 +15,50 @@ On the player's side:
 ## Usage
 
 Please follow the built-in tutorial (built with IntoJS), for instructions. You can always relaunch the tutorial from within the settings. If you have any questions, feel free to contact me.
+
+## Features
+
+### Action Locking
+
+In supported systems, SCS will detect whether the current phase has been registered with the module and will restrict what can be done on your turn accordingly.
+
+If you would like to add support for another system or more phases, please make a PR or let me know on my Discord (link is below) and I will happily take suggestions.
+
+Currently only dnd5e is supported with the default phases as described in the reddit post linked above.
+
+### Phase and Round display
+
+The module will display the current phase and round in an interactive and draggble app. You can use the arrows to change phase (`<` or `>`) and change round (`<<` or `>>`), or you can simply click on the phase you would like to switch to (not recommended if using phase/cycle limits).
+
+### Integration with the Core Combat Tracker
+
+While this module hides the Combat Tracker by default, it updates it in the background whenever the round is switched to allow for better compatibility. There is also a setting to show the default Combat Tracker.
+
+### Integration with other modules
+
+#### [SmallTime](https://foundryvtt.com/packages/smalltime)
+
+The app moves outside of SmallTime's way
+
+#### [About Time](https://foundryvtt.com/packages/about-time)
+
+If using About Time's realtime clock, SCS will prompt you to pause for the duration of your combat encounter. Just add a combatant (by right clicking on it and clicking "Toggle Combat State" in the HUD) and it will percieve that as a combat that has started. Removing all combatants ends the combat.
+
+#### [Argon Combat HUD](https://foundryvtt.com/packages/enhancedcombathud)
+
+This module hides Argon's "End Turn" button.
+
+### Change Colors
+
+Clicking this button will generate new random colors for the phases!
+
+### Limit Phases
+
+This setting will automatically switch the round at the end of the cycle of all phases. You can also do this with Maximum Cycle set to 1 and Limit Cycles enabled.
+
+### Limit Cycles & Maximum Cycle
+
+This setting will put a limit on how many cycles can take place before switching to the next round. For example, if Maximum Cycle is set to 3, after each phase has been completed three times, it will be the next round. It is recommended using the arrows to navigate between phases when using this.
 
 ## Installation
 
@@ -39,7 +82,9 @@ This will stop the tour from showing everytime the page is loaded unless the use
 
 ## License
 
-This package is under an [MIT license](LICENSE)
+Copyright © 2021 arcanist
+
+This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 
 ## Bugs
 
