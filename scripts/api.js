@@ -4,7 +4,7 @@ import scsApp from './app.js'
 /**
  * Provides a public API
  */
-export default class scs {
+export default class api {
 
     /** Hide default combat tracker */
     static hideTracker() {
@@ -53,5 +53,5 @@ export default class scs {
     };
 };
 
-// Add API to the global scope
-globalThis.scs = scs;
+// Add API to the module's scope
+game.modules.get(scsApp.ID)?.api = api;

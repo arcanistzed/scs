@@ -58,7 +58,7 @@ This setting will put a limit on how many cycles can take place before switching
 
 ## API
 
-SCS has a small API with a few methods that can be called by others. They are accessible under the global variable `scs`.
+SCS has a small API with a few methods that can be called by others. They are accessible under `game.modules.get("scs")?.api`.
 
 ### `hideTracker()`
 

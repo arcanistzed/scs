@@ -1,5 +1,5 @@
 // Import public API
-import { } from './api.js';
+import api from './api.js';
 
 // Import application
 import scsApp from './app.js'
