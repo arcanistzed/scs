@@ -103,8 +103,8 @@ export default class scsApp extends FormApplication {
         scsApp.generateColors();
         scsApp.addPhases();
         scsApp.hideFromPlayers();
-        scsApp.display(html);
-        if (game.user.isGM) scsApp.clock();
+        scsApp.manageDisplay(html);
+        if (game.user.isGM) scsApp.aboutTimeClock();
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
         let pinZone = false;
@@ -352,155 +352,79 @@ export default class scsApp extends FormApplication {
     /** Manage phase and round diplay
      * @param {HTMLElement} html The apps html
     */
-    static display(html) {
-
-        const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
-
-        function pullValues() {
-            scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
-            scsApp.currentCycle = game.settings.get(scsApp.ID, "currentCycle"); // counts the current cycle
-            scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
-        };
+    static manageDisplay(html) {
 
         // Update on Render
         Hooks.on("renderscsApp", () => {
-            pullValues();
-            updateApp();
+            scsApp.pullValues();
+           scsApp.updateApp();
         });
 
         // Update for players
         Hooks.on("updateSetting", setting => {
             if ((setting.data.key === "scs.currentPhase" || setting.data.key === "scs.currentRound") && !game.user.isGM) {
-                pullValues();
-                updateApp();
+                scsApp.pullValues();
+               scsApp.updateApp();
             };
         });
 
         // Reset when a new combat is created
-        Hooks.on("createCombat", () => { pullValues(); updateApp(); });
+        Hooks.on("createCombat", () => { scsApp.pullValues(); scsApp.updateApp(); });
 
         // If GM, execute one of the functions below this, depending on the button clicked
         if (game.user.isGM) {
-            html[0].querySelector("#lastRound").addEventListener("click", () => changeRound(-1));
-            html[0].querySelector("#lastPhase").addEventListener("click", () => changePhase(-1));
-            html[0].querySelector("#nextPhase").addEventListener("click", () => changePhase(1));
-            html[0].querySelector("#nextRound").addEventListener("click", () => changeRound(1));
-            html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => changePhase((i + 1) - scsApp.currentPhase)));
-        };
-
-        // Change round by delta
-        async function changeRound(delta) {
-
-            // Pull current values
-            pullValues();
-
-            // If going forwards, reset to phase 1; if going back, reset to max phase
-            scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
-
-            // If more than or equal to zero + the delta, change round by delta; else, notify user
-            if (scsApp.currentRound + delta >= 0) { scsApp.currentRound += delta }
-            else {
-                scsApp.currentPhase = 1;
-                ui.notifications.error("SCS | You cannot bring the current round below zero.");
-            };
-
-            // While delta is not zero, adjust Core round
-            while (delta !== 0) {
-                if (delta > 0) { // If positive, go to next round and bring delta towards zero
-                    await game.combat?.nextRound();
-                    delta--;
-                } else { // If negative, go to previous round and bring delta towards zero
-                    await game.combat?.previousRound();
-                    delta++;
-                }
-            };
-
-            // Update app to display new values
-            updateApp();
-        };
-
-        // Change phase by delta
-        async function changePhase(delta) {
-
-            // Pull current values
-            pullValues();
-
-            // Change phase by delta
-            scsApp.currentPhase += delta;
-
-            // Loop phases if limit cycles is enabled
-            if (game.settings.get(scsApp.ID, "limitCycles")) {
-                // Increment cycle if at the end of all phases
-                if (scsApp.currentPhase === scsApp.phases.count + 1) scsApp.currentCycle += 1;
-
-                // If the maximum amount of cycles is reached, loop and reset cycles
-                if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
-                    changeRound(1);
-                    scsApp.currentCycle = 1;
-                };
-            };
-
-            // Change rounds if limit phases is enabled
-            if (game.settings.get(scsApp.ID, "limitPhases")) {
-                if (scsApp.currentPhase === scsApp.phases.count + 1) {
-                    changeRound(1);
-                } else if (scsApp.currentPhase === 0) {
-                    changeRound(-1);
-                };
-            } else {
-                // Loop over phases
-                if (scsApp.currentPhase === scsApp.phases.count + 1) {
-                    scsApp.currentPhase = 1;
-                } else if (scsApp.currentPhase === 0) {
-                    scsApp.currentPhase = scsApp.phases.count;
-                };
-            };
-
-            // Correct phase if it excedes new limit
-            if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
-
-            // Update app to display new values
-            updateApp();
-        };
-
-        // Updates the app to display the correct state
-        function updateApp() {
-
-
-            // Update the appearance of the buttons depending on the user's settings
-            if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
-                buttons.forEach(current => { current.classList.remove("active") });
-                buttons[scsApp.currentPhase - 1].classList.add("active");
-            } else { // Active is lighter
-                buttons.forEach(current => { current.classList.add("active") });
-                buttons[scsApp.currentPhase - 1].classList.remove("active");
-            };
-
-            // Scroll the active phase button into view
-            let scrollTarget = document.querySelector(".phase-button.active");
-            if (scrollTarget.parentNode.scrollTop + document.querySelector(".scsButtons").clientHeight < scrollTarget.offsetTop) {
-                scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
-            } else if ( scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
-                scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
-            };
-
-            // Update the Round number
-            document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
-
-            // Save new values if GM
-            if (game.user.isGM) {
-                game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
-                game.settings.set(scsApp.ID, "currentCycle", scsApp.currentCycle);
-                game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
-            };
-
-            // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
-            setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
+            html[0].querySelector("#lastRound").addEventListener("click", () => scs.changeRound(-1));
+            html[0].querySelector("#lastPhase").addEventListener("click", () => scs.changePhase(-1));
+            html[0].querySelector("#nextPhase").addEventListener("click", () => scs.changePhase(1));
+            html[0].querySelector("#nextRound").addEventListener("click", () => scs.changeRound(1));
+            html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => scs.changePhase((i + 1) - scsApp.currentPhase)));
         };
     };
 
+    /** Pull current phase, cycle, and round */
+    static pullValues() {
+        scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
+        scsApp.currentCycle = game.settings.get(scsApp.ID, "currentCycle"); // counts the current cycle
+        scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
+    };
+
+    /** Updates the app to display the correct state */
+    static updateApp() {
+        const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
+
+        // Update the appearance of the buttons depending on the user's settings
+        if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
+            buttons.forEach(current => { current.classList.remove("active") });
+            buttons[scsApp.currentPhase - 1].classList.add("active");
+        } else { // Active is lighter
+            buttons.forEach(current => { current.classList.add("active") });
+            buttons[scsApp.currentPhase - 1].classList.remove("active");
+        };
+
+        // Scroll the active phase button into view
+        let scrollTarget = document.querySelector(".phase-button.active");
+        if (scrollTarget.parentNode.scrollTop + document.querySelector(".scsButtons").clientHeight < scrollTarget.offsetTop) {
+            scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
+        } else if (scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
+            scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
+        };
+
+        // Update the Round number
+        document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
+
+        // Save new values if GM
+        if (game.user.isGM) {
+            game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
+            game.settings.set(scsApp.ID, "currentCycle", scsApp.currentCycle);
+            game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
+        };
+
+        // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
+        setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
+    };
+
     /** Manage about time realtime clock */
-    static clock() {
+    static aboutTimeClock() {
 
         // Integration with About Time
         if (game.modules.get("about-time")?.active) {

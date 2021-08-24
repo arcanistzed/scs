@@ -46,10 +46,99 @@ export default class scs {
         document.querySelector(".introjs-tooltipbuttons").before(stopButton);
     };
 
-    /** Stop showing IntroJS tutorial */
-    static stopTutorial() {
+    /** Stop showing IntroJS tutorial
+     * @param {Boolean} close - Whether the tutorial should also immediately close (defaults to `false`)
+    */
+    static stopTutorial(close = false) {
         game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
-        // document.querySelector(".introjs-skipbutton").click(); // End tutorial
+        if (close) document.querySelector(".introjs-skipbutton").click(); // Close tutorial if wanted
+    };
+
+    /** Change SCS round. Note that this will also change the Core round.
+     * @param {Number} delta - The delta by which the round should change.
+     * Use a positive number to move the round forward and a negative number to go to previous rounds.
+    */
+    static async changeRound(delta) {
+
+        // Pull current values
+        scsApp.pullValues();
+
+        // If going forwards, reset to phase 1; if going back, reset to max phase
+        scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
+
+        // If more than or equal to zero + the delta, change round by delta; else, notify user
+        if (scsApp.currentRound + delta >= 0) { scsApp.currentRound += delta }
+        else {
+            scsApp.currentPhase = 1;
+            ui.notifications.error("SCS | You cannot bring the current round below zero.");
+        };
+
+        // While delta is not zero, adjust Core round
+        while (delta !== 0) {
+            if (delta > 0) { // If positive, go to next round and bring delta towards zero
+                await game.combat?.nextRound();
+                delta--;
+            } else { // If negative, go to previous round and bring delta towards zero
+                await game.combat?.previousRound();
+                delta++;
+            }
+        };
+
+        // Update app to display new values
+        scsApp.updateApp();
+    };
+
+    /** Change SCS phase
+     * @param {Number} delta - The delta by which the phase should change.
+     * Use a positive number to move the phase forward and a negative number to go to previous phases.
+    */
+    static async changePhase(delta) {
+
+        // Pull current values
+        scsApp.pullValues();
+
+        // If the phase would change to an invalid value, alert and exit
+        if (scsApp.currentPhase + delta < 0 || scsApp.currentPhase + delta > scsApp.phases.count + 1) {
+            console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds.`);
+            return;
+        };
+
+        // Change phase by delta
+        scsApp.currentPhase += delta;
+
+        // Loop phases if limit cycles is enabled
+        if (game.settings.get(scsApp.ID, "limitCycles")) {
+            // Increment cycle if at the end of all phases
+            if (scsApp.currentPhase === scsApp.phases.count + 1) scsApp.currentCycle += 1;
+
+            // If the maximum amount of cycles is reached, loop and reset cycles
+            if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
+                scs.changeRound(1);
+                scsApp.currentCycle = 1;
+            };
+        };
+
+        // Change rounds if limit phases is enabled
+        if (game.settings.get(scsApp.ID, "limitPhases")) {
+            if (scsApp.currentPhase === scsApp.phases.count + 1) {
+                scs.changeRound(1);
+            } else if (scsApp.currentPhase === 0) {
+                scs.changeRound(-1);
+            };
+        } else {
+            // Loop over phases
+            if (scsApp.currentPhase === scsApp.phases.count + 1) {
+                scsApp.currentPhase = 1;
+            } else if (scsApp.currentPhase === 0) {
+                scsApp.currentPhase = scsApp.phases.count;
+            };
+        };
+
+        // Correct phase if it excedes new limit
+        if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
+
+        // Update app to display new values
+        scsApp.updateApp();
     };
 };
 
