@@ -68,9 +68,18 @@ This will elegantly hide the default combat tracker from the sidebar.
 
 This will show the IntroJS tutorial tour once.
 
-### `stopTutorial()`
+### `stopTutorial(close = false)`
 
 This will stop the tour from showing everytime the page is loaded unless the user re-enabled the tutorial from within the module settings.
+An optional Boolean paramter can be used to also immediately close the tutorial, but this defaults to `false`.
+
+### `changeRound(delta)`
+
+An asynchronous method that changes the SCS's round by a given delta. Note that this will also change the Core round. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.
+
+### `changePhase(delta)`
+
+An asynchronous method that changes the SCS's phase by a given delta. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.
 
 ## Installation
 
