@@ -60,6 +60,7 @@
   flex-wrap: nowrap;
   max-width: 200px;
   max-height: calc(46px * 3 + 3px + 2.5em);
+  border: 1px solid #000;
 }
 
 /* Don't show any header */
@@ -69,9 +70,7 @@
 
 /* Give the whole app a look that blends into the Foundry UI alongside the player list */
 #scsApp .window-content {
-  border-radius: 5px;
   padding: 0;
-  border: 1px solid #000;
   color: var(--Whetstone-text-highlight-lighter, var(--palette-app-background-contrast-text, #f0f0e0));
   background-color: var(--Whetstone-bg-app, var(--palette-app-background, none));
   background-image: var(--palette-app-background-image, url(/ui/denim075.png) repeat);
