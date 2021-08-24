@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.5.0 - 25 Aug 2021 - More API
+
+* Added `changePhase` and `changeRound` to public API, allowing programmatically switching either
+* Fix app border appearing incorrectly
+* Updated [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) shim with dialog removed
+
 ## 2.4.6 - 15 Aug 2021
 
 * Fix action locking for Magic phase
