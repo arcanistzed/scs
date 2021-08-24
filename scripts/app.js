@@ -386,14 +386,6 @@ export default class scsApp extends FormApplication {
             html[0].querySelector("#nextPhase").addEventListener("click", () => changePhase(1));
             html[0].querySelector("#nextRound").addEventListener("click", () => changeRound(1));
             html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => changePhase((i + 1) - scsApp.currentPhase)));
-
-
-            /* document.querySelector("#sidebar-tabs > a:nth-child(1)").addEventListener("click", () => changePhase(parseInt(prompt("change phase?"))));
-            document.querySelector("#sidebar-tabs > a:nth-child(3)").addEventListener("click", () => changeRound(parseInt(prompt("change round?"))));
-            console.log(`
-            TODO:
-            - Expose phase/round switching in API
-            `); */
         };
 
         // Change round by delta
@@ -428,7 +420,7 @@ export default class scsApp extends FormApplication {
         };
 
         // Change phase by delta
-        function changePhase(delta) {
+        async function changePhase(delta) {
 
             // Pull current values
             pullValues();
