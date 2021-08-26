@@ -81,7 +81,7 @@ export default function registerSettings() {
         config: true,
         type: Boolean,
         default: false,
-        onChange: () => { game.setupGame(); }
+        onChange: () => api.defaultTracker(false),
     });
 
     game.settings.register(scsApp.ID, "limitCycles", {

@@ -6,9 +6,13 @@ import scsApp from './app.js'
  */
 export default class api {
 
-    /** Hide default combat tracker */
-    static hideTracker() {
-        document.querySelector("[data-tab='combat']").style.display = "none";
+    /** Adjust default combat tracker */
+    static defaultTracker(hide = true) {
+        // Hide or show combat tab
+        const combatTab = document.querySelector("[data-tab='combat']");
+        hide ? combatTab.style.display = "none" : combatTab.style.display = "block";
+        
+        // Adjust alignement to compensate for the missing tab
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
         Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
             if (collapsed) document.querySelector("#sidebar").style.height = "min-content";

@@ -60,9 +60,9 @@ This setting will put a limit on how many cycles can take place before switching
 
 SCS has a small API with a few methods that can be called by others. They are accessible under `game.modules.get("scs")?.api`.
 
-### `hideTracker()`
+### `defaultTracker(hide = true)`
 
-This will elegantly hide the default combat tracker from the sidebar.
+This will elegantly hide the default combat tracker from the sidebar. An optional Boolean paramter can be used to show the trackeragain, if hidden.
 
 ### `startTutorial()`
 
