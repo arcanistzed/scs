@@ -8,15 +8,14 @@ import scsApp from './app.js'
 import registerSettings from './settings.js';
 
 Hooks.on("ready", () => {
-
     // Register settings
     registerSettings();
 
     // Initialize API
-    new scs();
+    new api();
 
     // Hide default combat tracker
-    if (!game.settings.get(scsApp.ID, "showTracker")) scs.hideTracker();
+    if (!game.settings.get(scsApp.ID, "showTracker")) api.defaultTracker();
 
     // Move the app up if SmallTime is active
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };
@@ -44,6 +43,6 @@ Hooks.on("ready", () => {
 
     // Show the IntroJS tutorial once the app is rendered if the user hasn't denied the tutorial
     Hooks.once("renderscsApp", () => {
-        if (game.settings.get(scsApp.ID, "startupTutorial")) scs.startTutorial();
+        if (game.settings.get(scsApp.ID, "startupTutorial")) api.startTutorial();
     });
 });

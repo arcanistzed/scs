@@ -1,5 +1,6 @@
 // Import libWrapper shim
 import { libWrapper } from './shim.js';
+import api from './api.js';
 
 /**
  * Manages the SCS form app itself and it's functionality
@@ -357,14 +358,14 @@ export default class scsApp extends FormApplication {
         // Update on Render
         Hooks.on("renderscsApp", () => {
             scsApp.pullValues();
-           scsApp.updateApp();
+            scsApp.updateApp();
         });
 
         // Update for players
         Hooks.on("updateSetting", setting => {
             if ((setting.data.key === "scs.currentPhase" || setting.data.key === "scs.currentRound") && !game.user.isGM) {
                 scsApp.pullValues();
-               scsApp.updateApp();
+                scsApp.updateApp();
             };
         });
 
@@ -373,11 +374,11 @@ export default class scsApp extends FormApplication {
 
         // If GM, execute one of the functions below this, depending on the button clicked
         if (game.user.isGM) {
-            html[0].querySelector("#lastRound").addEventListener("click", () => scs.changeRound(-1));
-            html[0].querySelector("#lastPhase").addEventListener("click", () => scs.changePhase(-1));
-            html[0].querySelector("#nextPhase").addEventListener("click", () => scs.changePhase(1));
-            html[0].querySelector("#nextRound").addEventListener("click", () => scs.changeRound(1));
-            html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => scs.changePhase((i + 1) - scsApp.currentPhase)));
+            html[0].querySelector("#lastRound").addEventListener("click", () => api.changeRound(-1));
+            html[0].querySelector("#lastPhase").addEventListener("click", () => api.changePhase(-1));
+            html[0].querySelector("#nextPhase").addEventListener("click", () => api.changePhase(1));
+            html[0].querySelector("#nextRound").addEventListener("click", () => api.changeRound(1));
+            html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => api.changePhase((i + 1) - scsApp.currentPhase)));
         };
     };
 

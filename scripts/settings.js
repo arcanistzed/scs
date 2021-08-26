@@ -1,5 +1,6 @@
 // Import application
-import scsApp from './app.js'
+import scsApp from './app.js';
+import api from './api.js';
 
 /**
  * Manages color generation button in module settings menu
@@ -16,7 +17,6 @@ class GenerateColors extends FormApplication {
     }
 
     async activateListeners() {
-
         // Unset colors if GM
         if (game.user.isGM) {
             await game.settings.set(scsApp.ID, "colors", []);

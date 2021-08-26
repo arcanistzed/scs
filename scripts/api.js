@@ -113,7 +113,7 @@ export default class api {
 
             // If the maximum amount of cycles is reached, loop and reset cycles
             if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
-                scs.changeRound(1);
+                api.changeRound(1);
                 scsApp.currentCycle = 1;
             };
         };
@@ -121,9 +121,9 @@ export default class api {
         // Change rounds if limit phases is enabled
         if (game.settings.get(scsApp.ID, "limitPhases")) {
             if (scsApp.currentPhase === scsApp.phases.count + 1) {
-                scs.changeRound(1);
+                api.changeRound(1);
             } else if (scsApp.currentPhase === 0) {
-                scs.changeRound(-1);
+                api.changeRound(-1);
             };
         } else {
             // Loop over phases
@@ -142,5 +142,5 @@ export default class api {
     };
 };
 
-// Add API to the module's scope
-game.modules.get(scsApp.ID)?.api = api;
+// Add API to the module's scope on init
+Hooks.on("ready", () => game.modules.get(scsApp.ID).api = api);
