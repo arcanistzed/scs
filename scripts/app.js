@@ -387,12 +387,27 @@ export default class scsApp extends FormApplication {
         scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
         scsApp.currentCycle = game.settings.get(scsApp.ID, "currentCycle"); // counts the current cycle
         scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
+
+        // Make sure that the phase is within bounds
+        // This is needed because the total amount of phases might be changed by the user
+        if (scsApp.currentPhase < 0) {
+            scsApp.currentPhase = 1;
+        } else if (scsApp.currentPhase > scsApp.phases.count + 1) {
+            scsApp.currentPhase = scsApp.phases.count;
+        };
     };
 
     /** Updates the app to display the correct state */
     static updateApp() {
         const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
 
+        // Save new values if GM
+        if (game.user.isGM) {
+            game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
+            game.settings.set(scsApp.ID, "currentCycle", scsApp.currentCycle);
+            game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
+        };
+        if (buttons[scsApp.currentPhase - 1]) {
         // Update the appearance of the buttons depending on the user's settings
         if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
             buttons.forEach(current => { current.classList.remove("active") });
@@ -409,16 +424,9 @@ export default class scsApp extends FormApplication {
         } else if (scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
             scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
         };
-
+        }
         // Update the Round number
         document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
-
-        // Save new values if GM
-        if (game.user.isGM) {
-            game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
-            game.settings.set(scsApp.ID, "currentCycle", scsApp.currentCycle);
-            game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
-        };
 
         // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
         setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);

@@ -6,11 +6,11 @@
         "Hint": "Enable this to display the default combat tracker"
       },
       "limitCycles": {
-        "Name": "NEW! Limit Cycles",
+        "Name": "Limit Cycles",
         "Hint": "Move on to the next round of combat after the number of cycles configured below."
       },
       "maxCycle": {
-        "Name": "NEW! Maximum Cycle",
+        "Name": "Maximum Cycle",
         "Hint": "Set a maximum number of cycles before continuing on to the next round. You must enable Limit Cycles to use this."
       },
       "limitPhases": {

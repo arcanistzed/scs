@@ -11,7 +11,7 @@ export default class api {
         // Hide or show combat tab
         const combatTab = document.querySelector("[data-tab='combat']");
         hide ? combatTab.style.display = "none" : combatTab.style.display = "block";
-        
+
         // Adjust alignement to compensate for the missing tab
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
         Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
@@ -46,8 +46,12 @@ export default class api {
         // Create "Don't Show Again" checkbox
         let stopButton = document.createElement("div");
         stopButton.id = "scsTutorialAgainDiv";
-        stopButton.innerHTML = `<input id="scsTutorialAgain" type="checkbox" onchange="scs.stopTutorial()"><label for="scsTutorialAgain">Don't show again</label>`;
+        stopButton.innerHTML = `<input id="scsTutorialAgain" type="checkbox"><label for="scsTutorialAgain">Don't show again</label>`;
+        // Add it to the DOM
         document.querySelector(".introjs-tooltipbuttons").before(stopButton);
+
+        // Stop tutorial when it's clicked
+        stopButton.addEventListener("click", api.stopTutorial(false));
     };
 
     /** Stop showing IntroJS tutorial
@@ -103,7 +107,7 @@ export default class api {
 
         // If the phase would change to an invalid value, alert and exit
         if (scsApp.currentPhase + delta < 0 || scsApp.currentPhase + delta > scsApp.phases.count + 1) {
-            console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds.`);
+            console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds. Current phase: "${scsApp.currentPhase}".`);
             return;
         };
 
