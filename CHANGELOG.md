@@ -5,11 +5,11 @@
 * Exposed round (`.changeRound(delta)`) and phase (`.changePhase(delta)`) switching in the public API
 * Fix app border appearing incorrectly
 * Updated [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) shim with dialog removed
-* Migrate API to `game.modules.get("scs")?.api`
+* Migrated API to `game.modules.get("scs")?.api`
 * Added optional parameter to `hideTracker` (which has been renamed to `defaultTracker`), allowing you to instead show the tracker if hidden
 * Added optional parameter to `stopTutorial()` allowing you to also close the tutorial at the same time
 * Fix a bug where the phase would be stuck in an invalid state after the names are changed
-* Updated localizations
+* Updated localisations
 
 ## 2.4.6 - 15 Aug 2021
 
