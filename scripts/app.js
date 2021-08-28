@@ -38,7 +38,10 @@ export default class scsApp extends FormApplication {
      */
     static inCombat = false;
 
-    // Override close() to prevent Escape presses from closing the SCS app
+    /**
+     * Override close() to prevent Escape presses from closing the SCS app
+     * @override
+     */
     async close(options = {}) {
         // If called by scs or SmallTime, use original method to handle app closure.
         if (options.scs || options.smallTime) return super.close();
@@ -63,6 +66,7 @@ export default class scsApp extends FormApplication {
         else ui.menu.toggle();
     };
 
+    /** @override */
     static get defaultOptions() {
         const pinned = game.settings.get(scsApp.ID, "pinned");
 
@@ -91,6 +95,7 @@ export default class scsApp extends FormApplication {
         });
     };
 
+    /** @override */
     activateListeners(html) {
         super.activateListeners(html);
 
@@ -408,22 +413,22 @@ export default class scsApp extends FormApplication {
             game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
         };
         if (buttons[scsApp.currentPhase - 1]) {
-        // Update the appearance of the buttons depending on the user's settings
-        if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
-            buttons.forEach(current => { current.classList.remove("active") });
-            buttons[scsApp.currentPhase - 1].classList.add("active");
-        } else { // Active is lighter
-            buttons.forEach(current => { current.classList.add("active") });
-            buttons[scsApp.currentPhase - 1].classList.remove("active");
-        };
+            // Update the appearance of the buttons depending on the user's settings
+            if (!game.settings.get(scsApp.ID, "alternateActive")) { // Active is darker
+                buttons.forEach(current => { current.classList.remove("active") });
+                buttons[scsApp.currentPhase - 1].classList.add("active");
+            } else { // Active is lighter
+                buttons.forEach(current => { current.classList.add("active") });
+                buttons[scsApp.currentPhase - 1].classList.remove("active");
+            };
 
-        // Scroll the active phase button into view
-        let scrollTarget = document.querySelector(".phase-button.active");
-        if (scrollTarget.parentNode.scrollTop + document.querySelector(".scsButtons").clientHeight < scrollTarget.offsetTop) {
-            scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
-        } else if (scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
-            scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
-        };
+            // Scroll the active phase button into view
+            let scrollTarget = document.querySelector(".phase-button.active");
+            if (scrollTarget.parentNode.scrollTop + document.querySelector(".scsButtons").clientHeight < scrollTarget.offsetTop) {
+                scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
+            } else if (scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
+                scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
+            };
         }
         // Update the Round number
         document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
