@@ -93,9 +93,9 @@
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
-  "readme": "https://raw.githubusercontent.com/arcanistzed/scs/main/README.md",
-  "changelog": "https://raw.githubusercontent.com/arcanistzed/scs/main/CHANGELOG.md",
-  "license": "https://raw.githubusercontent.com/arcanistzed/scs/main/LICENSE",
+  "readme": "https://github.com/arcanistzed/scs/blob/main/README.md",
+  "changelog": "https://github.com/arcanistzed/scs/blob/main/CHANGELOG.md",
+  "license": "https://github.com/arcanistzed/scs/blob/main/LICENSE",
   "bugs": "https://github.com/arcanistzed/scs/issues/new/choose",
   "media": [
     {
