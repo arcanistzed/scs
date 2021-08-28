@@ -101,4 +101,4 @@ Please note that the `Phases` must be short enough to fit their boxes, so you sh
 
 ## Contact me
 
-Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=SCS%20module%20for%20Foundry%20VTT).
+Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=Simultaneous%20Combat%20System%20module).
