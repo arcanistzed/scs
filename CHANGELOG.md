@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.0 - 29 Aug 2021 - Attack Roll HUD
+
+In order to ease determining the attack order (for example, in the default attack phase), the module shows you the last attack roll in the token's HUD. This currently only works in D&D 5e and PF 2e.
+
 ## 2.5.0 - 26 Aug 2021 - More API and Fixes
 
 * Exposed round (`.changeRound(delta)`) and phase (`.changePhase(delta)`) switching in the public API
