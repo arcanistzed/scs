@@ -91,6 +91,8 @@ Copyright © 2021 arcanist
 
 This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 
+See the [Notice](./NOTICE.md) for attribution details.
+
 ## Bugs
 
 You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose) or on [my Discord server](https://discord.gg/AAkZWWqVav).
