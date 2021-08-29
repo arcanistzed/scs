@@ -84,6 +84,15 @@ export default function registerSettings() {
         onChange: () => api.defaultTracker(false),
     });
 
+    game.settings.register(scsApp.ID, "showAttackHUD", {
+        name: game.i18n.localize("scs.settings.showAttackHUD.Name"),
+        hint: game.i18n.localize("scs.settings.showAttackHUD.Hint"),
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+    });
+
     game.settings.register(scsApp.ID, "limitCycles", {
         name: game.i18n.localize("scs.settings.limitCycles.Name"),
         hint: game.i18n.localize("scs.settings.limitCycles.Hint"),

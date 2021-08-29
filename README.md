@@ -30,6 +30,10 @@ The module will display the current phase and round in an interactive and draggb
 
 While this module hides the Combat Tracker by default, it updates it in the background whenever the round is switched to allow for better compatibility. There is also a setting to show the default Combat Tracker.
 
+### Attack Roll HUD
+
+In order to ease determining the attack order (for example, in the default attack phase), the module shows you the last attack roll in the token's HUD. This currently only works in D&D 5e and PF 2e.
+
 ### Integration with other modules
 
 #### [SmallTime](https://foundryvtt.com/packages/smalltime)

@@ -1,5 +1,7 @@
 // Import libWrapper shim
 import { libWrapper } from './shim.js';
+
+// Import public API
 import api from './api.js';
 
 /**

@@ -7,6 +7,9 @@ import scsApp from './app.js'
 // Import for registering module settings
 import registerSettings from './settings.js';
 
+// Import Attack Roll Token HUD
+import AttackHUD from './hud.js';
+
 Hooks.on("ready", () => {
     // Register settings
     registerSettings();
@@ -45,4 +48,7 @@ Hooks.on("ready", () => {
     Hooks.once("renderscsApp", () => {
         if (game.settings.get(scsApp.ID, "startupTutorial")) api.startTutorial();
     });
+
+    // Start action tracker
+    new AttackHUD();
 });

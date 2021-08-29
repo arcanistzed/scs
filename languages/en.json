@@ -42,6 +42,10 @@
       "actionLocking": {
         "Name": "Action Locking",
         "Hint": "Lock to only specific actions for known phases. Feel free to make suggestions for phases to add!"
+      },
+      "showAttackHUD": {
+        "Name": "Show Attack Roll HUD",
+        "Hint": "Displays the last attack roll in the token's HUD for aiding in determining attack order."
       }
     },
     "tutorial": {
