@@ -71,6 +71,9 @@ export default class api {
         // Pull current values
         scsApp.pullValues();
 
+        // Get previous round
+        const previousRound = scsApp.currentRound;
+
         // If going forwards, reset to phase 1; if going back, reset to max phase
         scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
 
@@ -94,6 +97,9 @@ export default class api {
 
         // Update app to display new values
         scsApp.updateApp();
+
+        // Fire a hook
+        Hooks.call("scsRoundChanged", scsApp.currentRound, previousRound, delta);
     };
 
     /** Change SCS phase
@@ -110,6 +116,9 @@ export default class api {
             console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds. Current phase: "${scsApp.currentPhase}".`);
             return;
         };
+
+        // Get previous phase
+        const previousPhase = scsApp.currentPhase;
 
         // Change phase by delta
         scsApp.currentPhase += delta;
@@ -147,6 +156,9 @@ export default class api {
 
         // Update app to display new values
         scsApp.updateApp();
+
+        // Fire a hook
+        Hooks.call("scsPhaseChanged", scsApp.currentPhase, previousPhase, delta);
     };
 };
 
