@@ -62,28 +62,42 @@ This setting will put a limit on how many cycles can take place before switching
 
 ## API
 
+### Methods
+
 SCS has a small API with a few methods that can be called by others. They are accessible under `game.modules.get("scs")?.api`.
 
-### `defaultTracker(hide = true)`
+#### `defaultTracker(hide = true)`
 
 This will elegantly hide the default combat tracker from the sidebar. An optional Boolean paramter can be used to show the trackeragain, if hidden.
 
-### `startTutorial()`
+#### `startTutorial()`
 
 This will show the IntroJS tutorial tour once.
 
-### `stopTutorial(close = false)`
+#### `stopTutorial(close = false)`
 
 This will stop the tour from showing everytime the page is loaded unless the user re-enabled the tutorial from within the module settings.
 An optional Boolean paramter can be used to also immediately close the tutorial, but this defaults to `false`.
 
-### `changeRound(delta)`
+#### `changeRound(delta)`
 
 An asynchronous method that changes the SCS's round by a given delta. Note that this will also change the Core round. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.
 
-### `changePhase(delta)`
+#### `changePhase(delta)`
 
 An asynchronous method that changes the SCS's phase by a given delta. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.
+
+### Hooks
+
+This module has two hooks which are only called on the GM's client:
+
+#### `scsRoundChanged`
+
+This hook is called whenever the SCS round changes. It has three arguments which are (in order): the current phase, the previous phase, and the delta.
+
+#### `scsPhaseChanged`
+
+This hook is called whenever the SCS phase changes. It has three arguments which are (in order): the current phase, the previous phase, and the delta.
 
 ## Installation
 
