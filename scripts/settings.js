@@ -50,7 +50,10 @@ export default function registerSettings() {
         scope: "world",
         config: false,
         type: Number,
-        default: 1
+        default: 1,
+        onChange: currentPhase => {
+            if (!game.user.isGM) Hooks.call("scsPhaseChanged", currentPhase);
+        },
     });
 
     game.settings.register(scsApp.ID, "currentCycle", {
@@ -64,7 +67,10 @@ export default function registerSettings() {
         scope: "world",
         config: false,
         type: Number,
-        default: 1
+        default: 1,
+        onChange: currentRound => {
+            if (!game.user.isGM) Hooks.call("scsRoundChanged", currentRound);
+        },
     });
 
     game.settings.register(scsApp.ID, "stopRealtime", {
@@ -91,6 +97,7 @@ export default function registerSettings() {
         config: true,
         type: Boolean,
         default: true,
+        onChange: () => window.location.reload(),
     });
 
     game.settings.register(scsApp.ID, "limitCycles", {
