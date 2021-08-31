@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.0 - 30 Aug 2021
+
+* Add `scsPhaseChanged` and `scsRoundChanged` hooks
+* Use PIXI for the HUD to make it always show up. In addition, the HUD was redesigned. It now also only shows up during the Attack phase.
+
 ## 2.6.0 - 29 Aug 2021 - Attack Roll HUD
 
 In order to ease determining the attack order (for example, in the default attack phase), the module shows you the last attack roll in the token's HUD. This currently only works in D&D 5e and PF 2e.
