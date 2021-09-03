@@ -15,7 +15,7 @@ export default class api {
         // Adjust alignement to compensate for the missing tab
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
         Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
-            if (collapsed) document.querySelector("#sidebar").style.height = "min-content";
+            if (collapsed) document.querySelector("#sidebar").style.height = "auto";
         });
     };
 
