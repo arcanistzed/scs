@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.71 - 4 Sept 2021 - Window Closing
+
+* Fix window closing by removing app from `ui.windows`
+* Fix typos
+
 ## 2.7.0 - 30 Aug 2021
 
 * Add `scsPhaseChanged` and `scsRoundChanged` hooks
