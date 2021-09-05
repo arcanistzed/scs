@@ -30,7 +30,7 @@ export default class scsApp extends FormApplication {
     static currentCycle = 1;
 
     /** The current round
-     *  This mirrors the Core round during Core combats and is overriden whenever one is started
+     *  This mirrors the Core round during Core combats and is overridden whenever one is started
      */
     static currentRound = 1;
 
@@ -39,34 +39,6 @@ export default class scsApp extends FormApplication {
      * If all combatants are removed, this will return to false.
      */
     static inCombat = false;
-
-    /**
-     * Override close() to prevent Escape presses from closing the SCS app
-     * @override
-     */
-    async close(options = {}) {
-        // If called by scs or SmallTime, use original method to handle app closure.
-        if (options.scs || options.smallTime) return super.close();
-
-        // Case 1: Close other open UI windows.
-        if (Object.keys(ui.windows).length > 1) {
-            Object.values(ui.windows).forEach((app) => {
-                if (app.title === "Simultaneous Combat System" || app.title === "SmallTime") return;
-                app.close();
-            });
-        }
-        // Case 2 (GM only): Release controlled objects.
-        else if (
-            canvas?.ready &&
-            game.user.isGM &&
-            Object.keys(canvas.activeLayer._controlled).length
-        ) {
-            event.preventDefault();
-            canvas.activeLayer.releaseAll();
-        }
-        // Case 3: Toggle the main menu.
-        else ui.menu.toggle();
-    };
 
     /** @override */
     static get defaultOptions() {
@@ -93,13 +65,15 @@ export default class scsApp extends FormApplication {
             top: this.initialPosition.top,
             left: this.initialPosition.left,
             closeOnSubmit: false,
-            minimizable: false
         });
     };
 
     /** @override */
     activateListeners(html) {
         super.activateListeners(html);
+
+        // Remove the app from `ui.windows` to not let it close with the escape key
+        delete ui.windows[this.appId];
 
         // Make sure the app is pinned properly once loaded
         if (game.settings.get(scsApp.ID, "pinned")) scsApp.pinApp();
@@ -130,8 +104,6 @@ export default class scsApp extends FormApplication {
             this._moveTime = now;
 
             // Follow the mouse.
-            // TODO: Figure out how to account for changes to the viewport size
-            // between drags.
             let conditionalOffset = 0;
             if (game.settings.get(scsApp.ID, "pinned")) {
                 conditionalOffset = 20;
@@ -357,7 +329,7 @@ export default class scsApp extends FormApplication {
         };
     };
 
-    /** Manage phase and round diplay
+    /** Manage phase and round display
      * @param {HTMLElement} html The apps html
     */
     static manageDisplay(html) {
@@ -485,7 +457,7 @@ export default class scsApp extends FormApplication {
                     });
                     d.render(true);
 
-                    // Resume counting time once the combat has no particpants
+                    // Resume counting time once the combat has no participants
                     Hooks.on("deleteCombatant", () => {
                         if (game.combat?.turns.length) {
                             scsApp.inCombat = false; // We aren't in combat
