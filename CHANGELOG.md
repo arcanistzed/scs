@@ -1,6 +1,10 @@
 # Changelog
 
-## 2.71 - 4 Sept 2021 - Window Closing
+## 2.7.2 - 6 Sept 2021
+
+Set z-index above control toolbar
+
+## 2.7.1 - 4 Sept 2021 - Window Closing
 
 * Fix window closing by removing app from `ui.windows`
 * Fix typos
