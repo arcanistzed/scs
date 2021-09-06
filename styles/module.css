@@ -61,6 +61,7 @@
   max-width: 200px;
   max-height: calc(46px * 3 + 3px + 2.5em);
   border: 1px solid #000;
+  z-index: 100!important;
 }
 
 /* Don't show any header */
