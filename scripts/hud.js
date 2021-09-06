@@ -57,7 +57,11 @@ export default class AttackHUD {
     /** The PIXI Objects in the HUD */
     HUD = {};
 
-    /** Create the HUD */
+    /**Create the HUD
+     * @param {String} tokenId - The ID of the {@link Token} to create an HUD for
+     * @param {*} placeable - The {@link PlaceableObject} for the token
+     * @memberof AttackHUD
+     */
     createHUD(tokenId, placeable) {
         // Create a new PIXI HUD for this token
         this.HUD[tokenId] = {};
