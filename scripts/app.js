@@ -127,10 +127,10 @@ export default class scsApp extends FormApplication {
                 event.clientY > playerAppUpperBound &&
                 event.clientY < playerAppLowerBound
             ) {
-                $("#scsApp").css("animation", "jiggle 0.2s infinite");
+                document.querySelector("#scsApp").style.animation = "jiggle 0.2s infinite";
                 pinZone = true;
             } else {
-                $("#scsApp").css("animation", "");
+                document.querySelector("#scsApp").style.animation = "";
                 pinZone = false;
             }
         };
@@ -155,7 +155,7 @@ export default class scsApp extends FormApplication {
                     top: window.innerHeight - myOffset,
                 });
             } else {
-                let windowPos = $("#scsApp").position();
+                let windowPos = document.querySelector("#scsApp").getBoundingClientRect();
                 let newPos = { top: windowPos.top, left: windowPos.left };
                 await game.settings.set(scsApp.ID, "position", newPos);
                 await game.settings.set(scsApp.ID, "pinned", false);
@@ -177,7 +177,7 @@ export default class scsApp extends FormApplication {
     /** Pin the app above the Players list **/
     static async pinApp() {
         // Only do this if a pin lock isn"t already in place.
-        if (!$("#pin-lock").length) {
+        if (!document.querySelectorAll("#scs-pin-lock").length) {
             const playerApp = document.getElementById("players");
             const playerAppPos = playerApp.getBoundingClientRect();
             let rowsHeight = 46 * Math.min(Math.ceil(scsApp.phases.count / 3), 3); // Height of all rows of phases
@@ -185,7 +185,7 @@ export default class scsApp extends FormApplication {
 
             // Dropping this into the DOM with an !important was the only way
             // I could get it to enable the locking behaviour.
-            $("body").append(`
+            document.body.append(`
         <style id="pin-lock">
           #scsApp {
             top: calc(100vh - ${myOffset}px) !important;
@@ -207,7 +207,7 @@ export default class scsApp extends FormApplication {
         };
 
         // Remove the style tag that's pinning the window.
-        $("#pin-lock").remove();
+        document.querySelector("#scs-pin-lock").remove();
     };
 
     /** Initialize phase names */
