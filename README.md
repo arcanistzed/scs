@@ -1,6 +1,6 @@
 # Simultaneous Combat System
 
-![Version](https://img.shields.io/github/v/tag/arcanistzed/scs?label=Version&style=flat-square&color=2577a1) ![Latest Release Download Count](https://img.shields.io/github/downloads/arcanistzed/scs/latest/module.zip?label=Downloads&style=flat-square&color=9b43a8) ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2Farcanistzed%2Fscs%2Fmain%2Fmodule.json&label=Foundry%20Core%20Compatible%20Version&query=$.compatibleCoreVersion&style=flat-square&color=ff6400)
+![Version](https://img.shields.io/github/v/tag/arcanistzed/scs?label=Version&style=flat-square&color=2577a1) ![Latest Release Download Count](https://img.shields.io/github/downloads/arcanistzed/scs/latest/module.zip?label=Downloads&style=flat-square&color=9b43a8) ![Supported Foundry Versions](https://img.shields.io/endpoint?url=https://foundryshields.com/version?url=https://raw.githubusercontent.com/arcanistzed/scs/main/module.json&style=flat-square&color=ff6400) [![Discord Server](https://img.shields.io/badge/-Discord-%232c2f33?style=flat-square&logo=discord)](https://discord.gg/AAkZWWqVav) [![Patreon](https://img.shields.io/badge/-Patreon-%23141518?style=flat-square&logo=patreon)](https://www.patreon.com/bePatron?u=15896855)
 
 A beautiful mostly system-agnostic and completely customizable implementation of a Simultaneous Combat System. See the [Reddit post](https://redd.it/p11h35) from the author.
 
@@ -24,7 +24,7 @@ Currently only dnd5e is supported with the default phases as described in the re
 
 ### Phase and Round display
 
-The module will display the current phase and round in an interactive and draggble app. You can use the arrows to change phase (`<` or `>`) and change round (`<<` or `>>`), or you can simply click on the phase you would like to switch to (not recommended if using phase/cycle limits).
+The module will display the current phase and round in an interactive and draggable app. You can use the arrows to change phase (`<` or `>`) and change round (`<<` or `>>`), or you can simply click on the phase you would like to switch to (not recommended if using phase/cycle limits).
 
 ### Integration with the Core Combat Tracker
 
@@ -42,7 +42,7 @@ The app moves outside of SmallTime's way
 
 #### [About Time](https://foundryvtt.com/packages/about-time)
 
-If using About Time's realtime clock, SCS will prompt you to pause for the duration of your combat encounter. Just add a combatant (by right clicking on it and clicking "Toggle Combat State" in the HUD) and it will percieve that as a combat that has started. Removing all combatants ends the combat.
+If using About Time's realtime clock, SCS will prompt you to pause for the duration of your combat encounter. Just add a combatant (by right clicking on it and clicking "Toggle Combat State" in the HUD) and it will perceive that as a combat that has started. Removing all combatants ends the combat.
 
 #### [Argon Combat HUD](https://foundryvtt.com/packages/enhancedcombathud)
 
@@ -68,7 +68,7 @@ SCS has a small API with a few methods that can be called by others. They are ac
 
 #### `defaultTracker(hide = true)`
 
-This will elegantly hide the default combat tracker from the sidebar. An optional Boolean paramter can be used to show the trackeragain, if hidden.
+This will elegantly hide the default combat tracker from the sidebar. An optional Boolean parameter can be used to show the tracker again, if hidden.
 
 #### `startTutorial()`
 
@@ -76,8 +76,8 @@ This will show the IntroJS tutorial tour once.
 
 #### `stopTutorial(close = false)`
 
-This will stop the tour from showing everytime the page is loaded unless the user re-enabled the tutorial from within the module settings.
-An optional Boolean paramter can be used to also immediately close the tutorial, but this defaults to `false`.
+This will stop the tour from showing every time the page is loaded unless the user re-enabled the tutorial from within the module settings.
+An optional Boolean parameter can be used to also immediately close the tutorial, but this defaults to `false`.
 
 #### `changeRound(delta)`
 
