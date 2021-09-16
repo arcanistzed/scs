@@ -109,7 +109,7 @@ export default class scsApp extends FormApplication {
                 conditionalOffset = 20;
             };
 
-            if (document.getElementById("pin-lock")) scsApp.unPinApp(this);
+            if (document.getElementById("scs-pin-lock")) scsApp.unPinApp(this);
 
             this.app.setPosition({
                 left: this.position.left + (event.clientX - this._initial.x),
@@ -183,16 +183,15 @@ export default class scsApp extends FormApplication {
             let rowsHeight = 46 * Math.min(Math.ceil(scsApp.phases.count / 3), 3); // Height of all rows of phases
             let myOffset = playerAppPos.height + scsApp.pinOffset + rowsHeight + 12;
 
-            // Dropping this into the DOM with an !important was the only way
-            // I could get it to enable the locking behaviour.
-            document.body.append(`
-        <style id="pin-lock">
-          #scsApp {
-            top: calc(100vh - ${myOffset}px) !important;
-            left: 15px !important;
-          }
-        </style>
-      `);
+            // Add the pin lock to the DOM
+            const pinLock = document.createElement("style");
+            pinLock.id = "scs-pin-lock";
+            pinLock.innerHTML = `#scsApp {
+                top: calc(100vh - ${myOffset}px)!important;
+                left: 15px!important;
+            }`;
+            document.body.append(pinLock);
+
             await game.settings.set(scsApp.ID, "pinned", true);
         }
     };
