@@ -49,8 +49,8 @@ export default class AttackHUD {
         });
 
         // Remove the previous HUD when the token changes sizes
-        Hooks.on("updateToken", (document, change) => {
-            if (change.width || change.height) this.HUD[document.id] = false;
+        Hooks.on("updateToken", (doc, change) => {
+            if (change.width || change.height) this.HUD[doc.id] = false;
         });
     };
 
