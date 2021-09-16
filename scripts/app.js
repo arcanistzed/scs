@@ -471,15 +471,12 @@ export default class scsApp extends FormApplication {
 
     /** Lock users to only certain actions depending on the phase */
     static actionLocking() {
-
         // Check if enabled
         if (game.settings.get(scsApp.ID, "actionLocking")) {
 
             if (!["dnd5e"].includes(game.system.id)) {
                 ui.notifications.notify("SCS | There is no action locking available for this system yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
             } else {
-                // Un-register existing wrappers
-                libWrapper.unregister_all("scs");
                 // Register wrapper for Item Roll for Action Locking
                 libWrapper.register(scsApp.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
 
