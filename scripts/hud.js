@@ -5,6 +5,8 @@ import scsApp from './app.js';
 export default class AttackHUD {
     constructor() {
         Hooks.on("createChatMessage", async doc => {
+            // Don't do anything if Better Rolls is enabled
+            if (game.modules.get("betterrolls5e")?.active) return;
             /** Whether or not this is an attack roll */
             let isAttack;
             switch (game.system.id) {
@@ -16,37 +18,13 @@ export default class AttackHUD {
                     isAttack = type === "attack-roll" || type === "spell-attack-roll";
             };
 
-            // Update HUD if this is an Attack roll, the feature is enabled, and it's the Attack phase
-            if (isAttack
-                && game.settings.get(scsApp.ID, "showAttackHUD")
-                && scsApp.phases.names[scsApp.currentPhase - 1] === "Attacks"
-            ) {
-                /** This token's ID */
-                const tokenId = doc.data.speaker.token;
-
-                /** This attack roll */
-                const roll = doc.roll.total;
-                console.log("SCS | Latest attack roll", roll);
-
-                // Get token placeables for this actor
-                canvas.tokens.placeables.filter(token => token.id === tokenId).forEach(placeable => {
-
-                    // If no PIXI HUD already exist for this token, create one
-                    if (!this.HUD[tokenId]) this.createHUD(tokenId, placeable);
-
-                    // Update text
-                    this.HUD[tokenId].text.text = roll;
-
-                    // When the phase changes, if it's no longer the attack phase, remove the HUD
-                    Hooks.on("scsPhaseChanged", currentPhase => {
-                        if (scsApp.phases.names[currentPhase - 1] !== "Attacks") {
-                            placeable.removeChild(this.HUD[tokenId].icon);
-                            this.HUD[tokenId] = false;
-                        };
-                    });
-                });
-            };
+            // Update HUD if this is an Attack roll
+            if (isAttack) this.updateHUD(doc.data.speaker.token, doc.roll.total);
         });
+
+        // Manage the HUD when Better Rolls is enabled
+        Hooks.on("messageBetterRolls", br => this.updateForBetterRolls(br));
+        Hooks.on("updateBetterRolls", br => this.updateForBetterRolls(br));
 
         // Remove the previous HUD when the token changes sizes
         Hooks.on("updateToken", (doc, change) => {
@@ -57,7 +35,7 @@ export default class AttackHUD {
     /** The PIXI Objects in the HUD */
     HUD = {};
 
-    /**Create the HUD
+    /** Create the HUD
      * @param {String} tokenId - The ID of the {@link Token} to create an HUD for
      * @param {*} placeable - The {@link PlaceableObject} for the token
      * @memberof AttackHUD
@@ -85,4 +63,54 @@ export default class AttackHUD {
         placeable.addChild(ICON);
         ICON.addChild(TEXT);
     };
+
+    /** Update the HUD for Better Rolls
+     * @param {CustomItemRoll} br - The Better Rolls Item Roll
+     * @memberof AttackHUD
+     */
+    updateForBetterRolls(br) {
+        // Get the attack roll if this is an attack
+        const attackRoll = (br.entries ?? []).find(entry => entry.rollType === "attack")?.entries.filter(entry => !entry.ignored).map(entry => entry.total)[0];
+
+        // Search for the token ID
+        const tokenId = br.tokenId?.replace(/Scene\.\w{16}\.Token\.(?=\w{16})/, "")
+            || game.messages.get(br.messageId)?.data.speaker.token
+            || canvas.tokens.controlled[0].id
+            || game.actors.get(br.actorId)?.getActiveTokens()[0];
+
+        // Update the HUD
+        this.updateHUD(tokenId, attackRoll);
+    };
+
+    /** Update the HUD
+     * @param {ID} tokenId - The {@link Token} ID
+     * @param {Number} roll - The Attack Roll total result
+     * @memberof AttackHUD
+     */
+    updateHUD(tokenId, roll) {
+        // Check if the feature is enabled, and if it's the Attack phase
+        if (game.settings.get(scsApp.ID, "showAttackHUD") && scsApp.phases.names[scsApp.currentPhase - 1] === "Attacks") {
+
+            /** Log this attack roll */
+            console.log("SCS | Latest attack roll", roll);
+
+            // Get token placeables for this actor
+            canvas.tokens.placeables.filter(token => token.id === tokenId).forEach(placeable => {
+
+                // If no PIXI HUD already exist for this token, create one
+                if (!this.HUD[tokenId]) this.createHUD(tokenId, placeable);
+
+                // Update text
+                this.HUD[tokenId].text.text = roll;
+
+                // When the phase changes, if it's no longer the attack phase, remove the HUD
+                Hooks.on("scsPhaseChanged", currentPhase => {
+                    if (scsApp.phases.names[currentPhase - 1] !== "Attacks") {
+                        placeable.removeChild(this.HUD[tokenId].icon);
+                        this.HUD[tokenId] = false;
+                    };
+                });
+            });
+        };
+    }
 };
