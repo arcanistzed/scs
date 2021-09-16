@@ -38,7 +38,7 @@ In order to ease determining the attack order (for example, in the default attac
 
 #### [SmallTime](https://foundryvtt.com/packages/smalltime)
 
-The app moves outside of SmallTime's way
+The app moves outside of SmallTime's way and locks into place right above it.
 
 #### [About Time](https://foundryvtt.com/packages/about-time)
 
@@ -47,6 +47,18 @@ If using About Time's realtime clock, SCS will prompt you to pause for the durat
 #### [Argon Combat HUD](https://foundryvtt.com/packages/enhancedcombathud)
 
 This module hides Argon's "End Turn" button.
+
+#### [Better Rolls 5e](https://foundryvtt.com/packages/betterrolls5e)
+
+The HUD parses and handles Better Rolls' chat messages to allow it to display attack rolls made with the module.
+Please note that SCS may have difficulty determining the correct token to add the HUD to if you use Better Rolls to roll for linked tokens. To get the right result, you can select the token before rolling for attack. If that doesn't work, make sure you only have one token from that Actor on the map.
+
+If you are using Action Locking, you will get this warning from libWrapper which is safe to ignore:
+
+```txt
+libWrapper: Potential conflict detected between module 'scs' and module 'betterrolls5e'.
+Module 'scs' did not chain the wrapper for 'CONFIG.Item.documentClass.prototype.roll'.
+```
 
 ### Change Colors
 

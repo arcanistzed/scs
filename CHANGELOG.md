@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.0 - 16 Sept 2021 - Module Compatibility
+
+* The HUD is now compatible with the [Better Rolls 5e](https://foundryvtt.com/packages/betterrolls5e) module (Fixes #5)
+* Improved compatibility with [SmallTime](https://foundryvtt.com/packages/smalltime), to allow them to both position correctly together
+* Some code cleanup and now there's no more jQuery!
+
 ## 2.7.2 - 6 Sept 2021
 
 Set z-index above control toolbar
