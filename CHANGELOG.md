@@ -2,7 +2,7 @@
 
 ## 2.8.0 - 16 Sept 2021 - Module Compatibility
 
-* The HUD is now compatible with the [Better Rolls 5e](https://foundryvtt.com/packages/betterrolls5e) module (Fixes #5)
+* The HUD is now compatible with the [Better Rolls 5e](https://foundryvtt.com/packages/betterrolls5e) module (Fixes #5). See the README for details.
 * Improved compatibility with [SmallTime](https://foundryvtt.com/packages/smalltime), to allow them to both position correctly together
 * Some code cleanup and now there's no more jQuery!
 
