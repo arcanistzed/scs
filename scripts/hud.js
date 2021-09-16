@@ -4,15 +4,15 @@ import scsApp from './app.js';
 /** Action Tracker */
 export default class AttackHUD {
     constructor() {
-        Hooks.on("createChatMessage", async app => {
+        Hooks.on("createChatMessage", async document => {
             /** Whether or not this is an attack roll */
             let isAttack;
             switch (game.system.id) {
                 case "dnd5e":
-                    isAttack = await game.messages.get(app.id).getFlag("dnd5e", "roll")?.type === "attack";
+                    isAttack = await game.messages.get(document.id).getFlag("dnd5e", "roll")?.type === "attack";
                     break;
                 case "pf2e":
-                    const type = await game.messages.get(app.id).getFlag("pf2e", "context")?.type
+                    const type = await game.messages.get(document.id).getFlag("pf2e", "context")?.type
                     isAttack = type === "attack-roll" || type === "spell-attack-roll";
             };
 
@@ -22,10 +22,10 @@ export default class AttackHUD {
                 && scsApp.phases.names[scsApp.currentPhase - 1] === "Attacks"
             ) {
                 /** This token's ID */
-                const tokenId = app.data.speaker.token;
+                const tokenId = document.data.speaker.token;
 
                 /** This attack roll */
-                const roll = app.roll.total;
+                const roll = document.roll.total;
                 console.log("SCS | Latest attack roll", roll);
 
                 // Get token placeables for this actor
