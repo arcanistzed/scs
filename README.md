@@ -134,3 +134,10 @@ Please note that the `Phases` must be short enough to fit their boxes, so you sh
 ## Contact me
 
 Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=Simultaneous%20Combat%20System%20module).
+
+## TODO
+
+- Update package listing description
+- libRuler Integration for movement phase deferring
+- Integrate with Combat Tracker Groups and use Combat Tracker (don't hide by default)
+- Add option to only show the App if there is an active combat
