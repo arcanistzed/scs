@@ -19,8 +19,9 @@ export default class scsApp extends FormApplication {
      * An object containing the current phase names and colors
      */
     static phases = {
-        "names": [],
-        "colors": []
+        names: [],
+        colors: [],
+        count: undefined,
     };
 
     /** The current phase */
