@@ -162,9 +162,7 @@ export default function registerSettings() {
         onChange: () => {
             // Don't cause a reload loop for the GM
             if (!game.user.isGM) {
-                // After a small wait, update the players' colors as well
-                ui.notifications.notify("SCS | The page will reload shortly as your GM has begun regenerating the colors.")
-                setTimeout(() => new GenerateColors().render(true), 10000);
+                location.reload();
             };
         }
     });
@@ -185,7 +183,7 @@ export default function registerSettings() {
         config: true,
         type: String,
         default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
-        onChange: async () => {
+        onChange: async value => {
             // Reset the current phase and the colors
             scsApp.currentPhase = 1;
             scsApp.phases.colors = [];

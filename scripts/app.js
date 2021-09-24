@@ -82,7 +82,11 @@ export default class scsApp extends FormApplication {
         const drag = new Draggable(this, html, document.querySelector("#scsApp #currentRound"), false);
 
         // Application startup
-        scsApp.generateColors();
+        if (game.user.isGM) {
+            scsApp.generateColors();
+        } else {
+            scsApp.phases.colors = game.settings.get(scsApp.ID, "colors");
+        };
         scsApp.addPhases();
         scsApp.hideFromPlayers();
         scsApp.manageDisplay(html);
@@ -292,8 +296,8 @@ export default class scsApp extends FormApplication {
             scsApp.phases.colors.push([hueTop, hueBottom]);
         });
 
-        // Update settings for storage if GM
-        if (game.user.isGM) game.settings.set(scsApp.ID, "colors", scsApp.phases.colors);
+        // Update settings for storage
+        game.settings.set(scsApp.ID, "colors", scsApp.phases.colors);
     };
 
     /** Adds the phases to the Application */
