@@ -95,6 +95,9 @@ export default class api {
             }
         };
 
+        // End combat if round is zero
+        if (scsApp.currentRound === 0) game.combat?.endCombat();
+
         // Update app to display new values
         scsApp.updateApp();
 
