@@ -12,7 +12,7 @@ export default class api {
         const combatTab = document.querySelector("[data-tab='combat']");
         hide ? combatTab.style.display = "none" : combatTab.style.display = "block";
 
-        // Adjust alignement to compensate for the missing tab
+        // Adjust alignment to compensate for the missing tab
         document.querySelector("#sidebar-tabs").style.justifyContent = "space-between";
         Hooks.on("collapseSidebar", (_sidebar, collapsed) => {
             if (collapsed) document.querySelector("#sidebar").style.height = "auto";
@@ -154,7 +154,7 @@ export default class api {
             };
         };
 
-        // Correct phase if it excedes new limit
+        // Correct phase if it exceeds new limit
         if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
 
         // Update app to display new values
