@@ -183,7 +183,7 @@ export default function registerSettings() {
         config: true,
         type: String,
         default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
-        onChange: async value => {
+        onChange: async () => {
             // Reset the current phase and the colors
             scsApp.currentPhase = 1;
             scsApp.phases.colors = [];
@@ -193,10 +193,10 @@ export default function registerSettings() {
                 // Reset the current phase and the colors
                 game.settings.set(scsApp.ID, "currentPhase", 1);
                 game.settings.set(scsApp.ID, "colors", []);
-
-                // Reload the page
-                location.reload();
             };
+
+            // Reload the page
+            location.reload();
         }
     });
 };
