@@ -482,7 +482,7 @@ export default class scsApp extends FormApplication {
                     let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
                     // Don't change anything if this is not a known phase and notify user
                     if (!["Move", "Attacks", "Magic"].includes(thisPhase)) {
-                        ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
+                        if (game.user.isGM) ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
                         return wrapped(...args);
                     };
 
