@@ -28,7 +28,9 @@ The module will display the current phase and round in an interactive and dragga
 
 ### Integration with the Core Combat Tracker
 
-While this module hides the Combat Tracker by default, it updates it in the background whenever the round is switched to allow for better compatibility. There is also a setting to show the default Combat Tracker.
+While this module hides the Combat Tracker by default, it updates it in the background whenever the round is switched to allow for better compatibility.
+SCS prompts to end combat whenever the round is equal to zero and will start a new combat once the round is changed above that.
+There is also a setting to show the default Combat Tracker.
 
 ### Attack Roll HUD
 
@@ -40,9 +42,9 @@ In order to ease determining the attack order (for example, in the default attac
 
 The app moves outside of SmallTime's way and locks into place right above it.
 
-#### [About Time](https://foundryvtt.com/packages/about-time)
+#### [Simple Calendar](https://foundryvtt.com/packages/foundryvtt-simple-calendar) and [About Time](https://foundryvtt.com/packages/about-time)
 
-If using About Time's realtime clock, SCS will prompt you to pause for the duration of your combat encounter. Just add a combatant (by right clicking on it and clicking "Toggle Combat State" in the HUD) and it will perceive that as a combat that has started. Removing all combatants ends the combat.
+Works alongside the realtime clock by manipulating the Combat Tracker in the background, therefore the clock will be paused when the round is not zero and the game time will be changed when the round is changed.
 
 #### [Argon Combat HUD](https://foundryvtt.com/packages/enhancedcombathud)
 

@@ -84,6 +84,7 @@ export default class scsApp extends FormApplication {
 
         // Application startup
         if (game.user.isGM) {
+            scsApp.combatManager();
             scsApp.generateColors();
         } else {
             scsApp.phases.colors = game.settings.get(scsApp.ID, "colors");
@@ -91,7 +92,6 @@ export default class scsApp extends FormApplication {
         scsApp.addPhases();
         scsApp.hideFromPlayers();
         scsApp.manageDisplay(html);
-        if (game.user.isGM) scsApp.aboutTimeClock();
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
         let pinZone = false;
@@ -415,62 +415,25 @@ export default class scsApp extends FormApplication {
         setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
     };
 
-    /** Manage about time realtime clock */
-    static aboutTimeClock() {
+    /** Manage combat */
+    static combatManager() {
+        // Start a combat as soon as a Combatant is created
+        Hooks.on("createCombatant", () => {
+            if (game.combat) {
+                // If a combat exists, start it
+                game.combat.startCombat()
+            } else {
+                // Other wise, create a new one
+                const combat = Combat.implementation.create({ scene: game.scenes.active.id })
+                combat?.activate({ render: false });
+                ui.combat.initialize({ combat });
+            };
+        });
 
-        // Integration with About Time
-        if (game.modules.get("about-time")?.active) {
-
-            // If a combatant is being added, there must be a combat
-            Hooks.on("createCombatant", () => {
-
-                // Check that the user wants to use this feature, that the clock is running, and that we aren't already in another combat
-                if (
-                    game.settings.get(scsApp.ID, "stopRealtime")
-                    && game.Gametime.isRunning()
-                    && scsApp.inCombat === false
-                ) {
-
-                    scsApp.inCombat = true; // Now we are in a combat
-                    let clockStopped = false;
-
-                    // Prompt for what to do
-                    let d = new Dialog({
-                        title: "SCS | Pause About Time?",
-                        content: "<p>You have started a combat and have About Time enabled, would you like to pause tracking time in realtime for the duration?</p>",
-                        buttons: {
-                            yes: {
-                                icon: "<i class='fas fa-check'></i>",
-                                label: "Yes",
-                                callback: () => {
-                                    game.Gametime.stopRunning(); // Stop time
-                                    clockStopped = true; // So that we can restart it
-                                }
-                            },
-                            no: {
-                                icon: "<i class='fas fa-times'></i>",
-                                label: "No"
-                            },
-                            never: {
-                                icon: "<i class='fas fa-skull'></i>",
-                                label: "Never",
-                                callback: () => game.settings.set(scsApp.ID, "stopRealtime", false) // This Dialog won't appear anymore
-                            }
-                        },
-                        default: "yes",
-                    });
-                    d.render(true);
-
-                    // Resume counting time once the combat has no participants
-                    Hooks.on("deleteCombatant", () => {
-                        if (game.combat?.turns.length) {
-                            scsApp.inCombat = false; // We aren't in combat
-                            if (clockStopped) game.Gametime.startRunning(); // Restart the clock
-                        };
-                    });
-                };
-            });
-        };
+        // End the combat when all of the Combatants have been removed
+        Hooks.on("deleteCombatant", () => {
+            if (game.combat?.turns.length === 0) game.combat.endCombat();
+        });
     };
 
     /** Lock users to only certain actions depending on the phase */
