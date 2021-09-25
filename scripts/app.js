@@ -418,14 +418,16 @@ export default class scsApp extends FormApplication {
     /** Manage combat */
     static combatManager() {
         // Start a combat as soon as a Combatant is created
-        Hooks.on("createCombatant", () => {
+        Hooks.on("createCombatant", async () => {
             if (game.combat) {
                 // If a combat exists, start it
                 game.combat.startCombat()
             } else {
                 // Other wise, create a new one
-                const combat = Combat.implementation.create({ scene: game.scenes.active.id })
-                combat?.activate({ render: false });
+                const combat = await Combat.implementation.create({
+                    scene: game.scenes.active?.id
+                });
+                await combat?.activate({ render: false });
                 ui.combat.initialize({ combat });
             };
         });
