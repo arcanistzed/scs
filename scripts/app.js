@@ -416,7 +416,7 @@ export default class scsApp extends FormApplication {
     };
 
     /** Manage combat */
-    static combatManager() {
+    static async combatManager() {
         // Start a combat as soon as a Combatant is created
         Hooks.on("createCombatant", async () => {
             if (game.combat) {
