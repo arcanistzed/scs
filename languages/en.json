@@ -23,7 +23,7 @@
       },
       "phaseNames": {
         "Name": "Phase Names",
-        "Hint": "A comma-seperated list of phase names (reloads page)",
+        "Hint": "A comma-separated list of phase names (reloads page)",
         "defaults": [
           "Move",
           "Attacks",
