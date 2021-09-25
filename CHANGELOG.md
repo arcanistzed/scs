@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.9.0 - 24 Sept 2021
+
+* *Action Locking:* the notification for an unrecognized phase is now GM-only
+* *Combat Management:*
+  * Added a prompt to end the current combat when the round becomes zero
+  * Create a new Combat whenever the round becomes greater than zero
+* *Color Generation:* player clients no longer reload after a delay
+* Now always reloads the page after the phase names are changed in order to keep clients in sync
+* Use v9 CSS variables for styling
+
 ## 2.8.0 - 16 Sept 2021 - Module Compatibility
 
 * The HUD is now compatible with the [Better Rolls 5e](https://foundryvtt.com/packages/betterrolls5e) module (Fixes #5). See the README for details.
