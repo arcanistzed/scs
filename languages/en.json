@@ -1,6 +1,10 @@
 {
   "scs": {
     "settings": {
+      "hideNoCombat": {
+        "Name": "Hide if no Combat",
+        "Hint": "Hide the SCS App if there is no Combat active"
+      },
       "showTracker": {
         "Name": "Show Tracker",
         "Hint": "Enable this to display the default combat tracker"
@@ -37,7 +41,7 @@
       },
       "alternateActive": {
         "Name": "Alternate Appearance",
-        "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker."
+        "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker"
       },
       "actionLocking": {
         "Name": "Action Locking",
@@ -45,7 +49,7 @@
       },
       "showAttackHUD": {
         "Name": "Show Attack Roll HUD",
-        "Hint": "Displays the last attack roll in the token's HUD for aiding in determining attack order."
+        "Hint": "Displays the last attack roll in the token's HUD for aiding in determining attack order"
       }
     },
     "tutorial": {

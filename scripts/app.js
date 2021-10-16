@@ -84,7 +84,6 @@ export default class scsApp extends FormApplication {
 
         // Application startup
         if (game.user.isGM) {
-            scsApp.combatManager();
             scsApp.generateColors();
         } else {
             scsApp.phases.colors = game.settings.get(scsApp.ID, "colors");
@@ -92,6 +91,8 @@ export default class scsApp extends FormApplication {
         scsApp.addPhases();
         scsApp.hideFromPlayers();
         scsApp.manageDisplay(html);
+        scsApp.combatManager();
+        api.changeVisibility(!!game.combat);
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
         let pinZone = false;
@@ -407,7 +408,7 @@ export default class scsApp extends FormApplication {
             } else if (scrollTarget.offsetTop < scrollTarget.parentNode.scrollTop) {
                 scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
             };
-        }
+        };
         // Update the Round number
         document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
 
@@ -421,20 +422,48 @@ export default class scsApp extends FormApplication {
         Hooks.on("createCombatant", async () => {
             if (game.combat) {
                 // If a combat exists, start it
-                game.combat.startCombat()
-            } else {
-                // Other wise, create a new one
+                game.combat.startCombat();
+            } else if (game.user.isGM) {
+                // Other wise, create a new one if GM
                 const combat = await Combat.implementation.create({
                     scene: game.scenes.active?.id
                 });
                 await combat?.activate({ render: false });
                 ui.combat.initialize({ combat });
             };
+
+            // If enabled, make the App visible
+            if (game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(true);
         });
 
-        // End the combat when all of the Combatants have been removed
         Hooks.on("deleteCombatant", () => {
-            if (game.combat?.turns.length === 0) game.combat.endCombat();
+            // FIXME Don't use `setTimeout` or `debounce` because race conditions
+            setTimeout(() => {
+                // When all of the Combatants have been removed
+                if (game.combat?.turns.length === 0) {
+                    // End the combat
+                    debounce(() => game.combat.endCombat(), 100);
+
+                    // If enabled, hide the App
+                    if (game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(false);
+                };
+            }, 10);
+        });
+
+        // If enabled, make the App visible when a combat is created
+        Hooks.on("createCombat", () => {
+            if (game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(true);
+        });
+
+        // If enabled, hide the App when all of the combats have been deleted
+        Hooks.on("deleteCombat", () => {
+            if (!game.combat && game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(false);
+        });
+
+        // Update SCS round whenever the Core round changes
+        Hooks.on("updateCombat", (document, change) => {
+            scsApp.pullValues();
+            scsApp.updateApp();
         });
     };
 

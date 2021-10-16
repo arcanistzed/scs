@@ -29,8 +29,13 @@ The module will display the current phase and round in an interactive and dragga
 ### Integration with the Core Combat Tracker
 
 While this module hides the Combat Tracker by default, it updates it in the background whenever the round is switched to allow for better compatibility.
-SCS prompts to end combat whenever the round is equal to zero and will start a new combat once the round is changed above that.
+SCS prompts to end combat whenever the round is equal to zero and will start a new combat once the round is changed above that. The module will end the combat when all the combatants are removed.
 There is also a setting to show the default Combat Tracker.
+
+### Hides itself when there is no Combat
+
+When enabled, once the combat has ended or all of the combatants have been removed, the app will hide itself. It will show itself again when a new combat is created.
+You can use this feature without the default Combat Tracker by simply adding and removing combatants in the Token HUD when combat is beginning or is over.
 
 ### Attack Roll HUD
 
@@ -79,6 +84,10 @@ This setting will put a limit on how many cycles can take place before switching
 ### Methods
 
 SCS has a small API with a few methods that can be called by others. They are accessible under `game.modules.get("scs")?.api`.
+
+#### `changeVisibility(state)`
+
+This will change the visibility of the SCS Application. You cen either set `state` to `true` to display the App or to `false` to hide it.
 
 #### `defaultTracker(hide = true)`
 

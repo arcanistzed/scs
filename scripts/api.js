@@ -6,7 +6,18 @@ import scsApp from './app.js'
  */
 export default class api {
 
-    /** Adjust default combat tracker */
+    /** Change the visibility of the App
+     * @param {Boolean} state - Whether the App should be visible or not
+     */
+    static changeVisibility(state) {
+        const app = document.querySelector("#scsApp");
+        const states = ["", "none"];
+        app.style.display = state ? states[0] : states[1];
+    };
+
+    /** Adjust visibility of default combat tracker
+     * @param {Boolean} [hide=true] Whether to hide the tracker or not
+     */
     static defaultTracker(hide = true) {
         // Hide or show combat tab
         const combatTab = document.querySelector("[data-tab='combat']");

@@ -73,11 +73,14 @@ export default function registerSettings() {
         },
     });
 
-    game.settings.register(scsApp.ID, "stopRealtime", {
+    game.settings.register(scsApp.ID, "hideNoCombat", {
+        name: game.i18n.localize("scs.settings.hideNoCombat.Name"),
+        hint: game.i18n.localize("scs.settings.hideNoCombat.Hint"),
         scope: "world",
-        config: false,
+        config: true,
         type: Boolean,
-        default: true,
+        default: false,
+        onChange: () => api.changeVisibility(!!game.combat),
     });
 
     game.settings.register(scsApp.ID, "showTracker", {
