@@ -107,7 +107,23 @@ export default class api {
         };
 
         // End combat if round is zero
-        if (scsApp.currentRound === 0) game.combat?.endCombat();
+            if (scsApp.currentRound === 0) {
+                game.combat?.endCombat();
+            }
+            // Start combat if round is not zero
+            else {
+                // If there is an existing combat, start it
+                if (game.combat) {
+                    game.combat?.startCombat();
+                } else {
+                    // Otherwise, create a new one
+                    const combat = await Combat.implementation.create({
+                        scene: canvas.scene?.id
+                    });
+                    await combat?.activate({ render: false });
+                    ui.combat.initialize({ combat });
+                };
+            };
 
         // Update app to display new values
         scsApp.updateApp();
