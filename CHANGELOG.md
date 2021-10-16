@@ -1,5 +1,14 @@
 # Changelog
 
+## unreleased
+
+* Hide App when there is no Combat encounter
+* Bug fixes and improvements
+* Create a new combat if one doesn't exist if the round isn't zero
+* Only allow GM users to change the phase or round with the API
+* Code Quality improvements
+* End combat when all of the combatants have been removed
+
 ## 2.9.0 - 24 Sept 2021
 
 * *Action Locking:* the notification for an unrecognized phase is now GM-only
