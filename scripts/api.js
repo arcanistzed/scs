@@ -78,35 +78,36 @@ export default class api {
      * Use a positive number to move the round forward and a negative number to go to previous rounds.
     */
     static async changeRound(delta) {
+        if (game.user.isGM) {
+            // Pull current values
+            scsApp.pullValues();
 
-        // Pull current values
-        scsApp.pullValues();
+            // Get previous round
+            const previousRound = scsApp.currentRound;
 
-        // Get previous round
-        const previousRound = scsApp.currentRound;
+            // If going forwards, reset to phase 1; if going back, reset to max phase
+            scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
 
-        // If going forwards, reset to phase 1; if going back, reset to max phase
-        scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
+            // If more than or equal to zero + the delta, change round by delta; else, notify user
+            if (scsApp.currentRound + delta >= 0) {
+                scsApp.currentRound += delta;
+            } else {
+                scsApp.currentPhase = 1;
+                ui.notifications.error("SCS | You cannot bring the current round below zero.");
+            };
 
-        // If more than or equal to zero + the delta, change round by delta; else, notify user
-        if (scsApp.currentRound + delta >= 0) { scsApp.currentRound += delta }
-        else {
-            scsApp.currentPhase = 1;
-            ui.notifications.error("SCS | You cannot bring the current round below zero.");
-        };
+            // While delta is not zero, adjust Core round
+            while (delta !== 0) {
+                if (delta > 0) { // If positive, go to next round and bring delta towards zero
+                    await game.combat?.nextRound();
+                    delta--;
+                } else { // If negative, go to previous round and bring delta towards zero
+                    await game.combat?.previousRound();
+                    delta++;
+                }
+            };
 
-        // While delta is not zero, adjust Core round
-        while (delta !== 0) {
-            if (delta > 0) { // If positive, go to next round and bring delta towards zero
-                await game.combat?.nextRound();
-                delta--;
-            } else { // If negative, go to previous round and bring delta towards zero
-                await game.combat?.previousRound();
-                delta++;
-            }
-        };
-
-        // End combat if round is zero
+            // End combat if round is zero
             if (scsApp.currentRound === 0) {
                 game.combat?.endCombat();
             }
@@ -125,11 +126,12 @@ export default class api {
                 };
             };
 
-        // Update app to display new values
-        scsApp.updateApp();
+            // Update app to display new values
+            scsApp.updateApp();
 
-        // Fire a hook
-        Hooks.call("scsRoundChanged", scsApp.currentRound, previousRound, delta);
+            // Fire a hook
+            Hooks.call("scsRoundChanged", scsApp.currentRound, previousRound, delta);
+        };
     };
 
     /** Change SCS phase
@@ -137,58 +139,59 @@ export default class api {
      * Use a positive number to move the phase forward and a negative number to go to previous phases.
     */
     static async changePhase(delta) {
+        if (game.user.isGM) {
+            // Pull current values
+            scsApp.pullValues();
 
-        // Pull current values
-        scsApp.pullValues();
-
-        // If the phase would change to an invalid value, alert and exit
-        if (scsApp.currentPhase + delta < 0 || scsApp.currentPhase + delta > scsApp.phases.count + 1) {
-            console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds. Current phase: "${scsApp.currentPhase}".`);
-            return;
-        };
-
-        // Get previous phase
-        const previousPhase = scsApp.currentPhase;
-
-        // Change phase by delta
-        scsApp.currentPhase += delta;
-
-        // Loop phases if limit cycles is enabled
-        if (game.settings.get(scsApp.ID, "limitCycles")) {
-            // Increment cycle if at the end of all phases
-            if (scsApp.currentPhase === scsApp.phases.count + 1) scsApp.currentCycle += 1;
-
-            // If the maximum amount of cycles is reached, loop and reset cycles
-            if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
-                api.changeRound(1);
-                scsApp.currentCycle = 1;
+            // If the phase would change to an invalid value, alert and exit
+            if (scsApp.currentPhase + delta < 0 || scsApp.currentPhase + delta > scsApp.phases.count + 1) {
+                console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds. Current phase: "${scsApp.currentPhase}".`);
+                return;
             };
-        };
 
-        // Change rounds if limit phases is enabled
-        if (game.settings.get(scsApp.ID, "limitPhases")) {
-            if (scsApp.currentPhase === scsApp.phases.count + 1) {
-                api.changeRound(1);
-            } else if (scsApp.currentPhase === 0) {
-                api.changeRound(-1);
+            // Get previous phase
+            const previousPhase = scsApp.currentPhase;
+
+            // Change phase by delta
+            scsApp.currentPhase += delta;
+
+            // Loop phases if limit cycles is enabled
+            if (game.settings.get(scsApp.ID, "limitCycles")) {
+                // Increment cycle if at the end of all phases
+                if (scsApp.currentPhase === scsApp.phases.count + 1) scsApp.currentCycle += 1;
+
+                // If the maximum amount of cycles is reached, loop and reset cycles
+                if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
+                    api.changeRound(1);
+                    scsApp.currentCycle = 1;
+                };
             };
-        } else {
-            // Loop over phases
-            if (scsApp.currentPhase === scsApp.phases.count + 1) {
-                scsApp.currentPhase = 1;
-            } else if (scsApp.currentPhase === 0) {
-                scsApp.currentPhase = scsApp.phases.count;
+
+            // Change rounds if limit phases is enabled
+            if (game.settings.get(scsApp.ID, "limitPhases")) {
+                if (scsApp.currentPhase === scsApp.phases.count + 1) {
+                    api.changeRound(1);
+                } else if (scsApp.currentPhase === 0) {
+                    api.changeRound(-1);
+                };
+            } else {
+                // Loop over phases
+                if (scsApp.currentPhase === scsApp.phases.count + 1) {
+                    scsApp.currentPhase = 1;
+                } else if (scsApp.currentPhase === 0) {
+                    scsApp.currentPhase = scsApp.phases.count;
+                };
             };
+
+            // Correct phase if it exceeds new limit
+            if (scsApp.currentPhase > scsApp.phases.count) scsApp.currentPhase = scsApp.phases.count;
+
+            // Update app to display new values
+            scsApp.updateApp();
+
+            // Fire a hook
+            Hooks.call("scsPhaseChanged", scsApp.currentPhase, previousPhase, delta);
         };
-
-        // Correct phase if it exceeds new limit
-        if (scsApp.currentPhase > scsApp.phases.count) { scsApp.currentPhase = scsApp.phases.count }
-
-        // Update app to display new values
-        scsApp.updateApp();
-
-        // Fire a hook
-        Hooks.call("scsPhaseChanged", scsApp.currentPhase, previousPhase, delta);
     };
 };
 
