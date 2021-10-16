@@ -92,7 +92,7 @@ export default class scsApp extends FormApplication {
         scsApp.hideFromPlayers();
         scsApp.manageDisplay(html);
         scsApp.combatManager();
-        api.changeVisibility(!!game.combat);
+        api.changeVisibility(!!game.combat || !game.settings.get(scsApp.ID, "hideNoCombat"));
 
         // Pin zone is the "jiggle area" in which the app will be locked to a pinned position if dropped. pinZone stores whether or not we're currently in that area.
         let pinZone = false;
@@ -436,18 +436,27 @@ export default class scsApp extends FormApplication {
             if (game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(true);
         });
 
-        Hooks.on("deleteCombatant", () => {
-            // FIXME Don't use `setTimeout` or `debounce` because race conditions
+        Hooks.on("deleteCombatant", combatant => {
+            const combat = combatant.parent;
+
+            // Initialize and reset this pseudo-flag
+            if (!game.combat.data.flags.hasOwnProperty("scs")) game.combat.data.flags.scs = {};
+            combat.data.flags.scs.deleting = undefined;
+
+            // Wait for after this Hook has been fired
             setTimeout(() => {
-                // When all of the Combatants have been removed
-                if (game.combat?.turns.length === 0) {
+                // If all of the Combatants have been removed, this combat is being deleted for the first time, and this is the GM
+                if (combat?.turns.length === 0 && !combat.data.flags.scs.deleting && game.user.isGM) {
+                    // Mark this combat as in deletion
+                    combat.data.flags.scs.deleting = true;
+
                     // End the combat
-                    debounce(() => game.combat.endCombat(), 100);
+                    combat.endCombat();
 
                     // If enabled, hide the App
                     if (game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(false);
                 };
-            }, 10);
+            }, 0);
         });
 
         // If enabled, make the App visible when a combat is created
@@ -461,7 +470,7 @@ export default class scsApp extends FormApplication {
         });
 
         // Update SCS round whenever the Core round changes
-        Hooks.on("updateCombat", (document, change) => {
+        Hooks.on("updateCombat", () => {
             scsApp.pullValues();
             scsApp.updateApp();
         });

@@ -79,7 +79,7 @@ export default function registerSettings() {
         scope: "world",
         config: true,
         type: Boolean,
-        default: false,
+        default: true,
         onChange: () => api.changeVisibility(!!game.combat),
     });
 

@@ -51,8 +51,8 @@ export default class AttackHUD {
         // Adjust icon dimensions and position
         ICON.height = 48;
         ICON.width = 48;
-        ICON.y = game.scenes.active.tokens.get(tokenId).object.height / 1.5;
-        ICON.x = game.scenes.active.tokens.get(tokenId).object.width / 2 - 36;
+        ICON.y = canvas.scene.tokens.get(tokenId).object.height / 1.5;
+        ICON.x = canvas.scene.tokens.get(tokenId).object.width / 2 - 36;
 
         // Adjust text resolution and position
         TEXT.resolution = 10;
