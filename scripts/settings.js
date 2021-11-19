@@ -185,7 +185,11 @@ export default function registerSettings() {
         scope: "world",
         config: true,
         type: String,
-        default: (() => game.i18n.localize("scs.settings.phaseNames.defaults").join(", "))(),
+        default: (() => [
+            game.i18n.localize("scs.settings.phaseNames.defaults.0"),
+            game.i18n.localize("scs.settings.phaseNames.defaults.1"),
+            game.i18n.localize("scs.settings.phaseNames.defaults.2")
+        ].join(", "))(),
         onChange: async () => {
             // Reset the current phase and the colors
             scsApp.currentPhase = 1;

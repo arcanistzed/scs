@@ -28,11 +28,11 @@
       "phaseNames": {
         "Name": "Phase Names",
         "Hint": "A comma-separated list of phase names (reloads page)",
-        "defaults": [
-          "Move",
-          "Attacks",
-          "Magic"
-        ]
+        "defaults": {
+          "0": "Move",
+          "1": "Attacks",
+          "2": "Magic"
+        }
       },
       "generateColors": {
         "Name": "Change Colors",
