@@ -17,10 +17,10 @@
     }
   ],
   "esmodules": [
-    "/scripts/scs.js"
+    "scripts/scs.js"
   ],
   "styles": [
-    "/styles/module.css"
+    "styles/module.css"
   ],
   "languages": [
     {
