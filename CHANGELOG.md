@@ -1,13 +1,19 @@
 # Changelog
 
-## unreleased
+## 2.10.0 - 19 Nov 2021
+
+### Added
 
 * Hide App when there is no Combat encounter
-* Bug fixes and improvements
+* End combat when all of the combatants have been removed
+
+### Fixed
+
 * Create a new combat if one doesn't exist if the round isn't zero
 * Only allow GM users to change the phase or round with the API
+* Bug fixes and improvements
 * Code Quality improvements
-* End combat when all of the combatants have been removed
+* Fixed default settings in v9d2 which were messed up now that arrays can't be localized
 
 ## 2.9.0 - 24 Sept 2021
 
