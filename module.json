@@ -84,12 +84,6 @@
     "combat",
     "system"
   ],
-  "dependencies": [
-    {
-      "name": "_introjs",
-      "type": "module"
-    }
-  ],
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",

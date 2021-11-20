@@ -1,5 +1,9 @@
 # Changelog
 
+## unreleased
+
+* IntroJS is now a soft dependency which you only need to install for the tutorial
+
 ## 2.10.0 - 19 Nov 2021
 
 ### Added

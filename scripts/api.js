@@ -32,6 +32,7 @@ export default class api {
 
     /** Start IntroJS tutorial tour */
     static startTutorial() {
+        if (game.modules.get("_introjs")?.active) {
         introJs().setOptions({
             steps: [{
                 title: game.i18n.localize("scs.tutorial.welcome.Title"),
@@ -63,14 +64,21 @@ export default class api {
 
         // Stop tutorial when it's clicked
         stopButton.addEventListener("click", api.stopTutorial(false));
+        } else {
+            ui.notifications.warn("You must install and enable the IntroJS library before you can start the SCS tutorial");
+        };
     };
 
     /** Stop showing IntroJS tutorial
      * @param {Boolean} close - Whether the tutorial should also immediately close (defaults to `false`)
     */
     static stopTutorial(close = false) {
-        game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
-        if (close) document.querySelector(".introjs-skipbutton").click(); // Close tutorial if wanted
+        if (game.modules.get("_introjs")?.active) {
+            game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
+            if (close) document.querySelector(".introjs-skipbutton").click(); // Close tutorial if wanted
+        } else {
+            ui.notifications.warn("You must install and enable the IntroJS library before you can stop the SCS tutorial");
+        };
     };
 
     /** Change SCS round. Note that this will also change the Core round.
