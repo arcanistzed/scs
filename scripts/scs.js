@@ -13,7 +13,7 @@ import registerKeybindings from './keybindings.js';
 // Import Attack Roll Token HUD
 import AttackHUD from './hud.js';
 
-Hooks.on("init", () => { if (isNewerVersion(game.version, "9.230")) registerKeybindings(); });
+Hooks.on("init", () => { if (game.version && isNewerVersion(game.version, "9.230")) registerKeybindings(); });
 
 Hooks.on("ready", () => {
     // Register settings
@@ -50,7 +50,7 @@ Hooks.on("ready", () => {
     scsApp.actionLocking();
 
     // Prevent any combat turns (requires v9d2 or later)
-    if (isNewerVersion(game.version, "9.230")) {
+    if (game.version && isNewerVersion(game.version, "9.230")) {
         game.combat?.update({ turn: null });
         Hooks.on("preUpdateCombat", (_document, change) => { change.turn = null });
     };
