@@ -28,9 +28,9 @@ The module will display the current phase and round in an interactive and dragga
 
 ### Integration with the Core Combat Tracker
 
-While this module hides the Combat Tracker by default, it updates it in the background whenever the round is switched to allow for better compatibility.
+This module updates the Combat Tracker as you use it for better compatibility, but hides the buttons for changing turns. This module also prevents any turns to be assigned, so that you don't see any highlighting for such in the Combat Tracker.
 SCS prompts to end combat whenever the round is equal to zero and will start a new combat once the round is changed above that. The module will end the combat when all the combatants are removed.
-There is also a setting to show the default Combat Tracker.
+There is also a setting to hide the default Combat Tracker.
 
 ### Hides itself when there is no Combat
 
@@ -40,6 +40,12 @@ You can use this feature without the default Combat Tracker by simply adding and
 ### Attack Roll HUD
 
 In order to ease determining the attack order (for example, in the default attack phase), the module shows you the last attack roll in the token's HUD. This currently only works in D&D 5e and PF 2e.
+
+### Keybindings
+
+You can switch the phase turn by holding `Alt` and pressing the right or left arrow key. You can switch the current round instead by holding `Shift` instead.
+
+You can use `Alt+S` to toggle the app's visibility.
 
 ### Integration with other modules
 
@@ -148,7 +154,4 @@ Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click he
 
 ## TODO
 
-- Update package listing description
-- libRuler Integration for movement phase deferring
-- Integrate with Combat Tracker Groups and use Combat Tracker (don't hide by default)
-- Add option to only show the App if there is an active combat
+- libRuler Integration for movement deferring until end of phase
