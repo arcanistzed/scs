@@ -112,6 +112,11 @@
   display: none !important;
 }
 
+/* Hide turn buttons in Combat Tracker */
+[data-control=nextTurn], [data-control=previousTurn] {
+  display: none;
+}
+
 /* Custom styling for IntroJS tour */
 
 /* Style checkbox */

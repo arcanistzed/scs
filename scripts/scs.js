@@ -44,10 +44,16 @@ Hooks.on("ready", () => {
     // Manage Action Locking
     scsApp.actionLocking();
 
+    // Prevent any combat turns (requires v9d2 or later)
+    if (isNewerVersion(game.version, "9.230")) {
+        game.combat?.update({ turn: null });
+        Hooks.on("preUpdateCombat", (_document, change) => { change.turn = null });
+    };
+
     // Show the IntroJS tutorial once the app is rendered if the user hasn't denied the tutorial
     Hooks.once("renderscsApp", () => {
         if (game.modules.get("_introjs")?.active) {
-        if (game.settings.get(scsApp.ID, "startupTutorial")) api.startTutorial();
+            if (game.settings.get(scsApp.ID, "startupTutorial")) api.startTutorial();
         } else {
             ui.notifications.warn("You must install and enable the IntroJS library to view the SCS tutorial");
         };
