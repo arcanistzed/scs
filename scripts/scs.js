@@ -57,10 +57,12 @@ Hooks.on("ready", () => {
 
     // Show the IntroJS tutorial once the app is rendered if the user hasn't denied the tutorial
     Hooks.once("renderscsApp", () => {
-        if (game.modules.get("_introjs")?.active) {
-            if (game.settings.get(scsApp.ID, "startupTutorial")) api.startTutorial();
-        } else {
-            ui.notifications.warn("You must install and enable the IntroJS library to view the SCS tutorial");
+        if (game.settings.get(scsApp.ID, "startupTutorial")) {
+            if (game.modules.get("_introjs")?.active) {
+                api.startTutorial();
+            } else {
+                ui.notifications.warn("You must install and enable the IntroJS library to view the SCS tutorial");
+            };
         };
     });
 

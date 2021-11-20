@@ -148,7 +148,7 @@ export default function registerSettings() {
         default: false,
     });
 
-    if (game.modules.get("_introjs")?.active) game.settings.register(scsApp.ID, "startupTutorial", {
+    game.settings.register(scsApp.ID, "startupTutorial", {
         name: game.i18n.localize("scs.settings.startupTutorial.Name"),
         hint: game.i18n.localize("scs.settings.startupTutorial.Hint"),
         scope: "client",
