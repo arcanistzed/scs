@@ -1,3 +1,7 @@
+// Import application
+import scsApp from './app.js';
+import api from './api.js';
+
 /**
  * Register all keybindings for SCS
  */
