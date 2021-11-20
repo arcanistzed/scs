@@ -4,11 +4,17 @@
 
 * IntroJS is now a soft dependency which you only need to install for the tutorial
 * Inverted default Combat Tracker visibility setting
+
+## Added
+
 * Removed the concept of turns from the Combat Tracker:
   * Previous and Next turn buttons are hidden
   * No combatant is highlighted as the current combatant as there is no one taking their turn (requires v9d2 or later)
 
+### Fixed
+
 * Always move above SmallTime no matter what it's height happens to be
+
 ## 2.10.0 - 19 Nov 2021
 
 ### Added
