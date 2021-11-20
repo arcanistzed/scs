@@ -5,9 +5,9 @@
         "Name": "Hide if no Combat",
         "Hint": "Hide the SCS App if there is no Combat active"
       },
-      "showTracker": {
-        "Name": "Show Tracker",
-        "Hint": "Enable this to display the default combat tracker"
+      "hideTracker": {
+        "Name": "Hide Tracker",
+        "Hint": "Enable this to hide the default combat tracker"
       },
       "limitCycles": {
         "Name": "Limit Cycles",

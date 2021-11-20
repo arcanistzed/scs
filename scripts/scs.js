@@ -18,7 +18,7 @@ Hooks.on("ready", () => {
     new api();
 
     // Hide default combat tracker
-    if (!game.settings.get(scsApp.ID, "showTracker")) api.defaultTracker();
+    if (game.settings.get(scsApp.ID, "hideTracker")) api.defaultTracker();
 
     // Move the app up if SmallTime is active
     if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };

@@ -3,6 +3,7 @@
 ## unreleased
 
 * IntroJS is now a soft dependency which you only need to install for the tutorial
+* Inverted default Combat Tracker visibility setting
 
 ## 2.10.0 - 19 Nov 2021
 

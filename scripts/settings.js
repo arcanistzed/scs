@@ -83,14 +83,14 @@ export default function registerSettings() {
         onChange: () => api.changeVisibility(!!game.combat),
     });
 
-    game.settings.register(scsApp.ID, "showTracker", {
-        name: game.i18n.localize("scs.settings.showTracker.Name"),
-        hint: game.i18n.localize("scs.settings.showTracker.Hint"),
+    game.settings.register(scsApp.ID, "hideTracker", {
+        name: game.i18n.localize("scs.settings.hideTracker.Name"),
+        hint: game.i18n.localize("scs.settings.hideTracker.Hint"),
         scope: "world",
         config: true,
         type: Boolean,
         default: false,
-        onChange: () => api.defaultTracker(false),
+        onChange: val => api.defaultTracker(val),
     });
 
     game.settings.register(scsApp.ID, "showAttackHUD", {
