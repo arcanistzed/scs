@@ -8,6 +8,7 @@
   * Previous and Next turn buttons are hidden
   * No combatant is highlighted as the current combatant as there is no one taking their turn (requires v9d2 or later)
 
+* Always move above SmallTime no matter what it's height happens to be
 ## 2.10.0 - 19 Nov 2021
 
 ### Added

@@ -20,8 +20,8 @@ Hooks.on("ready", () => {
     // Hide default combat tracker
     if (game.settings.get(scsApp.ID, "hideTracker")) api.defaultTracker();
 
-    // Move the app up if SmallTime is active
-    if (game.modules.get("smalltime")?.active) { scsApp.pinOffset += 67 };
+    // Move the app up if SmallTime's app is rendered
+    Hooks.once("renderSmallTimeApp", () => { scsApp.pinOffset += document.querySelector("#smalltime-app").clientHeight + 10; });
 
     // Hide Argon's "End Turn" button
     Hooks.on("renderCombatHudCanvasElement", (_app, html) => html[0].querySelector("[data-title='Pass']").style.display = "none");
