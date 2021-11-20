@@ -7,8 +7,13 @@ import scsApp from './app.js'
 // Import for registering module settings
 import registerSettings from './settings.js';
 
+// Import for registering keybindings
+import registerKeybindings from './keybindings.js';
+
 // Import Attack Roll Token HUD
 import AttackHUD from './hud.js';
+
+Hooks.on("init", () => { if (isNewerVersion(game.version, "9.230")) registerKeybindings(); });
 
 Hooks.on("ready", () => {
     // Register settings

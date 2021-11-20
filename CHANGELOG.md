@@ -10,6 +10,7 @@
 * Removed the concept of turns from the Combat Tracker:
   * Previous and Next turn buttons are hidden
   * No combatant is highlighted as the current combatant as there is no one taking their turn (requires v9d2 or later)
+* Keybindings for switching phase and round as well as toggling app visibility (requires v9d2 or later)
 
 ### Fixed
 
