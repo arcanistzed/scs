@@ -10,7 +10,7 @@ Have you ever tired of waiting for the turns of your friends to be over? Are you
 
 ## Usage
 
-Please follow the built-in tutorial (built with IntoJS), for instructions. You can always relaunch the tutorial from within the settings. If you have any questions, feel free to contact me.
+Please follow the built-in tutorial (built with IntroJS), for instructions. You can always relaunch the tutorial from within the settings. If you have any questions, feel free to contact me.
 
 ## Features
 
