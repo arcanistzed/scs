@@ -11,7 +11,7 @@ import registerSettings from './settings.js';
 import registerKeybindings from './keybindings.js';
 
 // Import Attack Roll Token HUD
-import AttackHUD from './hud.js';
+import AttackDisplay from './display.js';
 
 Hooks.on("init", () => { if (game.version && isNewerVersion(game.version, "9.230")) registerKeybindings(); });
 
@@ -67,5 +67,5 @@ Hooks.on("ready", () => {
     });
 
     // Start action tracker
-    new AttackHUD();
+    new AttackDisplay();
 });

@@ -1,74 +1,78 @@
 {
-  "scs": {
-    "settings": {
-      "hideNoCombat": {
-        "Name": "Hide if no Combat",
-        "Hint": "Hide the SCS App if there is no Combat active"
-      },
-      "hideTracker": {
-        "Name": "Hide Tracker",
-        "Hint": "Enable this to hide the default combat tracker"
-      },
-      "limitCycles": {
-        "Name": "Limit Cycles",
-        "Hint": "Move on to the next round of combat after the number of cycles configured below."
-      },
-      "maxCycle": {
-        "Name": "Maximum Cycle",
-        "Hint": "Set a maximum number of cycles before continuing on to the next round. You must enable Limit Cycles to use this."
-      },
-      "limitPhases": {
-        "Name": "Limit Phases",
-        "Hint": "Move on to the next round of combat at the end of each cycle of phases. This will override Limit Cycles above."
-      },
-      "startupTutorial": {
-        "Name": "Play Startup Tutorial",
-        "Hint": "Disable this if you don't want the tutorial to display each time the page loads"
-      },
-      "phaseNames": {
-        "Name": "Phase Names",
-        "Hint": "A comma-separated list of phase names (reloads page)",
-        "defaults": {
-          "0": "Move",
-          "1": "Attacks",
-          "2": "Magic"
+    "scs": {
+        "settings": {
+            "hideNoCombat": {
+                "Name": "Hide if no Combat",
+                "Hint": "Hide the SCS App if there is no Combat active"
+            },
+            "hideTracker": {
+                "Name": "Hide Tracker",
+                "Hint": "Enable this to hide the default combat tracker"
+            },
+            "limitCycles": {
+                "Name": "Limit Cycles",
+                "Hint": "Move on to the next round of combat after the number of cycles configured below."
+            },
+            "maxCycle": {
+                "Name": "Maximum Cycle",
+                "Hint": "Set a maximum number of cycles before continuing on to the next round. You must enable Limit Cycles to use this."
+            },
+            "limitPhases": {
+                "Name": "Limit Phases",
+                "Hint": "Move on to the next round of combat at the end of each cycle of phases. This will override Limit Cycles above."
+            },
+            "startupTutorial": {
+                "Name": "Play Startup Tutorial",
+                "Hint": "Disable this if you don't want the tutorial to display each time the page loads"
+            },
+            "phaseNames": {
+                "Name": "Phase Names",
+                "Hint": "A comma-separated list of phase names (reloads page)",
+                "defaults": {
+                    "0": "Move",
+                    "1": "Attacks",
+                    "2": "Magic"
+                }
+            },
+            "generateColors": {
+                "Name": "Change Colors",
+                "Label": "Generate",
+                "Hint": "Click to generate new random colors (reloads page)"
+            },
+            "alternateActive": {
+                "Name": "Alternate Appearance",
+                "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker"
+            },
+            "actionLocking": {
+                "Name": "Action Locking",
+                "Hint": "Lock to only specific actions for known phases. Feel free to make suggestions for phases to add!"
+            },
+            "hudDisplay": {
+                "Name": "Attack Roll HUD",
+                "Hint": "Show the last attack roll in the token's HUD for aiding in determining attack order"
+            },
+            "trackerDisplay": {
+                "Name": "Attack Roll in the Combat Tracker",
+                "Hint": "Show the last attack roll in the Combat Tracker next to each combatant's name"
+            }
+        },
+        "tutorial": {
+            "welcome": {
+                "Title": "Welcome to the SCS",
+                "Intro": "This module is an implementation of the Simultaneous Combat System described in <a href=\"https://redd.it/p11h35\">this reddit post</a>."
+            },
+            "howItWorks": {
+                "Title": "How it works",
+                "Intro": "<p>Instead of each character taking their own turn sequentially, everything happens all at once. <br/> In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into resolution phases:</p>"
+            },
+            "combatTracker": {
+                "Title": "Where is the combat tracker?",
+                "Intro": "<p>Since combat happens simultaneously with this system, I've removed the default combat tracker. You can always re-enable it in the module's settings.</p>"
+            },
+            "movingAround": {
+                "Title": "How do I move this thing around?",
+                "Intro": "<p>You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it.</p>"
+            }
         }
-      },
-      "generateColors": {
-        "Name": "Change Colors",
-        "Label": "Generate",
-        "Hint": "Click to generate new random colors (reloads page)"
-      },
-      "alternateActive": {
-        "Name": "Alternate Appearance",
-        "Hint": "Invert the appearance of the active phase, so that it's lighter than the others rather than darker"
-      },
-      "actionLocking": {
-        "Name": "Action Locking",
-        "Hint": "Lock to only specific actions for known phases. Feel free to make suggestions for phases to add!"
-      },
-      "showAttackHUD": {
-        "Name": "Show Attack Roll HUD",
-        "Hint": "Displays the last attack roll in the token's HUD for aiding in determining attack order"
-      }
-    },
-    "tutorial": {
-      "welcome": {
-        "Title": "Welcome to the SCS",
-        "Intro": "This module is an implementation of the Simultaneous Combat System described in <a href=\"https://redd.it/p11h35\">this reddit post</a>."
-      },
-      "howItWorks": {
-        "Title": "How it works",
-        "Intro": "<p>Instead of each character taking their own turn sequentially, everything happens all at once. <br/> In order to prevent total chaos, combat still happens in rounds and there is a structure to each round. That is, they are divided into resolution phases:</p>"
-      },
-      "combatTracker": {
-        "Title": "Where is the combat tracker?",
-        "Intro": "<p>Since combat happens simultaneously with this system, I've removed the default combat tracker. You can always re-enable it in the module's settings.</p>"
-      },
-      "movingAround": {
-        "Title": "How do I move this thing around?",
-        "Intro": "<p>You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it.</p>"
-      }
     }
-  }
 }

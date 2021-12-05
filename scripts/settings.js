@@ -93,14 +93,22 @@ export default function registerSettings() {
         onChange: val => api.defaultTracker(val),
     });
 
-    game.settings.register(scsApp.ID, "showAttackHUD", {
-        name: game.i18n.localize("scs.settings.showAttackHUD.Name"),
-        hint: game.i18n.localize("scs.settings.showAttackHUD.Hint"),
+    game.settings.register(scsApp.ID, "hudDisplay", {
+        name: game.i18n.localize("scs.settings.hudDisplay.Name"),
+        hint: game.i18n.localize("scs.settings.hudDisplay.Hint"),
         scope: "world",
         config: true,
         type: Boolean,
         default: true,
-        onChange: () => window.location.reload(),
+    });
+
+    game.settings.register(scsApp.ID, "trackerDisplay", {
+        name: game.i18n.localize("scs.settings.trackerDisplay.Name"),
+        hint: game.i18n.localize("scs.settings.trackerDisplay.Hint"),
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
     });
 
     game.settings.register(scsApp.ID, "limitCycles", {
