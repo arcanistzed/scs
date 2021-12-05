@@ -1,6 +1,6 @@
 # Changelog
 
-## unreleased
+## 2.11.0 - 5 Dec 2021
 
 * IntroJS is now a soft dependency which you only need to install for the tutorial
 * Inverted default Combat Tracker visibility setting
@@ -11,10 +11,13 @@
   * Previous and Next turn buttons are hidden
   * No combatant is highlighted as the current combatant as there is no one taking their turn (requires v9d2 or later)
 * Keybindings for switching phase and round as well as toggling app visibility (requires v9d2 or later)
+* Major rework of the HUD feature which has been renamed to the more generic "Attack Display" and now includes an option to display the last roll in the Combat Tracker
 
 ### Fixed
 
 * Always move above SmallTime no matter what it's height happens to be
+* Attack Display works with MidiQoL
+* Attack Display HUD is more consistently centered
 
 ## 2.10.0 - 19 Nov 2021
 
