@@ -24,7 +24,7 @@ export default class AttackDisplay {
             if (isAttack) this.update(doc.data.speaker.token, doc.roll.total);
         });
 
-        // Manage  when Better Rolls is enabled
+        // Manage when Better Rolls is enabled
         Hooks.on("messageBetterRolls", br => this.updateForBetterRolls(br));
         Hooks.on("updateBetterRolls", br => this.updateForBetterRolls(br));
 
@@ -57,7 +57,7 @@ export default class AttackDisplay {
             // Adjust icon dimensions and position
             ICON.height = 48;
             ICON.width = 48;
-            ICON.x = (token.width / 2) - (ICON.width / 2) - /*Fix for un-centered icon */ 5;
+            ICON.x = (token.width / 2) - (ICON.width / 2) - /* Fix for un-centered icon */ 5;
             ICON.y = token.height - 15;
 
             // Adjust text resolution and position
