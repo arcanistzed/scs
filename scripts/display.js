@@ -78,8 +78,8 @@ export default class AttackDisplay {
         if (game.settings.get(scsApp.ID, "trackerDisplay")) {
             this.DISPLAY[token.id].tracker = [];
 
-            // Get the combatant in the tracker(s)
-            document.querySelectorAll(`.combatant[data-combatant-id=${game.combat.combatants.get(token.combatant.id).id}]`).forEach(el => {
+            // Get the combatant in the tracker(s) if it is there
+            if (game.combat && token.combatant) document.querySelectorAll(`.combatant[data-combatant-id=${game.combat.combatants.get(token.combatant.id).id}]`).forEach(el => {
                 // Create the icon
                 const icon = document.createElement("img");
                 icon.src = "/icons/svg/combat.svg";
