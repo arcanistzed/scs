@@ -5,19 +5,20 @@ import scsApp from './app.js';
 export default class AttackDisplay {
     constructor() {
         Hooks.on("createChatMessage", async doc => {
-            // Don't do anything if Better Rolls is enabled
-            if (game.modules.get("betterrolls5e")?.active) return;
+            // Don't do anything if Better Rolls or MidiQoL are enabled
+            if (game.modules.get("betterrolls5e")?.active || game.modules.get("midi-qol")?.active) return;
 
             /** Whether or not this is an attack roll */
             let isAttack;
             switch (game.system.id) {
                 case "dnd5e":
-                    isAttack = await doc.getFlag("dnd5e", "roll")?.type === "attack" || doc.data.flavor.includes("Attack Roll");
+                    isAttack = await doc.getFlag("dnd5e", "roll")?.type === "attack";
                     break;
                 case "pf2e":
                     const type = await doc.getFlag("pf2e", "context")?.type
                     isAttack = type === "attack-roll" || type === "spell-attack-roll";
             };
+            if (doc.data.flavor.includes("Attack Roll")) isAttack = true; // fallback
 
             // Update if this is an Attack roll
             if (isAttack) this.update(doc.data.speaker.token, doc.roll.total);
@@ -26,6 +27,9 @@ export default class AttackDisplay {
         // Manage  when Better Rolls is enabled
         Hooks.on("messageBetterRolls", br => this.updateForBetterRolls(br));
         Hooks.on("updateBetterRolls", br => this.updateForBetterRolls(br));
+
+        // Manage when MidiQoL is enabled
+        Hooks.on("midi-qol.AttackRollComplete", workflow => this.update(workflow.tokenId, workflow.attackTotal));
 
         // Remove the previous display when the token changes sizes
         Hooks.on("updateToken", (doc, change) => {
