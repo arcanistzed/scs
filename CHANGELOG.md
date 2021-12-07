@@ -1,11 +1,18 @@
 # Changelog
 
-## 2.11.0 - 5 Dec 2021
+# 2.11.1 - 7 Dec 2021
+
+### Fixed
+
+* Use MidiQoL's hook
+* Only attempt to add the Combat Tracker display if a combatant exists
+
+## 2.11.0 - 7 Dec 2021
 
 * IntroJS is now a soft dependency which you only need to install for the tutorial
 * Inverted default Combat Tracker visibility setting
 
-## Added
+### Added
 
 * Removed the concept of turns from the Combat Tracker:
   * Previous and Next turn buttons are hidden
