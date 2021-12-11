@@ -1,6 +1,13 @@
 # Changelog
 
-# 2.11.1 - 7 Dec 2021
+## 2.11.2 - 11 Dec 2021
+
+### Fixed
+
+* Error with display enabled when there is no flavor text in rolls
+* Remove conflicting Keybindings
+
+## 2.11.1 - 7 Dec 2021
 
 ### Fixed
 
