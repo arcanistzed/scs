@@ -35,7 +35,7 @@ export default function registerKeybindings() {
 		editable: [
 			{
 				key: "ARROWRIGHT",
-				modifiers: ["SHIFT"]
+				modifiers: ["ALT", "SHIFT"]
 			}
 		],
 		onDown: () => api.changeRound(1),
@@ -46,7 +46,7 @@ export default function registerKeybindings() {
 		editable: [
 			{
 				key: "ARROWLEFT",
-				modifiers: ["SHIFT"]
+				modifiers: ["ALT", "SHIFT"]
 			}
 		],
 		onDown: () => api.changeRound(-1),
