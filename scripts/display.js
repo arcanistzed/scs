@@ -18,7 +18,7 @@ export default class AttackDisplay {
                     const type = await doc.getFlag("pf2e", "context")?.type
                     isAttack = type === "attack-roll" || type === "spell-attack-roll";
             };
-            if (doc.data.flavor?.includes("Attack Roll")) isAttack = true; // fallback
+            if (doc.data.flavor?.includes(game.i18n.localize("DND5E.AttackRoll"))) isAttack = true; // fallback
 
             // Update if this is an Attack roll
             if (isAttack) this.update(doc.data.speaker.token, doc.roll.total);
