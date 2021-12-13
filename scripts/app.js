@@ -30,11 +30,6 @@ export default class scsApp extends FormApplication {
     /** The current cycle */
     static currentCycle = 1;
 
-    /** The current round
-     *  This mirrors the Core round during Core combats and is overridden whenever one is started
-     */
-    static currentRound = 1;
-
     /** A boolean representing whether SCS thinks there is currently a combat which is used for About Time integration
      * If a new combatant is created, this will become true.
      * If all combatants are removed, this will return to false.
@@ -334,7 +329,7 @@ export default class scsApp extends FormApplication {
         };
     };
 
-    /** Manage phase and round display
+    /** Manage phase display
      * @param {HTMLElement} html The apps html
     */
     static manageDisplay(html) {
@@ -347,7 +342,7 @@ export default class scsApp extends FormApplication {
 
         // Update for players
         Hooks.on("updateSetting", setting => {
-            if ((setting.data.key === "scs.currentPhase" || setting.data.key === "scs.currentRound") && !game.user.isGM) {
+            if ((setting.data.key === "scs.currentPhase") && !game.user.isGM) {
                 scsApp.pullValues();
                 scsApp.updateApp();
             };
@@ -358,19 +353,18 @@ export default class scsApp extends FormApplication {
 
         // If GM, execute one of the functions below this, depending on the button clicked
         if (game.user.isGM) {
-            html[0].querySelector("#lastRound").addEventListener("click", () => api.changeRound(-1));
+            html[0].querySelector("#lastRound").addEventListener("click", () => game.combat?.previousRound());
             html[0].querySelector("#lastPhase").addEventListener("click", () => api.changePhase(-1));
             html[0].querySelector("#nextPhase").addEventListener("click", () => api.changePhase(1));
-            html[0].querySelector("#nextRound").addEventListener("click", () => api.changeRound(1));
+            html[0].querySelector("#nextRound").addEventListener("click", () => game.combat?.nextRound());
             html[0].querySelectorAll(".phase-button").forEach((button, i) => button.addEventListener("click", () => api.changePhase((i + 1) - scsApp.currentPhase)));
         };
     };
 
-    /** Pull current phase, cycle, and round */
+    /** Pull current phase and cycle */
     static pullValues() {
         scsApp.currentPhase = game.settings.get(scsApp.ID, "currentPhase"); // counts the current phase
         scsApp.currentCycle = game.settings.get(scsApp.ID, "currentCycle"); // counts the current cycle
-        scsApp.currentRound = game.combat ? game.combat.round : game.settings.get(scsApp.ID, "currentRound"); // get the current round
 
         // Make sure that the phase is within bounds
         // This is needed because the total amount of phases might be changed by the user
@@ -389,7 +383,6 @@ export default class scsApp extends FormApplication {
         if (game.user.isGM) {
             game.settings.set(scsApp.ID, "currentPhase", scsApp.currentPhase);
             game.settings.set(scsApp.ID, "currentCycle", scsApp.currentCycle);
-            game.settings.set(scsApp.ID, "currentRound", scsApp.currentRound);
         };
         if (buttons[scsApp.currentPhase - 1]) {
             // Update the appearance of the buttons depending on the user's settings
@@ -410,10 +403,7 @@ export default class scsApp extends FormApplication {
             };
         };
         // Update the Round number
-        document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), scsApp.currentRound].join(" ");
-
-        // Alert if core round doesn't match module after some time (checks if there is a core combat first and if one wasn't just created)
-        setTimeout(() => { if (game.combat && game.combat?.round !== 0 && game.combat?.round != scsApp.currentRound) ui.notifications.error("SCS | Current round doesn't match Core") }, 100);
+        document.querySelector("#currentRound").innerHTML = [game.i18n.localize("COMBAT.Round"), game.combat?.round].join(" ");
     };
 
     /** Manage combat */
@@ -425,7 +415,7 @@ export default class scsApp extends FormApplication {
                 game.combat.startCombat();
             } else if (game.user.isGM) {
                 // Other wise, create a new one if GM
-                const combat = await Combat.implementation.create({
+                const combat = await getDocumentClass("Combat").implementation.create({
                     scene: game.scenes.active?.id
                 });
                 await combat?.activate({ render: false });
@@ -436,6 +426,7 @@ export default class scsApp extends FormApplication {
             if (game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(true);
         });
 
+        // Stop combatant if there aren't any combatants left
         Hooks.on("deleteCombatant", combatant => {
             const combat = combatant.parent;
 
@@ -469,11 +460,24 @@ export default class scsApp extends FormApplication {
             if (!game.combat && game.settings.get(scsApp.ID, "hideNoCombat")) api.changeVisibility(false);
         });
 
-        // Update SCS round whenever the Core round changes
-        Hooks.on("updateCombat", () => {
+
+        Hooks.on("updateCombat", async (_document, change) => {
             scsApp.pullValues();
             scsApp.updateApp();
+
+            // End combat if round is zero
+            if (change.round === 0) game.combat?.endCombat();
         });
+
+        // Create a new combat if there isn't one and start it
+        if (!game.combat) {
+            const combat = await getDocumentClass("Combat").implementation.create({
+                scene: canvas.scene?.id
+            });
+            await combat?.activate({ render: false });
+            ui.combat.initialize({ combat });
+            game.combat?.startCombat();
+        };
     };
 
     /** Lock users to only certain actions depending on the phase */

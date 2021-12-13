@@ -81,67 +81,6 @@ export default class api {
         };
     };
 
-    /** Change SCS round. Note that this will also change the Core round.
-     * @param {Number} delta - The delta by which the round should change.
-     * Use a positive number to move the round forward and a negative number to go to previous rounds.
-    */
-    static async changeRound(delta) {
-        if (game.user.isGM) {
-            // Pull current values
-            scsApp.pullValues();
-
-            // Get previous round
-            const previousRound = scsApp.currentRound;
-
-            // If going forwards, reset to phase 1; if going back, reset to max phase
-            scsApp.currentPhase = delta > 0 ? 1 : scsApp.phases.count;
-
-            // If more than or equal to zero + the delta, change round by delta; else, notify user
-            if (scsApp.currentRound + delta >= 0) {
-                scsApp.currentRound += delta;
-            } else {
-                scsApp.currentPhase = 1;
-                ui.notifications.error("SCS | You cannot bring the current round below zero.");
-            };
-
-            // While delta is not zero, adjust Core round
-            while (delta !== 0) {
-                if (delta > 0) { // If positive, go to next round and bring delta towards zero
-                    await game.combat?.nextRound();
-                    delta--;
-                } else { // If negative, go to previous round and bring delta towards zero
-                    await game.combat?.previousRound();
-                    delta++;
-                }
-            };
-
-            // End combat if round is zero
-            if (scsApp.currentRound === 0) {
-                game.combat?.endCombat();
-            }
-            // Start combat if round is not zero
-            else {
-                // If there is an existing combat, start it
-                if (game.combat) {
-                    game.combat?.startCombat();
-                } else {
-                    // Otherwise, create a new one
-                    const combat = await Combat.implementation.create({
-                        scene: canvas.scene?.id
-                    });
-                    await combat?.activate({ render: false });
-                    ui.combat.initialize({ combat });
-                };
-            };
-
-            // Update app to display new values
-            scsApp.updateApp();
-
-            // Fire a hook
-            Hooks.call("scsRoundChanged", scsApp.currentRound, previousRound, delta);
-        };
-    };
-
     /** Change SCS phase
      * @param {Number} delta - The delta by which the phase should change.
      * Use a positive number to move the phase forward and a negative number to go to previous phases.
@@ -170,7 +109,7 @@ export default class api {
 
                 // If the maximum amount of cycles is reached, loop and reset cycles
                 if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
-                    api.changeRound(1);
+                    game.combat?.nextRound();
                     scsApp.currentCycle = 1;
                 };
             };
@@ -178,9 +117,9 @@ export default class api {
             // Change rounds if limit phases is enabled
             if (game.settings.get(scsApp.ID, "limitPhases")) {
                 if (scsApp.currentPhase === scsApp.phases.count + 1) {
-                    api.changeRound(1);
+                    game.combat?.nextRound();
                 } else if (scsApp.currentPhase === 0) {
-                    api.changeRound(-1);
+                    game.combat?.previousRound();
                 };
             } else {
                 // Loop over phases

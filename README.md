@@ -36,7 +36,7 @@ The module will display the current phase and round in an interactive and dragga
 ### Integration with the Core Combat Tracker
 
 This module updates the Combat Tracker as you use it for better compatibility, but hides the buttons for changing turns. This module also prevents any turns to be assigned, so that you don't see any highlighting for such in the Combat Tracker.
-SCS prompts to end combat whenever the round is equal to zero and will start a new combat once the round is changed above that. The module will end the combat when all the combatants are removed.
+SCS prompts to end combat whenever the round is equal to zero and will start a new combat if there is none when loading. The module will end the combat when all the combatants are removed.
 There is also a setting to hide the default Combat Tracker.
 
 ### Hides itself when there is no Combat
@@ -108,9 +108,11 @@ This will show the IntroJS tutorial tour once.
 This will stop the tour from showing every time the page is loaded unless the user re-enabled the tutorial from within the module settings.
 An optional Boolean parameter can be used to also immediately close the tutorial, but this defaults to `false`.
 
-#### `changeRound(delta)`
+#### Deprecated: `changeRound(delta)`
 
-An asynchronous method that changes the SCS's round by a given delta. Note that this will also change the Core round. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.
+~~An asynchronous method that changes the SCS's round by a given delta. Note that this will also change the Core round. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.~~
+
+Use `game.combat.nextRound()` or `game.combat.previousRound()` instead.
 
 #### `changePhase(delta)`
 
@@ -120,9 +122,11 @@ An asynchronous method that changes the SCS's phase by a given delta. Use a posi
 
 This module has two hooks which are only called on the GM's client:
 
-#### `scsRoundChanged`
+#### Deprecated: `scsRoundChanged`
 
-This hook is called whenever the SCS round changes. It has three arguments which are (in order): the current phase, the previous phase, and the delta.
+~~This hook is called whenever the SCS round changes. It has three arguments which are (in order): the current phase, the previous phase, and the delta.~~
+
+Use the `updateCombat` hook and check the `change.round` value instead.
 
 #### `scsPhaseChanged`
 

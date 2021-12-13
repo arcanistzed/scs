@@ -63,16 +63,6 @@ export default function registerSettings() {
         default: 1
     });
 
-    game.settings.register(scsApp.ID, "currentRound", {
-        scope: "world",
-        config: false,
-        type: Number,
-        default: 1,
-        onChange: currentRound => {
-            if (!game.user.isGM) Hooks.call("scsRoundChanged", currentRound);
-        },
-    });
-
     game.settings.register(scsApp.ID, "hideNoCombat", {
         name: game.i18n.localize("scs.settings.hideNoCombat.Name"),
         hint: game.i18n.localize("scs.settings.hideNoCombat.Hint"),

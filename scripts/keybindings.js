@@ -38,7 +38,7 @@ export default function registerKeybindings() {
 				modifiers: ["ALT", "SHIFT"]
 			}
 		],
-		onDown: () => api.changeRound(1),
+		onDown: () => game.combat?.nextRound(),
 	});
 	game.keybindings.register(scsApp.ID, "previousRound", {
 		name: "Previous Round",
@@ -49,7 +49,7 @@ export default function registerKeybindings() {
 				modifiers: ["ALT", "SHIFT"]
 			}
 		],
-		onDown: () => api.changeRound(-1),
+		onDown: () => game.combat?.previousRound(),
 	});
 
 	game.keybindings.register(scsApp.ID, "toggleVisibility", {
