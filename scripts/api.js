@@ -58,14 +58,14 @@ export default class api {
         // Create "Don't Show Again" checkbox
         let stopButton = document.createElement("div");
         stopButton.id = "scsTutorialAgainDiv";
-        stopButton.innerHTML = `<input id="scsTutorialAgain" type="checkbox"><label for="scsTutorialAgain">Don't show again</label>`;
+            stopButton.innerHTML = `<input id="scsTutorialAgain" type="checkbox"><label for="scsTutorialAgain">${game.i18n.localize("scs.tutorial.dontShowAgain")}</label>`;
         // Add it to the DOM
         document.querySelector(".introjs-tooltipbuttons").before(stopButton);
 
         // Stop tutorial when it's clicked
         stopButton.addEventListener("click", api.stopTutorial(false));
         } else {
-            ui.notifications.warn("You must install and enable the IntroJS library before you can start the SCS tutorial");
+            ui.notifications.warn(`${scsApp.ID} | ${game.i18n.format("scs.notifications.tutorial.introDependency", { action: "start" })}`);
         };
     };
 
@@ -77,7 +77,7 @@ export default class api {
             game.settings.set(scsApp.ID, "startupTutorial", false); // Don't show again
             if (close) document.querySelector(".introjs-skipbutton").click(); // Close tutorial if wanted
         } else {
-            ui.notifications.warn("You must install and enable the IntroJS library before you can stop the SCS tutorial");
+            ui.notifications.warn(`${scsApp.ID} | ${game.i18n.format("scs.notifications.tutorial.introDependency", { action: "stop" })}`);
         };
     };
 
@@ -92,7 +92,7 @@ export default class api {
 
             // If the phase would change to an invalid value, alert and exit
             if (scsApp.currentPhase + delta < 0 || scsApp.currentPhase + delta > scsApp.phases.count + 1) {
-                console.error(`SCS | Cannot change phase by delta "${delta}", because that would bring it outside of the allowed bounds. Current phase: "${scsApp.currentPhase}".`);
+                console.error(`${scsApp.ID} | ${game.i18n.format("scs.notifications.changeOutOfBounds", { delta: delta, phase: scsApp.currentPhase })}`);
                 return;
             };
 

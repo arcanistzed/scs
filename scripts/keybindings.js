@@ -7,8 +7,8 @@ import api from './api.js';
  */
 export default function registerKeybindings() {
 	game.keybindings.register(scsApp.ID, "nextPhase", {
-		name: "Next Phase",
-		hint: "Switch to the next phase",
+		name: game.i18n.localize("scs.keybindings.nextPhase.name"),
+		hint: game.i18n.localize("scs.keybindings.nextPhase.hint"),
 		editable: [
 			{
 				key: "ARROWRIGHT",
@@ -18,8 +18,8 @@ export default function registerKeybindings() {
 		onDown: () => api.changePhase(1),
 	});
 	game.keybindings.register(scsApp.ID, "previousPhase", {
-		name: "Previous Phase",
-		hint: "Switch to the previous phase",
+		name: game.i18n.localize("scs.keybindings.previousPhase.name"),
+		hint: game.i18n.localize("scs.keybindings.previousPhase.hint"),
 		editable: [
 			{
 				key: "ARROWLEFT",
@@ -30,8 +30,8 @@ export default function registerKeybindings() {
 	});
 
 	game.keybindings.register(scsApp.ID, "nextRound", {
-		name: "Next Round",
-		hint: "Switch to the next round",
+		name: game.i18n.localize("scs.keybindings.nextRound.name"),
+		hint: game.i18n.localize("scs.keybindings.nextRound.hint"),
 		editable: [
 			{
 				key: "ARROWRIGHT",
@@ -41,8 +41,8 @@ export default function registerKeybindings() {
 		onDown: () => game.combat?.nextRound(),
 	});
 	game.keybindings.register(scsApp.ID, "previousRound", {
-		name: "Previous Round",
-		hint: "Switch to the previous round",
+		name: game.i18n.localize("scs.keybindings.previousRound.name"),
+		hint: game.i18n.localize("scs.keybindings.previousRound.hint"),
 		editable: [
 			{
 				key: "ARROWLEFT",
@@ -53,8 +53,8 @@ export default function registerKeybindings() {
 	});
 
 	game.keybindings.register(scsApp.ID, "toggleVisibility", {
-		name: "Toggle Visibility",
-		hint: "Show and hide the app",
+		name: game.i18n.localize("scs.keybindings.toggleVisibility.name"),
+		hint: game.i18n.localize("scs.keybindings.toggleVisibility.hint"),
 		editable: [
 			{
 				key: "S",

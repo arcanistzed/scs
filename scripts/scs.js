@@ -38,7 +38,7 @@ Hooks.on("ready", () => {
     if (!scsApp.phases.count) {
         Object.defineProperty(scsApp.phases, "count", {
             get: () => scsApp.phases.names.length,
-            set: () => { throw "SCS | The phase count is calculated from the phase names and cannot be changed directly." },
+            set: () => { throw `${scsApp.ID} | ${game.i18n.localize("scs.notifications.phaseCountDerived")}` },
             configurable: false
         });
     };
@@ -61,7 +61,7 @@ Hooks.on("ready", () => {
             if (game.modules.get("_introjs")?.active) {
                 api.startTutorial();
             } else {
-                ui.notifications.warn("You must install and enable the IntroJS library to view the SCS tutorial");
+                ui.notifications.warn(`${scsApp.ID} | ${game.i18n.format("scs.notifications.tutorial.introDependency", { action: "view" })}`);
             };
         };
     });

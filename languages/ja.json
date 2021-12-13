@@ -1,26 +1,33 @@
 {
-  "scs.settings.showTracker.Name": "トラッカーを表示",
-  "scs.settings.showTracker.Hint": "これを有効にすると、デフォルトの戦闘トラッカーが表示されます。",
-  "scs.settings.limitPhases.Name": "制限フェーズ",
-  "scs.settings.limitPhases.Hint": "3 つのフェーズが終了したら、次の戦闘ラウンドに進みます。",
-  "scs.settings.startupTutorial.Name": "スタートアップチュートリアルを再生",
-  "scs.settings.startupTutorial.Hint": "ページを読み込むたびにチュートリアルを表示したくない場合は、このオプションを無効にします。",
-  "scs.settings.phaseNames.Name": "フェーズ名",
-  "scs.settings.phaseNames.Hint": "相名のコンマ区切りのリスト",
-  "scs.settings.phaseNames.defaults.move": "移動",
-  "scs.settings.phaseNames.defaults.attacks": "攻撃",
-  "scs.settings.phaseNames.defaults.magic": "呪文",
-  "scs.settings.generateColors.Name": "色の変更",
-  "scs.settings.generateColors.Label": "生成",
-  "scs.settings.generateColors.Hint": "クリックすると、新しいランダムカラーが生成されます (再読み込みページ)。",
-  "scs.settings.alternateChecked.Name": "代替の外観",
-  "scs.settings.alternateChecked.Hint": "アクティブフェーズの外観を反転して、他のフェーズの外観を暗くなく明るくします。",
-  "scs.tutorial.welcome.Title": "SCSへようこそ",
-  "scs.tutorial.welcome.Intro": "このモジュールは、<a href=\"https://redd.it/nlyif8\"> このreddit投稿</a> に記載されている同時戦闘システムの実装です。",
-  "scs.tutorial.howItWorks.Title": "仕組み",
-  "scs.tutorial.howItWorks.Intro": "<p>各キャラクターが順番に自分のターンを取る代わりに、すべてが一度に起こります。 <br/>総混沌を防ぐため、戦闘は依然としてラウンドで起こり、各ラウンドに構造がある。 つまり、それらはフェーズに分かれています：</p>",
-  "scs.tutorial.combatTracker.Title": "戦闘トラッカーはどこですか？",
-  "scs.tutorial.combatTracker.Intro": "<p>戦闘はこのシステムと同時に行われるので、デフォルトの戦闘トラッカーを削除しました。 モジュールの設定でいつでも再度有効にできます。</p>",
-  "scs.tutorial.movingAround.Title": "どのように私はこのことを移動するのですか？",
-  "scs.tutorial.movingAround.Intro": "<p>このテキストをクリックしたままにすると、アプリをドラッグできます。 左下隅にスナップしますが、どこに置くかを選択してもその位置が記憶されます。</p>"
+    "scs.settings.showTracker.Name": "トラッカーを表示",
+    "scs.settings.showTracker.Hint": "これを有効にすると、デフォルトの戦闘トラッカーが表示されます。",
+    "scs.settings.limitPhases.Name": "制限フェーズ",
+    "scs.settings.limitPhases.Hint": "3 つのフェーズが終了したら、次の戦闘ラウンドに進みます。",
+    "scs.settings.startupTutorial.Name": "スタートアップチュートリアルを再生",
+    "scs.settings.startupTutorial.Hint": "ページを読み込むたびにチュートリアルを表示したくない場合は、このオプションを無効にします。",
+    "scs.settings.phaseNames.Name": "フェーズ名",
+    "scs.settings.phaseNames.Hint": "相名のコンマ区切りのリスト",
+    "scs.settings.phaseNames.defaults.move": "移動",
+    "scs.settings.phaseNames.defaults.attacks": "攻撃",
+    "scs.settings.phaseNames.defaults.magic": "呪文",
+    "scs.settings.generateColors.Name": "色の変更",
+    "scs.settings.generateColors.Label": "生成",
+    "scs.settings.generateColors.Hint": "クリックすると、新しいランダムカラーが生成されます (再読み込みページ)。",
+    "scs.settings.alternateChecked.Name": "代替の外観",
+    "scs.settings.alternateChecked.Hint": "アクティブフェーズの外観を反転して、他のフェーズの外観を暗くなく明るくします。",
+    "scs.tutorial.welcome.Title": "SCSへようこそ",
+    "scs.tutorial.welcome.Intro": "このモジュールは、<a href=\"https://redd.it/nlyif8\"> このreddit投稿</a> に記載されている同時戦闘システムの実装です。",
+    "scs.tutorial.howItWorks.Title": "仕組み",
+    "scs.tutorial.howItWorks.Intro": "<p>各キャラクターが順番に自分のターンを取る代わりに、すべてが一度に起こります。 <br/>総混沌を防ぐため、戦闘は依然としてラウンドで起こり、各ラウンドに構造がある。 つまり、それらはフェーズに分かれています：</p>",
+    "scs.tutorial.combatTracker.Title": "戦闘トラッカーはどこですか？",
+    "scs.tutorial.combatTracker.Intro": "<p>戦闘はこのシステムと同時に行われるので、デフォルトの戦闘トラッカーを削除しました。 モジュールの設定でいつでも再度有効にできます。</p>",
+    "scs.tutorial.movingAround.Title": "どのように私はこのことを移動するのですか？",
+    "scs.tutorial.movingAround.Intro": "<p>このテキストをクリックしたままにすると、アプリをドラッグできます。 左下隅にスナップしますが、どこに置くかを選択してもその位置が記憶されます。</p>",
+    "scs": {
+        "notifications": {
+            "colorGeneration": {
+                "tryingAgain": "色生成のエラー。\n再試行しています..."
+            }
+        }
+    }
 }

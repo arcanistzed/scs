@@ -1,5 +1,24 @@
 {
     "scs": {
+        "notifications": {
+            "actionLocking": {
+                "none": "There is no action locking available for the {title} {context} yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion.",
+                "move": "It's currently the Movement & Misc. phase, so you cannot cast spells or attack",
+                "attacks": "It's currently the attack phase, so you can only attack",
+                "magic": "It's currently the magic phase, so you can only cast non-attacking spells"
+            },
+            "colorGeneration": {
+                "tryingAgain": "Error in color generation. Trying again..."
+            },
+            "tutorial": {
+                "introDependency": "You must install and enable the IntroJS library before you can {action} the SCS tutorial."
+            },
+            "changeOutOfBounds": "Cannot change phase by delta \"{delta}\", because that would bring it outside of the allowed bounds. Current phase: \"{phase}\".",
+            "display": {
+                "latestAttackRoll": "Latest attack roll"
+            },
+            "phaseCountDerived": "The phase count is calculated from the phase names and cannot be changed directly."
+        },
         "settings": {
             "hideNoCombat": {
                 "Name": "Hide if no Combat",
@@ -72,6 +91,29 @@
             "movingAround": {
                 "Title": "How do I move this thing around?",
                 "Intro": "<p>You can drag the app around by clicking and holding this text. It snaps to the bottom left corner, but will remember it's position wherever you choose to put it.</p>"
+            },
+            "dontShowAgain": "Don't show again"
+        },
+        "keybindings": {
+            "nextPhase": {
+                "name": "Next Phase",
+                "hint": "Switch to the next phase"
+            },
+            "previousPhase": {
+                "name": "Previous Phase",
+                "hint": "Switch to the previous phase"
+            },
+            "nextRound": {
+                "name": "Next Round",
+                "hint": "Switch to the next round"
+            },
+            "previousRound": {
+                "name": "Previous Round",
+                "hint": "Switch to the previous round"
+            },
+            "toggleVisibility": {
+                "name": "Toggle Visibility",
+                "hint": "Show and hide the app"
             }
         }
     }

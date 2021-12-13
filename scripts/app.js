@@ -261,7 +261,7 @@ export default class scsApp extends FormApplication {
         scsApp.lastHue = chosenHue;
 
         if (chosenHue == undefined) {
-            ui.notifications.error("SCS | Error in color generation. Trying again...");
+            ui.notifications.error(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.colorGeneration.tryingAgain")}`);
         };
 
         return chosenHue; // Return the chosen hue
@@ -486,30 +486,34 @@ export default class scsApp extends FormApplication {
         if (game.settings.get(scsApp.ID, "actionLocking")) {
 
             if (!["dnd5e"].includes(game.system.id)) {
-                ui.notifications.notify("SCS | There is no action locking available for this system yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
+                ui.notifications.notify(`${scsApp.ID} | ${game.i18n.format("scs.notifications.actionLocking.none", { title: game.system.data.title, context: "system" })}`);
             } else {
                 // Register wrapper for Item Roll for Action Locking
                 libWrapper.register(scsApp.ID, "CONFIG.Item.documentClass.prototype.roll", function (wrapped, ...args) {
 
                     let thisPhase = scsApp.phases.names[scsApp.currentPhase - 1];
                     // Don't change anything if this is not a known phase and notify user
-                    if (!["Move", "Attacks", "Magic"].includes(thisPhase)) {
-                        if (game.user.isGM) ui.notifications.notify("SCS | There is no action locking available for this phase yet. Feel free to drop by <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> to make a suggestion");
+                    if (![
+                        game.i18n.localize("scs.settings.phaseNames.defaults.move"),
+                        game.i18n.localize("scs.settings.phaseNames.defaults.attacks"),
+                        game.i18n.localize("scs.settings.phaseNames.defaults.magic"),
+                    ].includes(thisPhase)) {
+                        if (game.user.isGM) ui.notifications.notify(`${scsApp.ID} | ${game.i18n.format("scs.notifications.actionLocking.none", { title: thisPhase, context: "phase" })}`);
                         return wrapped(...args);
                     };
 
                     // Manage action locking
-                    if (thisPhase === "Move" && (this.data.type === "spell" || this.hasAttack)) {
+                    if (thisPhase === game.i18n.localize("scs.settings.phaseNames.defaults.move") && (this.data.type === "spell" || this.hasAttack)) {
                         // If it is currently the move phase and this is a spell or an attack, alert user and do nothing
-                        ui.notifications.error("SCS | It's currently the Movement & Misc. phase, so you cannot cast spells or attack");
+                        ui.notifications.error(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.actionLocking.move")}`);
                         return;
-                    } else if (thisPhase === "Attacks" && !this.hasAttack) {
+                    } else if (thisPhase === game.i18n.localize("scs.settings.phaseNames.defaults.attacks") && !this.hasAttack) {
                         // If it is currently the attack phase and this is not an attack, alert user and do nothing
-                        ui.notifications.error("SCS | It's currently the attack phase, so you can only attack");
+                        ui.notifications.error(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.actionLocking.attacks")}`);
                         return;
-                    } else if (thisPhase === "Magic" && (this.data.type !== "spell" || this.hasAttack)) {
+                    } else if (thisPhase === game.i18n.localize("scs.settings.phaseNames.defaults.magic") && (this.data.type !== "spell" || this.hasAttack)) {
                         // If it is currently the spells phase and this is not a spell or this has an attack, alert user and do nothing
-                        ui.notifications.error("SCS | It's currently the magic phase, so you can only cast non-attacking spells");
+                        ui.notifications.error(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.actionLocking.magic")}`);
                         return;
                     } else {
                         // If not one of the cases above, allow action

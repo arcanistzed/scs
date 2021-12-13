@@ -130,7 +130,7 @@ export default class AttackDisplay {
         if ((game.settings.get(scsApp.ID, "hudDisplay") || game.settings.get(scsApp.ID, "trackerDisplay")) && scsApp.phases.names[scsApp.currentPhase - 1] === "Attacks") {
 
             /** Log this attack roll */
-            console.log("SCS | Latest attack roll", roll);
+            console.log(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.display.latestAttackRoll")}`, roll);
 
             // Get token placeables for this actor
             canvas.tokens.placeables.filter(token => token.id === tokenId).forEach(token => {
