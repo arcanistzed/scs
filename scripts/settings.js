@@ -184,9 +184,9 @@ export default function registerSettings() {
         config: true,
         type: String,
         default: (() => [
-            game.i18n.localize("scs.settings.phaseNames.defaults.0"),
-            game.i18n.localize("scs.settings.phaseNames.defaults.1"),
-            game.i18n.localize("scs.settings.phaseNames.defaults.2")
+            game.i18n.localize("scs.settings.phaseNames.defaults.move"),
+            game.i18n.localize("scs.settings.phaseNames.defaults.attacks"),
+            game.i18n.localize("scs.settings.phaseNames.defaults.magic")
         ].join(", "))(),
         onChange: async () => {
             // Reset the current phase and the colors
