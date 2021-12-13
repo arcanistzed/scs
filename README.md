@@ -50,7 +50,7 @@ In order to ease determining the attack order (for example, in the default attac
 
 ### Keybindings
 
-You can switch the phase turn by holding `Alt` and pressing the right or left arrow key. You can switch the current round instead by holding `Shift` instead.
+You can switch the phase turn by holding `Alt` and pressing the right or left arrow key. You can switch the current round instead by also holding `Shift`.
 
 You can use `Alt+S` to toggle the app's visibility.
 
@@ -116,7 +116,7 @@ Use `game.combat.nextRound()` or `game.combat.previousRound()` instead.
 
 #### `changePhase(delta)`
 
-An asynchronous method that changes the SCS's phase by a given delta. Use a positive number for the delta to move the round forward and a negative number to go to previous rounds.
+An asynchronous method that changes the SCS's phase by a given delta. Use a positive number for the delta to move the phase forward and a negative number to go to previous phase.
 
 ### Hooks
 
