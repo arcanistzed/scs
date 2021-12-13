@@ -127,7 +127,7 @@ export default class AttackDisplay {
      */
     update(tokenId, roll) {
         // Check if the feature is enabled, and if it's the Attack phase
-        if ((game.settings.get(scsApp.ID, "hudDisplay") || game.settings.get(scsApp.ID, "trackerDisplay")) && scsApp.phases.names[scsApp.currentPhase - 1] === "Attacks") {
+        if ((game.settings.get(scsApp.ID, "hudDisplay") || game.settings.get(scsApp.ID, "trackerDisplay")) && scsApp.phases.names[scsApp.currentPhase - 1] === game.i18n.localize("scs.settings.phaseNames.defaults.attacks")) {
 
             /** Log this attack roll */
             console.log(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.display.latestAttackRoll")}`, roll);
@@ -144,7 +144,7 @@ export default class AttackDisplay {
 
                 // When the phase changes, if it's no longer the attack phase, remove the display
                 Hooks.on("scsPhaseChanged", currentPhase => {
-                    if (scsApp.phases.names[currentPhase - 1] !== "Attacks") this.remove(tokenId);
+                    if (scsApp.phases.names[currentPhase - 1] !== game.i18n.localize("scs.settings.phaseNames.defaults.attacks")) this.remove(tokenId);
                 });
             });
         };
