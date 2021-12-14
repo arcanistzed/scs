@@ -1,10 +1,14 @@
 # Changelog
 
-## unreleased
+## 2.12.0 - 13 Dec 2021
+
+### Added
+
+* Localized everything to make the "display" and "Action Locking" features work in other languages
 
 ### Fixed
 
-* Removed separate round value since it was causing bugs with de-sync and making it so that you aren't able to advance the round at all. This separation was created because I originally wanted the SCS to work without any core combats active, but that no longer makes sense because they are now synchronized anyway.
+* Removed separate round value since it was causing bugs with de-sync and making it so that you aren't able to advance the round at all. This separation was created because I originally wanted the SCS to work without any core combats active, but that no longer makes sense because they are now synchronized anyway
 
 ## 2.11.2 - 11 Dec 2021
 
