@@ -156,6 +156,3 @@ Please note that the `Phases` must be short enough to fit their boxes, so you sh
 
 Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=Simultaneous%20Combat%20System%20module).
 
-## TODO
-
-- libRuler Integration for movement deferring until end of phase
