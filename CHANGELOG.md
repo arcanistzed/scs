@@ -1,5 +1,9 @@
 # Changelog
 
+## unreleased
+
+I have remove the default keys for keybindings so users can define their own for better compatibility.
+
 ## 2.12.0 - 13 Dec 2021
 
 ### Added

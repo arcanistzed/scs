@@ -50,9 +50,7 @@ In order to ease determining the attack order (for example, in the default attac
 
 ### Keybindings
 
-You can switch the phase turn by holding `Alt` and pressing the right or left arrow key. You can switch the current round instead by also holding `Shift`.
-
-You can use `Alt+S` to toggle the app's visibility.
+You can switch the phase, current round, or toggle the app's visibility with keybindings.
 
 ### Integration with other modules
 
