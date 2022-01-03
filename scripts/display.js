@@ -51,7 +51,7 @@ export default class AttackDisplay {
         // Create the HUD display
         if (game.settings.get(scsApp.ID, "hudDisplay")) {
             // Create PIXI Objects
-            const TEXT = new PIXI.Text("", { fill: 0x000000, fontSize: 125, fontFamily: "Roboto", fontWeight: "bold", align: "center" });
+            const TEXT = new PreciseText("", { fill: 0x000000, fontSize: 125, fontFamily: "Roboto", fontWeight: "bold", align: "center" });
             const ICON = new PIXI.Sprite.from("/icons/svg/combat.svg");
 
             // Adjust icon dimensions and position
@@ -60,8 +60,6 @@ export default class AttackDisplay {
             ICON.x = (token.width / 2) - (ICON.width / 2) - /* Fix for un-centered icon */ 5;
             ICON.y = token.height - 15;
 
-            // Adjust text resolution and position
-            TEXT.resolution = 10;
             // FIXME These numbers are sort of random
             TEXT.x = (TEXT.width * 6);
             TEXT.y = ICON.height * 4.5;
