@@ -6,25 +6,15 @@ import api from './api.js';
  * Manages color generation button in module settings menu
  */
 class GenerateColors extends FormApplication {
-
-    static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
-            template: "modules/scs/templates/color.hbs",
-            id: "scsColor",
-            title: "SCS: Colors",
-            minimized: true
-        });
-    }
-
-    async activateListeners() {
-        // Unset colors if GM
-        if (game.user.isGM) {
-            await game.settings.set(scsApp.ID, "colors", []);
-            scsApp.phases.colors = [];
-        };
-
-        // Reload the page
-        location.reload();
+    constructor(...args) {
+        super(...args);
+        (async () => {
+            // Unset colors if GM
+            if (game.user.isGM) {
+                await game.settings.set(scsApp.ID, "colors", []);
+                location.reload();
+            };
+        })();
     };
 };
 
@@ -160,12 +150,6 @@ export default function registerSettings() {
         scope: "world",
         config: false,
         type: Object,
-        onChange: () => {
-            // Don't cause a reload loop for the GM
-            if (!game.user.isGM) {
-                location.reload();
-            };
-        }
     });
 
     game.settings.registerMenu(scsApp.ID, "generateColors", {
