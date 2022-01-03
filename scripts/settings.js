@@ -36,14 +36,14 @@ export default function registerSettings() {
         scope: "client",
         config: false,
         type: Object,
-        default: { top: 446, left: 15 }
+        default: { top: 446, left: 15 },
     });
 
     game.settings.register(scsApp.ID, "pinned", {
         scope: "client",
         config: false,
         type: Boolean,
-        default: true
+        default: true,
     });
 
     game.settings.register(scsApp.ID, "currentPhase", {
@@ -60,7 +60,7 @@ export default function registerSettings() {
         scope: "world",
         config: false,
         type: Number,
-        default: 1
+        default: 1,
     });
 
     game.settings.register(scsApp.ID, "hideNoCombat", {
@@ -174,7 +174,7 @@ export default function registerSettings() {
         hint: game.i18n.localize("scs.settings.generateColors.Hint"),
         icon: "fas fa-rainbow",
         type: GenerateColors,
-        restricted: true
+        restricted: true,
     });
 
     game.settings.register(scsApp.ID, "names", {
@@ -202,6 +202,6 @@ export default function registerSettings() {
 
             // Reload the page
             location.reload();
-        }
+        },
     });
 };
