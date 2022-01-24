@@ -6,10 +6,10 @@
   "manifestPlusVersion": "1.2.0",
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.8.9",
-  "author": "arcanist",
+  "author": "Arcanist",
   "authors": [
     {
-      "name": "arcanist",
+      "name": "Arcanist",
       "url": "https://arcanistzed.github.io/",
       "email": "arcanistzed@gmail.com",
       "discord": "arcanist#4317",
@@ -78,11 +78,6 @@
       "name": "中文 (Chinese)",
       "path": "languages/cn.json"
     }
-  ],
-  "keywords": [
-    "simultaneous",
-    "combat",
-    "system"
   ],
   "url": "This is auto replaced",
   "manifest": "This is auto replaced",
