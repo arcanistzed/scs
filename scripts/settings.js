@@ -54,8 +54,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "hideNoCombat", {
-        name: game.i18n.localize("scs.settings.hideNoCombat.Name"),
-        hint: game.i18n.localize("scs.settings.hideNoCombat.Hint"),
+        name: "scs.settings.hideNoCombat.Name",
+        hint: "scs.settings.hideNoCombat.Hint",
         scope: "world",
         config: true,
         type: Boolean,
@@ -64,8 +64,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "hideTracker", {
-        name: game.i18n.localize("scs.settings.hideTracker.Name"),
-        hint: game.i18n.localize("scs.settings.hideTracker.Hint"),
+        name: "scs.settings.hideTracker.Name",
+        hint: "scs.settings.hideTracker.Hint",
         scope: "world",
         config: true,
         type: Boolean,
@@ -74,8 +74,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "hudDisplay", {
-        name: game.i18n.localize("scs.settings.hudDisplay.Name"),
-        hint: game.i18n.localize("scs.settings.hudDisplay.Hint"),
+        name: "scs.settings.hudDisplay.Name",
+        hint: "scs.settings.hudDisplay.Hint",
         scope: "world",
         config: true,
         type: Boolean,
@@ -83,8 +83,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "trackerDisplay", {
-        name: game.i18n.localize("scs.settings.trackerDisplay.Name"),
-        hint: game.i18n.localize("scs.settings.trackerDisplay.Hint"),
+        name: "scs.settings.trackerDisplay.Name",
+        hint: "scs.settings.trackerDisplay.Hint",
         scope: "client",
         config: true,
         type: Boolean,
@@ -92,8 +92,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "limitCycles", {
-        name: game.i18n.localize("scs.settings.limitCycles.Name"),
-        hint: game.i18n.localize("scs.settings.limitCycles.Hint"),
+        name: "scs.settings.limitCycles.Name",
+        hint: "scs.settings.limitCycles.Hint",
         scope: "world",
         config: true,
         type: Boolean,
@@ -101,8 +101,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "maxCycle", {
-        name: game.i18n.localize("scs.settings.maxCycle.Name"),
-        hint: game.i18n.localize("scs.settings.maxCycle.Hint"),
+        name: "scs.settings.maxCycle.Name",
+        hint: "scs.settings.maxCycle.Hint",
         scope: "world",
         config: true,
         type: Number,
@@ -110,8 +110,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "limitPhases", {
-        name: game.i18n.localize("scs.settings.limitPhases.Name"),
-        hint: game.i18n.localize("scs.settings.limitPhases.Hint"),
+        name: "scs.settings.limitPhases.Name",
+        hint: "scs.settings.limitPhases.Hint",
         scope: "world",
         config: true,
         type: Boolean,
@@ -119,8 +119,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "actionLocking", {
-        name: game.i18n.localize("scs.settings.actionLocking.Name"),
-        hint: game.i18n.localize("scs.settings.actionLocking.Hint"),
+        name: "scs.settings.actionLocking.Name",
+        hint: "scs.settings.actionLocking.Hint",
         scope: "world",
         config: true,
         type: Boolean,
@@ -128,8 +128,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "alternateActive", {
-        name: game.i18n.localize("scs.settings.alternateActive.Name"),
-        hint: game.i18n.localize("scs.settings.alternateActive.Hint"),
+        name: "scs.settings.alternateActive.Name",
+        hint: "scs.settings.alternateActive.Hint",
         scope: "client",
         config: true,
         type: Boolean,
@@ -137,8 +137,8 @@ export default function registerSettings() {
     });
 
     game.settings.register(scsApp.ID, "startupTutorial", {
-        name: game.i18n.localize("scs.settings.startupTutorial.Name"),
-        hint: game.i18n.localize("scs.settings.startupTutorial.Hint"),
+        name: "scs.settings.startupTutorial.Name",
+        hint: "scs.settings.startupTutorial.Hint",
         scope: "client",
         config: true,
         type: Boolean,
@@ -153,17 +153,17 @@ export default function registerSettings() {
     });
 
     game.settings.registerMenu(scsApp.ID, "generateColors", {
-        name: game.i18n.localize("scs.settings.generateColors.Name"),
-        label: game.i18n.localize("scs.settings.generateColors.Label"),
-        hint: game.i18n.localize("scs.settings.generateColors.Hint"),
+        name: "scs.settings.generateColors.Name",
+        label: "scs.settings.generateColors.Label",
+        hint: "scs.settings.generateColors.Hint",
         icon: "fas fa-rainbow",
         type: GenerateColors,
         restricted: true,
     });
 
     game.settings.register(scsApp.ID, "names", {
-        name: game.i18n.localize("scs.settings.phaseNames.Name"),
-        hint: game.i18n.localize("scs.settings.phaseNames.Hint"),
+        name: "scs.settings.phaseNames.Name",
+        hint: "scs.settings.phaseNames.Hint",
         scope: "world",
         config: true,
         type: String,
