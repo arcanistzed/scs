@@ -470,7 +470,7 @@ export default class scsApp extends FormApplication {
         });
 
         // Create a new combat if there isn't one and start it
-        if (!game.combat) {
+        if (!game.combat && game.settings.get(scsApp.ID, "hideTracker")) {
             const combat = await getDocumentClass("Combat").implementation.create({
                 scene: canvas.scene?.id
             });
