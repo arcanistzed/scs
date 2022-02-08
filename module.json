@@ -22,7 +22,7 @@
   },
   "version": "This is auto replaced",
   "minimumCoreVersion": "0.7.9",
-  "compatibleCoreVersion": "0.8.9",
+  "compatibleCoreVersion": "9",
   "esmodules": [
     "scripts/scs.js"
   ],
