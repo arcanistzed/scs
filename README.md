@@ -8,9 +8,17 @@ Have you ever tired of waiting for the turns of your friends to be over? Are you
 
 ![gradient](https://user-images.githubusercontent.com/82790112/123046244-ddeb3a80-d3c9-11eb-98db-da2f4a6abd68.gif)
 
+## Installation
+
+In the setup screen, use the URL `https://github.com/arcanistzed/scs/releases/latest/download/module.json` to install the module.
+
 ## Usage
 
 Please follow the built-in tutorial (built with IntroJS), for instructions. You can always relaunch the tutorial from within the settings. If you have any questions, feel free to contact me.
+
+## Support
+
+Please consider supporting me on [my Patreon](https://patreon.com/arcanistzed) if you like my work. You can see a list of all my projects on [my website](https://arcanist.me).
 
 ## Features
 
@@ -130,18 +138,6 @@ Use the `updateCombat` hook and check the `change.round` value instead.
 
 This hook is called whenever the SCS phase changes. It has three arguments which are (in order): the current phase, the previous phase, and the delta.
 
-## Installation
-
-In the setup screen, use the URL `https://github.com/arcanistzed/scs/releases/latest/download/module.json` to install the module.
-
-## License
-
-Copyright © 2021 arcanist
-
-This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
-
-See the [Notice](./NOTICE.md) for attribution details.
-
 ## Bugs
 
 You can submit bugs via [Github Issues](https://github.com/arcanistzed/scs/issues/new/choose) or on [my Discord server](https://discord.gg/AAkZWWqVav).
@@ -154,3 +150,10 @@ Please note that the `Phases` must be short enough to fit their boxes, so you sh
 
 Come hang out on [my Discord server](https://discord.gg/AAkZWWqVav) or [click here to send me an email](mailto:arcanistzed@gmail.com?subject=Simultaneous%20Combat%20System%20module).
 
+## License
+
+Copyright © 2021 arcanist
+
+This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+See the [Notice](./NOTICE.md) for attribution details.
