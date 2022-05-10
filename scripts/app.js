@@ -228,50 +228,37 @@ export default class scsApp extends FormApplication {
 
     /**
      * All allowed hues
-     * @returns {Array} Hues that validate certain rules from a given base hue
+     * @param {number[]} bases - Base hues to check against
+     * @returns {number[]} Hues that validate certain rules from a given base hue
      */
-    static allAllowedHues = base => Array.from(new Array(360)) // Hue is in degrees
+    static allAllowedHues = bases => Array.from(new Array(360)) // Hue is in degrees
         .map((_, i) => i + 1) // Insert numbers into the Array from 1 to 300
         .filter(h => // Filter the Array
-            Math.abs(base - h) > 15 // Must be sufficiently different than the base
-            && Math.abs(base - h) <= 100 // Must not be too different
-            && (h < 50 || h > 150) // Must not be green
-        );
+            bases.deepFlatten().every(base => // Check if every base is compatible with this hue
+                Math.abs(base - h) > 15 // Must be sufficiently different than the base
+                && Math.abs(base - h) <= 150 // Must not be too different
+                && (h < 50 || h > 150) // Must not be green
+            ));
 
     /** Last hue generated */
     static lastHue;
 
-    /** Generate a new hue
-     * @param {Number} base A base hue from which to generate another hue
+    /**
+     * Generate a hue that is compatible with given base hues
+     * @param {number[]} bases - Base hues to check against
+     * @return {number} A hue that is compatible with the given base hues
      */
-    static generateHue(base) {
-
-        // Initialize an Array that will contain the valid hues for the current base
-        let validHues = scsApp.allAllowedHues(base);
-
-        // If there is a last hue, set the valid hues to everything that isn't within 25 from the last hue
-        if (scsApp.lastHue != null) {
-            validHues = scsApp.allAllowedHues(base).filter(h => Math.abs(scsApp.lastHue - h) >= 25);
-        };
-
-        // Pick the a random hue from the valid hues
-        let chosenHue = validHues[Math.floor(Math.random() * validHues.length)];
-
-        // Set lastHue to the chosen hue for the next generation
-        scsApp.lastHue = chosenHue;
-
-        if (chosenHue == undefined) {
-            ui.notifications.error(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.colorGeneration.tryingAgain")}`);
-        };
-
-        return chosenHue; // Return the chosen hue
+    static generateHue(...bases) {
+        const validHues = scsApp.allAllowedHues(bases);
+        const index = Math.floor(Math.random() * validHues.length);
+        return validHues[index] ?? ui.notifications.error(`${scsApp.ID} | ${game.i18n.localize("scs.notifications.colorGeneration.tryingAgain")}`);
     };
 
     /** Generate random beautiful color gradients */
     static generateColors() {
 
         // A hue for each phase
-        scsApp.phases.names.forEach((_name, i) => {
+        scsApp.phases.colors.push(...scsApp.phases.names.reduce((accumulator, _name, i) => {
             let hueTop, hueBottom;
 
             // Try and assign existing hues for this phase
@@ -283,15 +270,16 @@ export default class scsApp extends FormApplication {
             } catch (err) { // If not, generate new hues
 
                 // Generate the top hue from a random base
-                hueTop = scsApp.generateHue(Math.floor(Math.random() * 360));
+                hueTop = scsApp.generateHue(accumulator.at(-1) ?? Math.floor(Math.random() * 360));
 
                 // Generate the bottom hue with the top hue as the base
                 hueBottom = scsApp.generateHue(hueTop);
             };
 
             // Push the hues to temp storage
-            scsApp.phases.colors.push([hueTop, hueBottom]);
-        });
+            accumulator.push([hueTop, hueBottom]);
+            return accumulator;
+        }, []));
 
         // Update settings for storage
         game.settings.set(scsApp.ID, "colors", scsApp.phases.colors);
