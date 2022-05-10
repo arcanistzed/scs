@@ -132,6 +132,9 @@ export default class AttackDisplay {
 
             // Get token placeables for this actor
             canvas.tokens.placeables.filter(token => token.id === tokenId).forEach(token => {
+                
+                // Set a flag on the actor
+                token.actor.setFlag("scs", "attackRoll", roll);
 
                 // If no PIXI display already exist for this token, create one
                 if (!this.DISPLAY[tokenId]) this.create(token);
