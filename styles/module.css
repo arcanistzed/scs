@@ -61,9 +61,7 @@
   max-width: 200px;
   max-height: calc(46px * 3 + 3px + 2.5em);
   border: 1px solid var(--color-border-dark, #000);
-  z-index: 100!important;
   pointer-events: all;
-  height: unset!important;
 }
 
 /* Don't show any header */
@@ -137,7 +135,7 @@
 
 /* Font Awesome Icons */
 .introjs-tooltipReferenceLayer .fa,
-.far,
-.fas {
-  font-family: "Font Awesome 5 Free";
+.introjs-tooltipReferenceLayer .far,
+.introjs-tooltipReferenceLayer .fas {
+  font-family: "Font Awesome 6 Pro", "Font Awesome 5 Free";
 }
