@@ -2,7 +2,16 @@
 
 ## unreleased
 
-I have remove the default keys for keybindings so users can define their own for better compatibility.
+Removed the default keys for the keybinding for better compatibility (users can define their own)
+
+### Added
+
+* As part of the "display" feature, a flag is now set on actors with their last attack roll. This could be used in a custom [Combat Tracker Groups](https://github.com/arcanistzed/ctg) grouping mode, for example.
+
+### Fixed
+
+* Refactors to color generation and display
+* More robust CSS
 
 ## 2.12.0 - 13 Dec 2021
 
