@@ -1,6 +1,6 @@
 // Import application
-import scsApp from './app.js';
-import api from './api.js';
+import scsApp from "./app.js";
+import api from "./api.js";
 
 /**
  * Register all keybindings for SCS
@@ -36,7 +36,7 @@ export default function registerKeybindings() {
 				api.changeVisibility(true);
 			} else {
 				api.changeVisibility(false);
-			};
+			}
 		},
 	});
-};
+}

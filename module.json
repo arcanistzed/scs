@@ -27,7 +27,7 @@
     "scripts/scs.js"
   ],
   "styles": [
-    "styles/module.css"
+    "styles/scs.css"
   ],
   "languages": [
     {

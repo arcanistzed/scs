@@ -1,0 +1,161 @@
+/* Style the phase "buttons" */
+.scs .phase-button {
+	box-sizing: border-box;
+	display: block;
+	margin: 3px 0;
+	text-align: center;
+	color: var(--color-text-light-0, white);
+	padding: 12px 5px;
+	flex: 0 0 32%;
+}
+
+/* Add a shadow on the active phase */
+.scs .phase-button.active {
+	box-shadow: inset 2px 2px 5px var(--color-shadow-dark, rgb(0, 0, 0));
+	mix-blend-mode: soft-light;
+}
+
+/* Styling for the phase "buttons" */
+
+/* Style the first one in the row so that the corners are rounded correctly and so there is a margin on the left */
+.scs .phase-button:nth-child(3n + 1) {
+	margin-left: 3px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+/* Style the last one in the row so that the corners are rounded correctly and so there is a margin on the right */
+.scs .phase-button:nth-last-child(1),
+.scs .phase-button:nth-child(3n + 3) {
+	margin-right: 3px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+/* These are the small arrows which let you switch phase and round */
+.scs .scsArrows {
+	text-align: center;
+	color: var(
+		--Whetstone-text-highlight-lighter,
+		var(--palette-app-background-contrast-text, var(--color-text-light-highlight, #f0f0e0))
+	);
+	align-items: center;
+	min-height: 2.5em;
+	max-height: 2.5em;
+	position: static;
+}
+
+/* Give the navigation arrows some room */
+.scs .scsArrows > * {
+	min-width: 15%;
+	cursor: pointer;
+}
+
+/* These are the various phase "buttons" */
+.scs .scsButtons {
+	justify-content: center;
+}
+
+#scsApp .scsButtons {
+	overflow-y: auto;
+	scroll-behavior: smooth;
+	max-height: calc(46px * 3);
+}
+
+/* The color config inputs */
+.scs .phase-button input {
+	margin-top: 0.5em;
+	border: solid white 1px;
+	color: white;
+	box-shadow: none;
+}
+
+/* Controls the app itself */
+#scsApp {
+	flex-wrap: nowrap;
+	max-width: 200px;
+	max-height: calc(46px * 3 + 3px + 2.5em);
+	border: 1px solid var(--color-border-dark, #000);
+	pointer-events: all;
+}
+
+/* Don't show any header */
+#scsApp .window-header {
+	display: none;
+}
+
+/* Give the whole app a look that blends into the Foundry UI alongside the player list */
+#scsApp .window-content {
+	padding: 0;
+	color: var(
+		--Whetstone-text-highlight-lighter,
+		var(--palette-app-background-contrast-text, var(--color-text-light-highlight, #f0f0e0))
+	);
+	background-color: var(--Whetstone-bg-app, var(--palette-app-background, none));
+	background-image: var(--palette-app-background-image, url(/ui/denim075.png) repeat);
+	background-blend-mode: var(--palette-app-background-image-blend-mode, normal);
+	overflow: hidden;
+}
+
+/* The current round indicator */
+#scsApp .currentRound {
+	color: var(
+		--Whetstone-accent-primary-contrast,
+		var(--palette-app-background-shaded-text, var(--color-text-light-primary, grey))
+	);
+	text-align: center;
+	flex: 100; /* It must take as much room as possible */
+	cursor: move;
+}
+
+/* Lighter text when dragged around */
+#scsApp .currentRound:active {
+	color: var(
+		--Whetstone-text-accent-primary-half,
+		var(--palette-app-background-contrast-text, var(--color-text-light-highlight, lightgrey))
+	);
+}
+
+/* The animation shown when pinning the app */
+@keyframes jiggle {
+	0% {
+		transform: rotate(1deg);
+		animation-timing-function: ease-in;
+	}
+
+	50% {
+		transform: rotate(-1deg);
+		animation-timing-function: ease-out;
+	}
+}
+
+/* Hide turn buttons in Combat Tracker */
+[data-control="nextTurn"],
+[data-control="previousTurn"] {
+	display: none;
+}
+
+/* Custom styling for IntroJS tour */
+
+/* Style checkbox */
+#scsTutorialAgainDiv {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	margin-left: -5px;
+	padding: 0.5em 1em;
+}
+
+/* Move line above checkbox */
+.introjs-tooltipbuttons {
+	border: transparent;
+	padding: 1em;
+	padding-top: 0;
+}
+
+/* Font Awesome Icons */
+.introjs-tooltipReferenceLayer .fa,
+.introjs-tooltipReferenceLayer .far,
+.introjs-tooltipReferenceLayer .fas {
+	font-family: "Font Awesome 6 Pro", "Font Awesome 5 Free";
+}
