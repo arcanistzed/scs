@@ -120,6 +120,9 @@ export default class api {
 			// Change phase by delta
 			scsApp.currentPhase += delta;
 
+			// Delta by which to change round
+			let roundDelta = 0;
+
 			// Loop phases if limit cycles is enabled
 			if (game.settings.get(scsApp.ID, "limitCycles")) {
 				// Increment cycle if at the end of all phases
@@ -127,7 +130,7 @@ export default class api {
 
 				// If the maximum amount of cycles is reached, loop and reset cycles
 				if (scsApp.currentCycle > game.settings.get(scsApp.ID, "maxCycle")) {
-					game.combat?.nextRound();
+					roundDelta = 1;
 					scsApp.currentCycle = 1;
 				}
 			}
@@ -135,17 +138,17 @@ export default class api {
 			// Change rounds if limit phases is enabled
 			if (game.settings.get(scsApp.ID, "limitPhases")) {
 				if (scsApp.currentPhase === scsApp.phases.count + 1) {
-					game.combat?.nextRound();
+					roundDelta = 1;
 				} else if (scsApp.currentPhase === 0) {
-					game.combat?.previousRound();
+					roundDelta = -1;
 				}
-			} else {
-				// Loop over phases
-				if (scsApp.currentPhase === scsApp.phases.count + 1) {
-					scsApp.currentPhase = 1;
-				} else if (scsApp.currentPhase === 0) {
-					scsApp.currentPhase = scsApp.phases.count;
-				}
+			}
+
+			// Loop over phases
+			if (scsApp.currentPhase === scsApp.phases.count + 1) {
+				scsApp.currentPhase = 1;
+			} else if (scsApp.currentPhase === 0) {
+				scsApp.currentPhase = scsApp.phases.count;
 			}
 
 			// Correct phase if it exceeds new limit
@@ -153,6 +156,10 @@ export default class api {
 
 			// Update app to display new values
 			scsApp.updateApp();
+
+			// Apply round delta
+			if (roundDelta < 0) game.combat?.previousRound();
+			if (roundDelta > 0) game.combat?.nextRound();
 
 			// Fire a hook
 			Hooks.call("scsPhaseChanged", scsApp.currentPhase, previousPhase, delta);
