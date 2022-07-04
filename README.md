@@ -79,9 +79,11 @@ This module hides Argon's "End Turn" button.
 The Attack Display parses and handles Better Rolls' chat messages to allow it to display attack rolls made with the module.
 Please note that SCS may have difficulty determining the correct token to add the display to if you use Better Rolls to roll for linked tokens. To get the right result, you can select the token before rolling for attack. If that doesn't work, make sure you only have one token from that Actor on the map.
 
-### Change Colors
+### Configure Colors
 
-Clicking this button will generate new random colors for the phases!
+A configuration menu that allows you to manually configure all colors used. The numbers in the fields represent the hue value (from 0 to 360) of the top and bottom of each linear gradient. You can click the dice buttons to generate a random value for that field.
+
+![configuration](https://i.imgur.com/7LFwm7R.png)
 
 ### Limit Phases
 
