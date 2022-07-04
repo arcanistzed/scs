@@ -1,0 +1,17 @@
+<form>
+	<nav class="container">{{log phases}}
+		{{#each phases as |phase i|}}
+			<div class="phase">
+				<h3>{{phase.name}}</h3>
+				<div class="flexrow">
+					<input type="number" name="{{i}}.0" min="0" value={{phase.colors.[0]}} data-dtype="Number" />
+					<button type="button" class="flex0 fas fa-dice" data-action="randomize"></button>
+				</div>
+				<div class="flexrow">
+					<input type="number" name="{{i}}.1" min="0" value={{phase.colors.[1]}} data-dtype="Number" />
+					<button type="button" class="flex0 fas fa-dice" data-action="randomize"></button>
+				</div>
+			</div>
+		{{/each}}
+	</nav>
+</form>

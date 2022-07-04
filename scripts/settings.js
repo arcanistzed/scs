@@ -1,22 +1,7 @@
 // Import application
 import scsApp from "./app.js";
 import api from "./api.js";
-
-/**
- * Manages color generation button in module settings menu
- */
-class GenerateColors extends FormApplication {
-    constructor(...args) {
-        super(...args);
-        (async () => {
-            // Unset colors if GM
-            if (game.user.isGM) {
-                await game.settings.set(scsApp.ID, "colors", []);
-                location.reload();
-            };
-        })();
-    };
-};
+import ColorConfig from "./ColorConfig.js";
 
 /**
  * Register all settings for SCS
@@ -144,8 +129,9 @@ export default function registerSettings() {
 		type: Boolean,
 		default: true,
 		onChange: () => {
+			// Re-render the app
 			if (!document.getElementById("scsTutorialAgain")) new scsApp().render(true);
-		}, // Re-render the app
+		},
 	});
 
 	game.settings.register(scsApp.ID, "colors", {
@@ -154,12 +140,12 @@ export default function registerSettings() {
 		type: Object,
 	});
 
-	game.settings.registerMenu(scsApp.ID, "generateColors", {
-		name: "scs.settings.generateColors.Name",
-		label: "scs.settings.generateColors.Label",
-		hint: "scs.settings.generateColors.Hint",
+	game.settings.registerMenu(scsApp.ID, "colorConfig", {
+		name: "scs.settings.colorConfig.Name",
+		label: "scs.settings.colorConfig.Label",
+		hint: "scs.settings.colorConfig.Hint",
 		icon: "fas fa-rainbow",
-		type: GenerateColors,
+		type: ColorConfig,
 		restricted: true,
 	});
 

@@ -53,10 +53,10 @@
                     "magic": "Magic"
                 }
             },
-            "generateColors": {
-                "Name": "Change Colors",
-                "Label": "Generate",
-                "Hint": "Click to generate new random colors (reloads page)"
+            "colorConfig": {
+                "Name": "Configure Colors",
+                "Label": "Configure",
+                "Hint": "Click to configure the colors of the Simultaneous Combat System app"
             },
             "alternateActive": {
                 "Name": "Alternate Appearance",
@@ -115,6 +115,10 @@
                 "name": "Toggle Visibility",
                 "hint": "Show and hide the app"
             }
+        },
+        "colorConfig": {
+            "title": "Color Config",
+            "save": "Save"
         }
     }
 }
