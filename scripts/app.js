@@ -75,7 +75,7 @@ export default class scsApp extends FormApplication {
 		if (game.settings.get(scsApp.ID, "pinned")) scsApp.pinApp();
 
 		// Make the app draggable
-		const drag = new Draggable(this, this.element, document.querySelector("#scsApp .currentRound"), false);
+		const drag = new Draggable(this, this.element, document.querySelector("#scsApp .round"), false);
 
 		// Application startup
 		if (game.user.isGM) {
@@ -300,22 +300,22 @@ export default class scsApp extends FormApplication {
 	/** Adds the phases to the Application */
 	static addPhases() {
 		// Remove any existing buttons
-		document.querySelectorAll(".phase-button").forEach(button => {
+		document.querySelectorAll("#scsApp .phase").forEach(button => {
 			button.remove();
 		});
 
 		// Create "buttons" for phases
 		scsApp.phases.names.forEach(name => {
 			let phaseButton = document.createElement("div");
-			document.querySelector(".scsButtons").append(phaseButton);
-			phaseButton.classList.add("phase-button");
+			document.querySelector("#scsApp .container").append(phaseButton);
+			phaseButton.classList.add("phase");
 			phaseButton.innerText = name;
 		});
 
 		// Add colors
 		scsApp.phases.colors.forEach((color, i) => {
-			document.querySelector("#scsApp .colorGradients").innerHTML += `
-            .scs .phase-button:nth-child(${i + 1}) {
+			document.querySelector("#scsApp .gradients").innerHTML += `
+            .scs .phase:nth-child(${i + 1}) {
                 background-image: linear-gradient(
                 hsl(${color[0]} 80% 40%),
                 hsl(${color[1]} 80% 40%)
@@ -327,7 +327,7 @@ export default class scsApp extends FormApplication {
 	/** Hide buttons for players and re-adjust app size */
 	static hideFromPlayers() {
 		if (!game.user.isGM) {
-			document.querySelectorAll("#scsApp .scsArrows > *.fas").forEach(arrow => {
+			document.querySelectorAll("#scsApp .arrows > *.fas").forEach(arrow => {
 				arrow.style.display = "none";
 			});
 		}
@@ -363,7 +363,7 @@ export default class scsApp extends FormApplication {
 			html.querySelector(".lastPhase").addEventListener("click", () => api.changePhase(-1));
 			html.querySelector(".nextPhase").addEventListener("click", () => api.changePhase(1));
 			html.querySelector(".nextRound").addEventListener("click", () => game.combat?.nextRound());
-			html.querySelectorAll(".phase-button").forEach((button, i) =>
+			html.querySelectorAll(".phase").forEach((button, i) =>
 				button.addEventListener("click", () => api.changePhase(i + 1 - scsApp.currentPhase))
 			);
 		}
@@ -385,7 +385,7 @@ export default class scsApp extends FormApplication {
 
 	/** Updates the app to display the correct state */
 	static updateApp() {
-		const buttons = document.querySelectorAll(".phase-button"); // gets an array of the three buttons
+		const buttons = document.querySelectorAll("#scsApp .phase"); // gets an array of the three buttons
 
 		// Save new values if GM
 		if (game.user.isGM) {
@@ -409,9 +409,9 @@ export default class scsApp extends FormApplication {
 			}
 
 			// Scroll the active phase button into view
-			let scrollTarget = document.querySelector(".phase-button.active");
+			let scrollTarget = document.querySelector("#scsApp .phase.active");
 			if (
-				scrollTarget.parentNode.scrollTop + document.querySelector(".scsButtons").clientHeight <
+				scrollTarget.parentNode.scrollTop + document.querySelector("#scsApp .container").clientHeight <
 				scrollTarget.offsetTop
 			) {
 				scrollTarget.parentNode.scrollTop = scrollTarget.offsetTop - 4;
@@ -420,7 +420,7 @@ export default class scsApp extends FormApplication {
 			}
 		}
 		// Update the Round number
-		document.querySelector(".currentRound").innerHTML = [
+		document.querySelector("#scsApp .round").innerHTML = [
 			game.i18n.localize("COMBAT.Round"),
 			game.combat?.round,
 		].join(" ");

@@ -54,7 +54,7 @@ export default class api {
 						},
 						{
 							title: game.i18n.localize("scs.tutorial.movingAround.Title"),
-							element: document.querySelector("#scsApp .currentRound"),
+							element: document.querySelector("#scsApp .round"),
 							intro: game.i18n.localize("scs.tutorial.movingAround.Intro"),
 						},
 					],
