@@ -1,17 +1,21 @@
 # Changelog
 
-## unreleased
+## 2.13.0
 
 Removed the default keys for the keybinding for better compatibility (users can define their own)
 
 ### Added
 
 * As part of the "display" feature, a flag is now set on actors with their last attack roll. This could be used in a custom [Combat Tracker Groups](https://github.com/arcanistzed/ctg) grouping mode, for example.
+* Refactor CSS completely
+  * New scroll snapping
+* Configuration form to enable complete manual configuration of all colors
 
 ### Fixed
 
 * Refactors to color generation and display
-* More robust CSS
+* Make phase and round switching more predictable
+* Don't start combat if the Combat Tracker is not hidden (thanks to @Lethay)
 
 ## 2.12.0 - 13 Dec 2021
 
