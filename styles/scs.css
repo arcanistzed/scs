@@ -100,7 +100,6 @@
 .scs .arrows > div {
 	cursor: pointer;
 	flex: 0;
-	padding: 1ch;
 	border-radius: 1ch;
 }
 
