@@ -121,6 +121,15 @@ export default function registerSettings() {
 		default: false,
 	});
 
+	game.settings.register(scsApp.ID, "preventTurns", {
+		name: "scs.settings.preventTurns.Name",
+		hint: "scs.settings.preventTurns.Hint",
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: true,
+	});
+
 	game.settings.register(scsApp.ID, "startupTutorial", {
 		name: "scs.settings.startupTutorial.Name",
 		hint: "scs.settings.startupTutorial.Hint",

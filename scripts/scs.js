@@ -32,11 +32,25 @@ Hooks.on("ready", () => {
 		scsApp.pinOffset += document.querySelector("#smalltime-app").clientHeight + 10;
 	});
 
-	// Hide Argon's "End Turn" button
-	Hooks.on(
-		"renderCombatHudCanvasElement",
-		(_app, [html]) => (html.querySelector("[data-title='Pass']").style.display = "none")
-	);
+	// Prevent turns from existing
+	if (game.settings.get(scsApp.ID, "preventTurns")) {
+		// Hide Argon's "End Turn" button
+		Hooks.on(
+			"renderCombatHudCanvasElement",
+			(_app, [html]) => (html.querySelector("[data-title='Pass']").style.display = "none")
+		);
+
+		// Prevent any active combatants (requires v9d2 or later)
+		if (game.version && isNewerVersion(game.version, "9.230")) {
+			game.combat?.update({ turn: null });
+			Hooks.on("preUpdateCombat", (_document, change) => {
+				change.turn = null;
+			});
+		}
+
+		// Add class to Combat Tracker to hide buttons
+		Hooks.on("renderCombatTracker", (_app, [html]) => html.classList.add("scs-hide-turn-buttons"));
+	}
 
 	// Initialize phase names
 	scsApp.initPhaseNames();
@@ -57,14 +71,6 @@ Hooks.on("ready", () => {
 
 	// Manage Action Locking
 	scsApp.actionLocking();
-
-	// Prevent any combat turns (requires v9d2 or later)
-	if (game.version && isNewerVersion(game.version, "9.230")) {
-		game.combat?.update({ turn: null });
-		Hooks.on("preUpdateCombat", (_document, change) => {
-			change.turn = null;
-		});
-	}
 
 	// Show the IntroJS tutorial once the app is rendered if the user hasn't denied the tutorial
 	Hooks.once("renderscsApp", () => {

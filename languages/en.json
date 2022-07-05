@@ -73,6 +73,10 @@
             "trackerDisplay": {
                 "Name": "Attack Roll in the Combat Tracker",
                 "Hint": "Show the last attack roll in the Combat Tracker next to each combatant's name"
+            },
+            "preventTurns": {
+                "Name": "Prevent Turns",
+                "Hint": "Do not show \"Next Turn\", \"Previous Turn\", or \"End Turn\" buttons and do not allow any Combatants to become active on the Combat Tracker."
             }
         },
         "tutorial": {

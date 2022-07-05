@@ -181,8 +181,7 @@
 }
 
 /* Hide turn buttons in Combat Tracker */
-[data-control="nextTurn"],
-[data-control="previousTurn"] {
+.scs-hide-turn-buttons :is([data-control="nextTurn"], [data-control="previousTurn"]) {
 	display: none;
 }
 
