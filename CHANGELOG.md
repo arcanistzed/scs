@@ -1,6 +1,16 @@
 # Changelog
 
-## 2.13.0
+## 2.14.0 - 5 Jul 2022
+
+### Added
+
+Add configuration open for turn removal feature (enabled by default) [#14](https://github.com/arcanistzed/scs/issues/14)
+
+### Fixed
+
+CSS padding issue that caused arrow buttons to not be visible
+
+## 2.13.0 - 4 Jul 2022
 
 Removed the default keys for the keybinding for better compatibility (users can define their own)
 
