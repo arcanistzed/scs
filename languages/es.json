@@ -1,0 +1,128 @@
+{
+	"scs": {
+		"notifications": {
+			"actionLocking": {
+				"none": "No hay bloqueo de acción disponible para {title} {context} aun. Pasen por <a href='https://discord.gg/AAkZWWqVav'>my discord server</a> para dejar sus sugerencias.",
+				"move": "Actualmente estás en la etapa de movimiento y misceláneos, así que no puedes atacar o castear hechizos",
+				"attacks": "Actualmente estás en la etapa de ataque asi que solo podes atacar",
+				"magic": "Actualmente estás en la etapa de magia, así que solo puedes castear hechizos que no sean de ataque"
+			},
+			"colorGeneration": {
+				"tryingAgain": "Error en generación color. Intentando nuevamente..."
+			},
+			"tutorial": {
+				"introDependency": "Debes instalar y activar la biblioteca IntroJS antes de poder {action} el tutorial SCS."
+			},
+			"changeOutOfBounds": "No puedes cambiar la etapa a delta \"{delta}\", porque esto le traería dentro de los límites permitidos. Etapa Actual: \"{phase}\".",
+			"display": {
+				"latestAttackRoll": "Última tirada de ataque"
+			},
+			"phaseCountDerived": "El conteo de etapas es calculado por el nombre de etapa y no puede ser cambiado directamente."
+		},
+		"settings": {
+			"hideNoCombat": {
+				"Name": "Ocultar si No hay Combate",
+				"Hint": "Ocultar la aplicación SCS si no hay ningún combate activo"
+			},
+			"hideTracker": {
+				"Name": "Ocultar Rastreador",
+				"Hint": "Activar esta opción para ocultar el Rastreador de Combate por defecto"
+			},
+			"limitCycles": {
+				"Name": "Límite de Ciclos",
+				"Hint": "Continuar a la siguiente Ronda de Combate después del número de Ciclos configurado aquí."
+			},
+			"maxCycle": {
+				"Name": "Ciclos Máximos",
+				"Hint": "Elige un número máximo de Ciclos antes de pasar a la siguiente Ronda. Debe seleccionar ‘Límite de Ciclos’ para usar esta opción."
+			},
+			"limitPhases": {
+				"Name": "Límite de Etapas",
+				"Hint": "Continuar a la siguiente Ronda de Combate al final de cada Etapa de Ciclos. Esto anula la función ‘Límite de Ciclos’."
+			},
+			"startupTutorial": {
+				"Name": "Deshabilitar el Tutorial de Inicio",
+				"Hint": "Deshabilita el tutorial que aparece cada vez que se carga la pagina"
+			},
+			"phaseNames": {
+				"Name": "Nombre de Etapas",
+				"Hint": "Una lista separada por comas de los Nombres de las Etapas (recarga la pagina)",
+				"defaults": {
+					"move": "Movimiento",
+					"attacks": "Ataque",
+					"magic": "Magia"
+				}
+			},
+			"colorConfig": {
+				"Name": "Configurar Colores",
+				"Label": "Configurar",
+				"Hint": "Hacer click para configurar el color de las aplicaciones simultáneas del Sistema de Combate"
+			},
+			"alternateActive": {
+				"Name": "Apariencia Alternativa",
+				"Hint": "Invierte la apariencia de la Etapa Activa para que sea más luminosa y las otras más oscuras"
+			},
+			"actionLocking": {
+				"Name": "Bloqueo de Acción",
+				"Hint": "Bloquea las etapas para acciones específicas conocidas. ¡Siéntanse libres de hacer sugerencias para agregar nuevas etapas!"
+			},
+			"hudDisplay": {
+				"Name": "HUD de la Tirada de Ataque",
+				"Hint": "Muestra la última tirada de ataque del HUD del token para ayudar a determinar el orden de ataque"
+			},
+			"trackerDisplay": {
+				"Name": "Tirada de Ataque en el Rastreador de Combate",
+				"Hint": "Muestra la última tirada de ataque en el Rastreador de Combate junto al nombre de cada combatiente"
+			},
+			"preventTurns": {
+				"Name": "Prevenir Turnos",
+				"Hint": "No mostrar los botones de \"Proximo Turno\", \"Turno Previo\", o \"Final del Turno\" e impide que los combatientes se activen en el Rastreador de Combate."
+			}
+		},
+		"tutorial": {
+			"welcome": {
+				"Title": "Bienvenidos a SCS",
+				"Intro": "Este módulo es una implementación del Sistema de Combate Simultaneo descripto en <a href=\"https://redd.it/p11h35\">this reddit post</a>."
+			},
+			"howItWorks": {
+				"Title": "¿Cómo funciona?",
+				"Intro": "<p>En lugar de que cada personaje tome su turno en forma secuencial, todo ocurre a la vez. <br/> Para prevenir el caos total, el combate sigue siendo por turnos y hay una estructura para cada turno. Es decir, se dividen en etapas de resolución:</p>"
+			},
+			"combatTracker": {
+				"Title": "¿Donde esta el Rastreador de Combate?",
+				"Intro": "<p>Ya que el combate ocurre en simultáneo en este sistema, se removió el rastreador de combate por defecto. Pueden volver a activarlo desde la configuracion del modulo.</p>"
+			},
+			"movingAround": {
+				"Title": "¿Puedo poner esto en otro lado?",
+				"Intro": "<p>Pueden arrastrar esta aplicación donde quieran haciendo click y manteniendo apretado este texto. Se sujeta a la esquina inferior izquierda, pero también recuerda la última posición elegida.</p>"
+			},
+			"dontShowAgain": "No volver a mostrar"
+		},
+		"keybindings": {
+			"nextPhase": {
+				"name": "Próxima Etapa",
+				"hint": "Cambiar a la siguiente etapa"
+			},
+			"previousPhase": {
+				"name": "Etapa Previa",
+				"hint": "Cambiar a la etapa previa"
+			},
+			"nextRound": {
+				"name": "Siguiente Turno",
+				"hint": "Cambia al siguiente Turno"
+			},
+			"previousRound": {
+				"name": "Turno Previo",
+				"hint": "Cambia al turno previo"
+			},
+			"toggleVisibility": {
+				"name": "Cambiar Visibilidad",
+				"hint": "Permite ocultar y hacer visible la aplicación"
+			}
+		},
+		"colorConfig": {
+			"title": "Configuración de Color",
+			"save": "Guardar"
+		}
+	}
+}
